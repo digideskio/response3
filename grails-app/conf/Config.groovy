@@ -76,7 +76,10 @@ log4j = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
-
+    info   'grails.app'
+    
+    warn   'grails.app'
+    
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -88,4 +91,14 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+           
+    debug  'grails.app'
 }
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.redpill_linpro.response3.security.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.redpill_linpro.response3.security.UserRole'
+grails.plugins.springsecurity.authority.className = 'com.redpill_linpro.response3.security.Role'
+
+// Additional password protection
+grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
