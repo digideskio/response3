@@ -2,6 +2,8 @@ import com.redpill_linpro.response3.security.User;
 
 class BootStrap {
 
+    def grailsApplication
+    
     def init = { servletContext ->
         def admin = new User(
             username: 'admin', enabled: true, password: 'admin123456',
