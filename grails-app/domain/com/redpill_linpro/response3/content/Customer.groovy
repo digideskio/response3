@@ -47,12 +47,13 @@ class Customer {
         cache usage:'read-write'
 
         //Indexes
-        name index:'Customer_name_idx'
-        projects index:'Customer_projects_idx'
-        clients index:'Customer_clients_idx'
-        contactPersons index:'Customer_contactPersons_idx'
-        dateCreated index:'Customer_dateCreated_idx'
-        partner index:'Customer_partner_idx'
+        id index:'customer_id_idx'
+        name index:'customer_name_idx'
+        projects index:'customer_projects_idx'
+        clients index:'customer_clients_idx'
+        contactPersons index:'customer_contact_persons_idx'
+        dateCreated index:'customer_date_created_idx'
+        partner index:'customer_partner_idx'
     }
     
     String toString() {

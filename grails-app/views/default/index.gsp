@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title><g:message code="Response.Index.Welcome"/></title>
+        <title><g:message code="response3"/></title>
         <meta name="layout" content="main" />
     </head>
     <body>
