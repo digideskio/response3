@@ -17,9 +17,9 @@
 	        </a>
         </li>
         <li class="administration-icon">
-                <a href="">
-            <g:message code="administration" default="ADMINISTRATION"/>
-            </a>
+           <g:link controller="administration">
+             <g:message code="administration" default="ADMINISTRATION"/>
+           </g:link>
         </li>
         <li class="signoff-icon">
 	        <a href="">

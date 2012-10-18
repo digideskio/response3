@@ -4,11 +4,6 @@
         <meta name="layout" content="main" />
     </head>
     <body>
-        <g:if test="${flash.message}">
-          <div class="contentMargin">
-            <div class="message">${flash.message}</div>
-          </div>
-        </g:if>
         <h1 style="margin-left:20px;">
             <g:message code="welcome.to.response3" default="Welcome to Response-3.0"/></h1>
         <br/>

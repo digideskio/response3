@@ -19,7 +19,12 @@
 		<r:layoutResources />
 	</head>
 	<body>
-		<g:render template="head" />
+		<g:render template="/default/head" />
+		<g:if test="${flash.message}">
+          <div class="contentMargin">
+            <div class="message">${flash.message}</div>
+          </div>
+        </g:if>
 		<g:layoutBody/>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 		<g:javascript library="application"/>

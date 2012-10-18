@@ -105,3 +105,66 @@ body {
     background:#CC1B1B url(../images/icons/close.png) center 10px no-repeat;
     background-size:40px 40px;
 }
+.r3widget{
+	background:#fff;
+	width:300px;
+	margin:20px;
+}
+.r3widget h1{
+	letter-spacing:0.15em;
+	height:40px;
+	line-height:40px;
+	background:#605860;
+	color:#fff;
+	font-size:0.9em;
+	padding:0 10px;
+}
+.r3widget ul {
+    padding: 0;
+}
+.r3widget ul li{
+	list-style:none;
+    border-bottom: 1px solid #D4D4D4;
+}
+.r3widget ul li a{
+	padding: 8px 0px 8px 20px;
+	height:40px;
+	line-height:40px;
+	display:block;
+	font-size:0.85em;
+	font-weight: bold;
+	color:#333;
+	text-decoration:none;
+	letter-spacing:0.1em;
+}
+.r3widget ul li a:hover{
+    background:#FF931F;
+    color:#fff;
+}
+span.box{
+	float:left;
+	background:#3B659C;
+	width:36px;
+	height:36px;
+	margin-right: 10px;
+	top:1px;
+	position:relative;
+}
+span.green{
+    background:#7ED600;
+}
+span.darkgreen{
+    background:#789600;
+}
+span.blue{
+    background:#3FA9F5;
+}
+span.darkblue{
+	background:#3B659C;
+}
+span.purple{
+    background:#56267F;
+}
+span.red{
+    background:#C33;
+}
