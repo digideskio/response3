@@ -1,20 +1,19 @@
 <div id="header">
     <h1>
-        <a href="/">
+        <g:link controller="default">
             <g:message code="response3" default="Response3"/>
-        </a>
+        </g:link>
     </h1>
-    <h2><g:message code="issue.tracker" default="Issue Tracker"/></h2>
     <ul id="nav">
         <li class="search-icon">
-                <a href="">
+          <g:link controller="search">
             <g:message code="search" default="SEARCH"/>
-            </a>
+          </g:link>
         </li>
         <li class="account-icon">
-	        <a href="">
+	      <g:link controller="account">
                 <g:message code="account" default="ACCOUNT"/>
-	        </a>
+	      </g:link>
         </li>
         <li class="administration-icon">
            <g:link controller="administration">
@@ -22,9 +21,10 @@
            </g:link>
         </li>
         <li class="signoff-icon">
-	        <a href="">
+	      <g:link controller="logout">
                 <g:message code="sign.off" default="SIGN OFF"/>
-	        </a>
+	      </g:link>
         </li>
     </ul>
+    <h2><g:message code="issue.tracker" default="Issue Tracker"/></h2>
 </div>

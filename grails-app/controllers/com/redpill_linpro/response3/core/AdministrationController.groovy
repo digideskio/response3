@@ -1,4 +1,4 @@
-package com.redpill_linpro.core
+package com.redpill_linpro.response3.core
 
 class AdministrationController {
 

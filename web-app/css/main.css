@@ -13,6 +13,7 @@ html {
 	background-color: #ddd;
 	background-repeat: no-repeat;
 	height: 100%;
+	min-width:1000px;
 }
 
 html.no-cssgradients {
@@ -24,12 +25,14 @@ html * {
 }
 
 body {
-
 }
 #header{
 	background:#333;
 	height:80px;
-	padding:10px 100px;
+	padding:10px 20px;
+}
+#header h1{
+	display:inline;
 }
 #header h1 a{
 	font-size:1.5em;
@@ -47,15 +50,14 @@ body {
 }
 
 #header ul{
-	list-style: none outside none;
-	position:absolute;
-	top: 10px;
-	right:100px;
+	list-style: none;
+	display:inline-block;
+	float:right;
 }
 #header li{
     display:inline;
     border:1px #666 solid;
-    margin-left:6px;
+    margin-left:4px;
     float:left;
     line-height: 120px;
     text-align:center;
@@ -136,6 +138,7 @@ body {
 	color:#333;
 	text-decoration:none;
 	letter-spacing:0.1em;
+	transition:background 100ms ease-in;
 }
 .r3widget ul li a:hover{
     background:#FF931F;
@@ -143,7 +146,6 @@ body {
 }
 span.box{
 	float:left;
-	background:#3B659C;
 	width:36px;
 	height:36px;
 	margin-right: 10px;
@@ -151,20 +153,31 @@ span.box{
 	position:relative;
 }
 span.green{
-    background:#7ED600;
+    background:#7ED600 url(../images/icons/folder.png) center no-repeat;
 }
 span.darkgreen{
-    background:#789600;
+    background:#789600 url(../images/icons/add.png) center no-repeat;;
 }
 span.blue{
-    background:#3FA9F5;
+    background:#3FA9F5 url(../images/icons/add.png) center no-repeat;;
 }
 span.darkblue{
-	background:#3B659C;
+	background:#3B659C url(../images/icons/folder.png) center no-repeat;;
 }
 span.purple{
-    background:#56267F;
+    background:#56267F url(../images/icons/folder.png) center no-repeat;;
 }
 span.red{
-    background:#C33;
+    background:#C33 url(../images/icons/add.png) center no-repeat;;
+}
+div.notfound{
+	min-height:500px;
+	background:#fff url(../images/errors/rat.png) center no-repeat;
+}
+div.notfound h1{
+	text-align:center;
+}
+div.notfound_footer{
+	height:50px;
+	background: linear-gradient(to bottom, #fff, #ddd);
 }
