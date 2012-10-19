@@ -156,19 +156,19 @@ span.green{
     background:#7ED600 url(../images/icons/folder.png) center no-repeat;
 }
 span.darkgreen{
-    background:#789600 url(../images/icons/add.png) center no-repeat;;
+    background:#789600 url(../images/icons/add.png) center no-repeat;
 }
 span.blue{
-    background:#3FA9F5 url(../images/icons/add.png) center no-repeat;;
+    background:#3FA9F5 url(../images/icons/add.png) center no-repeat;
 }
 span.darkblue{
-	background:#3B659C url(../images/icons/folder.png) center no-repeat;;
+	background:#3B659C url(../images/icons/folder.png) center no-repeat;
 }
 span.purple{
-    background:#56267F url(../images/icons/folder.png) center no-repeat;;
+    background:#56267F url(../images/icons/folder.png) center no-repeat;
 }
 span.red{
-    background:#C33 url(../images/icons/add.png) center no-repeat;;
+    background:#C33 url(../images/icons/add.png) center no-repeat;
 }
 div.notfound{
 	min-height:500px;
@@ -180,4 +180,76 @@ div.notfound h1{
 div.notfound_footer{
 	height:50px;
 	background: linear-gradient(to bottom, #fff, #ddd);
+}
+.r3form{
+    width:500px;
+}
+.r3form table{
+    width:100%;
+    border-collapse: collapse;
+}
+.r3form td{
+    padding: 0 20px;
+    font-size:0.85em;
+    font-weight: bold;
+    color:#333;
+    letter-spacing:0.1em;
+    width:360px;
+}
+.r3form td input{
+    width:98%;
+    background-color: #eee;
+    border-radius: 5px;
+    border-color: #FFF;
+    border-style: none solid solid none;
+    font-size: 0.975em;
+    padding: 5px;
+}
+.r3form td textarea{
+    width:98%;
+    height:160px;
+    background-color: #eee;
+    border-radius: 5px;
+    border-color: #FFF;
+    border-style: none solid solid none;
+    font-size: 0.975em;
+    padding: 5px;
+}
+.r3form td input:focus{
+    background:#FFE7CA;
+    border-color: #FFF;
+    outline: none;
+}
+.r3form td textarea:focus{
+    background:#FFE7CA;
+    border-color: #FFF;
+    outline: none;
+}
+.fieldRequired {
+    color: red;
+}
+.r3form td input.button{
+	display:block;
+	margin-top:10px;
+	margin-right: auto;
+    margin-left: auto;
+	font-weight:bold;
+	border-radius: 0px;
+    border-style: none;
+	width:50%;
+	text-align:left;
+	cursor:pointer;
+	height:40px;
+    line-height:40px;
+	letter-spacing:0.15em;
+    background:#FF931F url(../images/icons/save.png) no-repeat;
+    background-position:right 20px center;
+    color:#fff;
+    font-size:0.9em;
+    padding:0 20px;
+    transition:background 100ms ease-in;
+}
+.r3form td input.button:hover{
+	background:#DE7B10 url(../images/icons/save.png) no-repeat;
+	background-position:right 20px center;
 }

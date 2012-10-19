@@ -18,8 +18,8 @@ class Partner {
     
     static constraints = {
         customers(nullable:true)
-        name(blank: false, nullable:false, unique:true)
-        description(nullable: true)
+        name(blank: false, nullable:false, unique:true,size:1..60)
+        description(nullable: true,size:0..4000)
         clients(nullable: true)
         contactPersons(nullable: true)
         deactivated(validator: {
