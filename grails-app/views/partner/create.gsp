@@ -24,7 +24,9 @@
                    </tr>
                    <tr>
                       <td>
-                          <g:textField id="name" name="name" value="" />
+                          <g:textField class="${hasErrors(bean: instance, field: 'name', 'error')}" 
+                                       id="name" name="name" 
+                                       value="${fieldValue(bean: instance, field: 'name')}" />
                       </td>
                   </tr>
                   
@@ -37,7 +39,8 @@
                   </tr>
                   <tr>
                       <td>
-                          <g:textArea name="description" value=""/>
+                          <g:textArea class="${hasErrors(bean: instance, field: 'description', 'error')}"
+                                      name="description" value="${fieldValue(bean: instance, field: 'description')}.htmlEncode()"/>
                       </td>
                   </tr>
                   <tr>

@@ -200,29 +200,35 @@ div.notfound_footer{
     width:98%;
     background-color: #eee;
     border-radius: 5px;
-    border-color: #FFF;
-    border-style: none solid solid none;
+    border: 1px solid #eee;
     font-size: 0.975em;
     padding: 5px;
+}
+.r3form td input.error{
+    background-color: #FFF3F3;
+    border:#cc0000 1px solid;
 }
 .r3form td textarea{
     width:98%;
     height:160px;
     background-color: #eee;
     border-radius: 5px;
-    border-color: #FFF;
-    border-style: none solid solid none;
+    border: 1px solid #eee;
     font-size: 0.975em;
     padding: 5px;
 }
+.r3form td textarea.error{
+    background-color: #FFF3F3;
+    border:#cc0000 1px solid;
+}
 .r3form td input:focus{
     background:#FFE7CA;
-    border-color: #FFF;
+    border: 1px solid #FFE7CA;
     outline: none;
 }
 .r3form td textarea:focus{
     background:#FFE7CA;
-    border-color: #FFF;
+    border: 1px solid #FFE7CA;
     outline: none;
 }
 .fieldRequired {
@@ -243,7 +249,7 @@ div.notfound_footer{
     line-height:40px;
 	letter-spacing:0.15em;
     background:#FF931F url(../images/icons/save.png) no-repeat;
-    background-position:right 20px center;
+    background-position:90% center;
     color:#fff;
     font-size:0.9em;
     padding:0 20px;
@@ -251,5 +257,24 @@ div.notfound_footer{
 }
 .r3form td input.button:hover{
 	background:#DE7B10 url(../images/icons/save.png) no-repeat;
-	background-position:right 20px center;
+	background-position:90% center;
+}
+
+div.errors {
+    background: #fff3f3;
+    border-top: 1px solid #cc0000;
+    border-bottom: 1px solid #cc0000;
+    color: #cc0000;
+    margin: 10px 0 5px 0;
+    padding: 5px 0 5px 0;
+    font-size: 0.7em;
+}
+div.errors ul {
+    list-style: none;
+    padding: 0;
+}
+div.errors li {
+    background: url(../images/skin/exclamation.png) 8px 0% no-repeat;
+    line-height: 16px;
+    padding-left: 30px;
 }
