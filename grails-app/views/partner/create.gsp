@@ -40,7 +40,7 @@
                   <tr>
                       <td>
                           <g:textArea class="${hasErrors(bean: instance, field: 'description', 'error')}"
-                                      name="description" value="${fieldValue(bean: instance, field: 'description')}.htmlEncode()"/>
+                                      name="description" value="${fieldValue(bean: instance, field: 'description')}"/>
                       </td>
                   </tr>
                   <tr>

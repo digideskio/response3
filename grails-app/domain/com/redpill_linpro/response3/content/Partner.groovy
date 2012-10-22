@@ -3,6 +3,7 @@ package com.redpill_linpro.response3.content
 import com.redpill_linpro.response3.security.User
 
 class Partner {
+    
     String name
     String description
     
@@ -40,7 +41,6 @@ class Partner {
         table 'partner'
         version false
         id generator: 'sequence', params: [sequence: 'partner_seq']
-        description type: 'text'
         //Indexes
         id index:'partner_id_idx'
         name index:'partner_name_idx'

@@ -40,7 +40,7 @@ class Project {
         contactPersons(nullable:true)
         title(blank: false, nullable:false)
         projectManagers(nullable:true,blank: true)
-        description(nullable:true,blank: true)
+        description(nullable:true,blank: true,size:0..4000)
         clients(nullable: true)
     }
     
@@ -48,7 +48,6 @@ class Project {
         table 'project'
         version false
         id generator: 'sequence', params: [sequence: 'project_seq']
-        description type: 'text'
 
         //Indexes
         id index:'project_id_idx'

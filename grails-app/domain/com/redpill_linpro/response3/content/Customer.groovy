@@ -20,7 +20,7 @@ class Customer {
     static constraints = {
         partner(nullable:false)
         name(blank: false, nullable:false)
-        description(nullable: true)
+        description(nullable: true,size:0..4000)
         clients(nullable: true)
         contactPersons(nullable: true)
         deactivated(validator: {
@@ -43,7 +43,6 @@ class Customer {
         table "customer"
         version false
         id generator: 'sequence', params: [sequence: 'customer_seq']
-        description type: 'text'
         cache usage:'read-write'
 
         //Indexes

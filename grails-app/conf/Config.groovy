@@ -81,8 +81,8 @@ log4j = {
     warn   'grails.app'
     
     error  'grails.app.services.org.grails.plugin.resource',
-            'grails.app.taglib.org.grails.plugin.resource',
-            'grails.app.resourceMappers.org.grails.plugin.resource',
+           'grails.app.taglib.org.grails.plugin.resource',
+           'grails.app.resourceMappers.org.grails.plugin.resource',
            'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -95,7 +95,10 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
            
-    debug  'grails.app'
+    debug  'grails.app',
+           'org.hibernate.SQL'
+           
+    trace 'org.hibernate.type'
 }
 
 // Added by the Spring Security Core plugin:
@@ -105,3 +108,6 @@ grails.plugins.springsecurity.authority.className = 'com.redpill_linpro.response
 
 // Additional password protection
 grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
+
+// response3 specific configuration
+response3.lists.max=40L

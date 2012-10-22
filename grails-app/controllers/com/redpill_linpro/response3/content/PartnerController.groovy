@@ -1,6 +1,25 @@
 package com.redpill_linpro.response3.content
 
 class PartnerController {
+    
+    def grailsApplication
+    
+    def list(){
+        params.max = Math.min(
+            params.max ? params.int('max') : 10, 
+            grailsApplication.config.response3.lists.max)
+        params.sort = params.sort?:"dateCreated"
+        params.order = params.order?:"desc"
+        def props = grailsApplication.getDomainClass(
+            "com.redpill_linpro.response3.content.Partner"
+        ).persistentProperties.collect{ it.name }
+        def partners = Partner.list(params)
+        return [
+            instances: partners,
+            props: props,
+            total: Partner.count()
+        ]
+    }
 
     def create() { 
         def partner = new Partner()
