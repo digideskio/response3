@@ -26,6 +26,11 @@
             <div class="message">${flash.message}</div>
           </div>
         </g:if>
+        <g:if test="${flash.errorMessage}">
+          <div class="contentMargin">
+            <div class="errors">${flash.errorMessage}</div>
+          </div>
+        </g:if>
         <div class="main">
 		  <g:layoutBody/>
 		</div>

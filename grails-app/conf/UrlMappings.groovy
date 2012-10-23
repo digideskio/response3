@@ -9,7 +9,7 @@ class UrlMappings {
 
 		"/"(controller:'default')
         "403"(view:'/error/forbidden')
-        "500"(view:'/error/error')
+        "500"(view:'/error')
         "404"(view:'/error/notfound')
 	}
 }

@@ -2,9 +2,10 @@ package com.redpill_linpro.response3.content
 
 class PartnerController {
     
-    def grailsApplication
+    def lockService
     
     def list(){
+        log.debug params
         params.max = Math.min(
             params.max ? params.int('max') : 10, 
             grailsApplication.config.response3.lists.max)
@@ -30,6 +31,35 @@ class PartnerController {
     
     def show() { 
         def partner = Partner.read(params.id)
+        if(partner){
+            return [
+                instance:partner
+            ]
+        }
+        else{
+            flash.message = message(code:'partner.not.found', args:[params.id])
+            redirect(action:'list')
+        }
+    }
+    
+    def edit(){
+        log.debug params
+        try{
+            String className = "com.redpill_linpro.response3.content.Project"
+            def partner = lockService.lock(className,Long.parseLong(params.id))
+            if(partner){
+                return [
+                    instance:partner
+                ]
+            } else {
+                throw new RuntimeException("Partnerservice returned null")
+            }
+        } catch(RuntimeException e){
+            log.error(e.getMessage())
+            flash.errorMessage = message(
+                code:'could.not.lock.partner', args:[params.id])
+            redirect(action:'show', id:params.id)
+        }
     }
     
     def save() { 
@@ -42,6 +72,10 @@ class PartnerController {
         else{
             render(view: "create", model: [instance: partner])
         }
+    }
+    
+    def update(){
+        def partner = Partner.get(params.id)
     }
     
     def delete() {}

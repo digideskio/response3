@@ -2,6 +2,7 @@
 package com.redpill_linpro.response3.content
 
 import com.redpill_linpro.response3.security.User
+import com.redpill_linpro.response3.security.Lock
 
 class Customer {
     Partner partner
@@ -9,6 +10,7 @@ class Customer {
     String description
     Date dateCreated
     Date lastUpdated
+    Lock lock
     boolean deactivated = false
     
     static hasMany = [
@@ -19,6 +21,7 @@ class Customer {
     
     static constraints = {
         partner(nullable:false)
+        lock(nullable:true)
         name(blank: false, nullable:false)
         description(nullable: true,size:0..4000)
         clients(nullable: true)

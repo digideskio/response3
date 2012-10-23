@@ -31,14 +31,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <g:each in="${instances}" var="i">
-                <tr>
-                <td><g:checkBox name="id" checked="${false}" value="${fieldValue(bean: i, field: 'id')}"/></td>
-                <td>${fieldValue(bean: i, field: 'name')}</td>
-                <td><g:formatDate format="yyyy.MM.dd - HH:mm" date="${i.dateCreated}"/></td>
-                <td><g:formatDate format="yyyy.MM.dd - HH:mm" date="${i.lastUpdated}"/></td>
-                </tr>
+                <g:each in="${instances}" var="i" status="s">
+	                <tr class="${(s % 2) == 0 ? 'even' : 'odd'}">
+	                <td class="table_checkbox"><g:checkBox name="id" checked="${false}" value="${fieldValue(bean: i, field: 'id')}"/></td>
+	                <td><g:link action="show" id="${fieldValue(bean: i, field: 'id')}">${fieldValue(bean: i, field: 'name')}</g:link></td>
+	                <td><g:formatDate format="yyyy.MM.dd - HH:mm" date="${i.dateCreated}"/></td>
+	                <td><g:formatDate format="yyyy.MM.dd - HH:mm" date="${i.lastUpdated}"/></td>
+	                </tr>
                 </g:each>
+                <tr>
+                    <td colspan="4">
+                        <input type="submit" value="${message(code:'delete',default:'Delete')}" class="button">
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

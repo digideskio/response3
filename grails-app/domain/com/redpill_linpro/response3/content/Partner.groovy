@@ -1,11 +1,13 @@
 package com.redpill_linpro.response3.content
 
 import com.redpill_linpro.response3.security.User
+import com.redpill_linpro.response3.security.Lock
 
 class Partner {
     
     String name
     String description
+    Lock lock
     
     Date dateCreated
     Date lastUpdated
@@ -19,6 +21,7 @@ class Partner {
     
     static constraints = {
         customers(nullable:true)
+        lock(nullable:true)
         name(blank: false, nullable:false, unique:true,size:1..60)
         description(nullable: true,size:0..4000)
         clients(nullable: true)
@@ -41,6 +44,7 @@ class Partner {
         table 'partner'
         version false
         id generator: 'sequence', params: [sequence: 'partner_seq']
+        lock lazy: false
         //Indexes
         id index:'partner_id_idx'
         name index:'partner_name_idx'

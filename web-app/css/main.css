@@ -26,6 +26,9 @@ html * {
 
 body {
 }
+a{
+	text-decoration:none;
+}
 #header{
 	background:#333;
 	height:80px;
@@ -69,7 +72,6 @@ body {
     width:100px;
     padding:10px;
 	color:#fff;
-	text-decoration:none;
 	font-size:0.7em;
 	font-weigth:bold;
 	display:block;
@@ -148,7 +150,6 @@ body {
 	font-size:0.85em;
 	font-weight: bold;
 	color:#333;
-	text-decoration:none;
 	letter-spacing:0.1em;
 	transition:background 100ms ease-in;
 }
@@ -238,6 +239,13 @@ div.notfound_footer{
     border: 1px solid #FFE7CA;
     outline: none;
 }
+.r3form td input[readonly="readonly"]:focus{
+	background-color: #eee;
+}
+.r3form td textarea[readonly="readonly"]:focus{
+    background-color: #eee;
+}
+
 .r3form td textarea:focus{
     background:#FFE7CA;
     border: 1px solid #FFE7CA;
@@ -246,16 +254,13 @@ div.notfound_footer{
 .fieldRequired {
     color: red;
 }
-.r3form td input.button{
+.r3form td input.button, .r3listing input.button{
 	display:block;
-	margin-top:10px;
-	margin-right: auto;
-    margin-left: auto;
 	font-weight:bold;
 	border-radius: 0px;
     border-style: none;
-	width:50%;
-	text-align:left;
+    text-align:left;
+	width:240px;
 	cursor:pointer;
 	height:40px;
     line-height:40px;
@@ -267,18 +272,31 @@ div.notfound_footer{
     padding:0 20px;
     transition:background 100ms ease-in;
 }
-.r3form td input.button:hover{
+.r3form td input.button{
+	margin-top:10px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.r3form td input.button:hover, .r3listing input.button:hover{
 	background:#DE7B10 url(../images/icons/save.png) no-repeat;
 	background-position:90% center;
 }
-
+div.message {
+    background: #F3F8FC;
+    border-top: 1px solid #006DBA;
+    border-bottom: 1px solid #006DBA;
+    color: #006DBA;
+    margin-top: 10px;
+    padding: 5px 20px 5px 20px;
+    font-size: 0.7em;
+}
 div.errors {
     background: #fff3f3;
     border-top: 1px solid #cc0000;
     border-bottom: 1px solid #cc0000;
     color: #cc0000;
-    margin: 10px 0 5px 0;
-    padding: 5px 0 5px 0;
+    margin-top: 10px;
+    padding: 5px 20px 5px 20px;
     font-size: 0.7em;
 }
 div.errors ul {
@@ -299,21 +317,48 @@ div.errors li {
 	border-collapse: collapse;
 }
 .r3listing table th{
-	background: #3B659C;
+	background:#3B659C;
 	text-align: left;
-	padding: 0 4px;
+}
+.r3listing table th:first-child{
+	width:12px;
+}
+.r3listing table th.sorted.desc{
+	background:#3B659C url(../images/icons/up.png) no-repeat;
+	background-position:right center;
+}
+.r3listing table th.sorted.asc{
+    background:#3B659C url(../images/icons/down.png) no-repeat;
+    background-position:right center;
 }
 .r3listing table td{
     text-align: left;
     font-size:0.8em;
     border-right: 1px solid #D4D4D4;
-    padding: 0 4px;
+    padding:4px;
 }
+.r3listing table td a{
+	display: block;
+	color:#222;
+    width:100%;
+}
+.r3listing table td:last-child{
+    border-right: none;
+}
+.r3listing table tr.odd{
+    background:#F3F4FC;
+}
+.r3listing table tr:last-child td{
+	background:#3B659C;
+    padding:0px;
+}
+
 .r3listing table th a{
     color:#fff;
-    text-decoration:none;
     font-size:0.9em;
-    display:inline;
+    display:block;
+    width:100%;
+    padding: 0px 4px;
 }
 .r3listing table tbody tr{
     transition:background 100ms ease-in;
@@ -322,7 +367,7 @@ div.errors li {
 	background:#C7D4E7;
 }
 .table_checkbox{
-	max-width: 10px;
+	padding: 4px 4px 0px 4px;
 }
 .table_title{
     max-width: 390x;
