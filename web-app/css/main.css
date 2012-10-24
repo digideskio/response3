@@ -195,7 +195,15 @@ div.notfound_footer{
 	background: linear-gradient(to bottom, #fff, #ddd);
 }
 .r3form{
-    width:500px;
+    width:560px;
+}
+.r3form.show h1{
+	background:#605860 url(../images/icons/locked.png) no-repeat;
+	background-position:right center; 
+}
+.r3form.edit h1{
+    background:#605860 url(../images/icons/unlocked.png) no-repeat;
+    background-position:right center; 
 }
 .r3form table{
     width:100%;
@@ -207,7 +215,7 @@ div.notfound_footer{
     font-weight: bold;
     color:#333;
     letter-spacing:0.1em;
-    width:360px;
+    width:560px;
 }
 .r3form td input{
     width:98%;
@@ -265,21 +273,31 @@ div.notfound_footer{
 	height:40px;
     line-height:40px;
 	letter-spacing:0.15em;
-    background:#FF931F url(../images/icons/save.png) no-repeat;
-    background-position:90% center;
     color:#fff;
     font-size:0.9em;
     padding:0 20px;
     transition:background 100ms ease-in;
+}
+.r3form.show td input.button, .r3listing input.button{
+	background:#FF931F url(../images/icons/edit.png) no-repeat;
+	background-position:90% center;
+}
+.r3form.edit td input.button, .r3listing input.button{
+	background:#FF931F url(../images/icons/save.png) no-repeat;
+	background-position:90% center;
 }
 .r3form td input.button{
 	margin-top:10px;
     margin-right: auto;
     margin-left: auto;
 }
-.r3form td input.button:hover, .r3listing input.button:hover{
-	background:#DE7B10 url(../images/icons/save.png) no-repeat;
+.r3form.show td input.button:hover, .r3listing input.button:hover{
+	background:#DE7B10 url(../images/icons/edit.png) no-repeat;
 	background-position:90% center;
+}
+.r3form.edit td input.button:hover, .r3listing input.button:hover{
+    background:#DE7B10 url(../images/icons/save.png) no-repeat;
+    background-position:90% center;
 }
 div.message {
     background: #F3F8FC;

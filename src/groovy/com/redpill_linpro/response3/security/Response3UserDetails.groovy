@@ -9,12 +9,8 @@ class Response3UserDetails extends GrailsUser {
         super(base.username, base.password, base.enabled,
             base.accountNonExpired, base.credentialsNonExpired, 
             base.accountNonLocked,
-            base.authorities, base.id,
-            base.firstName,
-            base.lastName,
-            base.telephone,
-            base.email
-            )
+            base.authorities, base.id
+        )
 
         this.salt = salt;
     }

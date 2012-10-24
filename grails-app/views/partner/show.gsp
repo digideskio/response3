@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title><g:message code="response3"/> - <g:message code="partner" /> - ${fieldValue(bean: instance, field: 'name')}</title>
+        <title><g:message code="response3"/> - <g:message code="show.partner" /> - ${fieldValue(bean: instance, field: 'name')}</title>
         <meta name="layout" content="main" />
     </head>
     <body>
@@ -10,7 +10,7 @@
             </div>
         </g:hasErrors>
         <g:render template="header"/>
-        <div class="r3widget r3form">
+        <div class="r3widget r3form show">
           <g:form name="partnerform" action="edit" id="${instance.id}">
             <h1><g:message code="show.partner" /></h1>
             <table>
@@ -48,7 +48,6 @@
                   <tr>
                       <td>
                       <input class="button" type="submit" value="${message(code:'edit.partner')}" />
-                      
                       </td>
                   </tr>
              </tbody>

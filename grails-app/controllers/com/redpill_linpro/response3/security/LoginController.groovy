@@ -29,6 +29,7 @@ class LoginController {
 	 * Default action; redirects to 'defaultTargetUrl' if logged in, /login/auth otherwise.
 	 */
 	def index = {
+        log.debug params
 		if (springSecurityService.isLoggedIn()) {
 			redirect uri: SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl
 		}
@@ -41,9 +42,9 @@ class LoginController {
 	 * Show the login page.
 	 */
 	def auth = {
-
+        log.debug params
 		def config = SpringSecurityUtils.securityConfig
-
+        log.debug springSecurityService.isLoggedIn()
 		if (springSecurityService.isLoggedIn()) {
 			redirect uri: config.successHandler.defaultTargetUrl
 			return

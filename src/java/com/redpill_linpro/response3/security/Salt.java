@@ -7,7 +7,7 @@ public enum Salt {
     INSTANCE;
     private final static SecureRandom RANDOM = new SecureRandom();
 
-    public String getSalt() {
+    public static String getSalt() {
         return new BigInteger(130, RANDOM).toString(32);
     }
 }

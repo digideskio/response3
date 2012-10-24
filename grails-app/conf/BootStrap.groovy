@@ -4,17 +4,26 @@ class BootStrap {
 
     def grailsApplication
     
+    def roleService
+    def AdminUserService
+    
     def init = { servletContext ->
-        def admin = new User(
-            username: 'admin', enabled: true, password: 'admin123456',
-            firstName: 'Olav', lastName: 'Gjerde', 
-            email:"olav@administrators.org" 
-        )
-        if (!admin.validate()){
-            admin.errors.allErrors.each{log.error(it)}
-        } else {
-            admin.save(flush: true)
+        roleService.init()
+        adminUserService.init()
+        environments {
+            production {
+            }
+            test{
+                developmentSetup()
+            }
+            development {
+                developmentSetup()
+            }
         }
+        
+    }
+    def developmentSetup(){
+        
     }
     def destroy = {
         

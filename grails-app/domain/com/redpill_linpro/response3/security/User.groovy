@@ -6,19 +6,21 @@ class User {
 
 	String username
 	String password
-    String salt = Salt.INSTANCE.getSalt()
-	boolean enabled
-	boolean accountExpired
-	boolean accountLocked
-	boolean passwordExpired
+    String salt = Salt.getSalt()
+	boolean enabled = true
+	boolean accountExpired = false
+	boolean accountLocked = false
+	boolean passwordExpired = false
     
-    String firstName
-    String lastName
+    String firstname
+    String lastname
     String telephone
     String email
 
 	static constraints = {
 		username blank: false, unique: true, size:3..32, matches:"^[a-zA-Z0-9]+"
+        firstname blank:true, nullable:true
+        lastname blank:true, nullable:true
 		password blank: false, size: 10..255
         email blank: false
         salt blank: false, maxSize: 64
@@ -33,8 +35,8 @@ class User {
         version false
         
         id index:'person_id_idx'
-        firstName index:'person_firstname_idx'
-        lastName index:'person_lastname_idx'
+        firstname index:'person_firstname_idx'
+        lastname index:'person_lastname_idx'
         email index:'person_email_idx'
         enabled index:'person_enabled_idx'
 	}
@@ -56,4 +58,14 @@ class User {
 	protected void encodePassword() {
 		password = springSecurityService.encodePassword(password, salt)
 	}
+    
+    public boolean isAdmin(){
+        def roles = getAuthorities()
+        for(role in roles){
+            if(role.authority.equals("ROLE_ADMIN")){
+                return true
+            }
+        }
+        return false
+    }
 }

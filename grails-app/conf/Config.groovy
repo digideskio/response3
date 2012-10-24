@@ -109,5 +109,18 @@ grails.plugins.springsecurity.authority.className = 'com.redpill_linpro.response
 // Additional password protection
 grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
 
+// Url protection
+grails.plugins.springsecurity.securityConfigType = 'Annotation'
+grails.plugins.springsecurity.rejectIfNoRule = true
+grails.plugins.springsecurity.controllerAnnotations.staticRules = [
+    '/administration/**':    ['ROLE_ADMIN','ROLE_MANAGER'],
+    '/js/**':        ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/css/**':       ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/images/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/*':           ['IS_AUTHENTICATED_FULLY'],
+    '/login/**':     ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/logout/**':    ['IS_AUTHENTICATED_ANONYMOUSLY']
+]
+
 // response3 specific configuration
 response3.lists.max=40L

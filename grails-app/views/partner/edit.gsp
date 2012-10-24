@@ -10,13 +10,14 @@
             </div>
         </g:hasErrors>
         <g:render template="header"/>
-        <div class="r3widget r3form">
-          <g:form name="partnerform" action="save">
-            <h1><g:message code="show.partner" /></h1>
+        <div class="r3widget r3form edit">
+          <g:form name="partnerform" action="update">
+            <input type="hidden" name="partner.id" value="${fieldValue(bean: instance, field: 'id')}" />
+            <h1><g:message code="edit.partner" /></h1>
             <table>
               <tbody>
                   <tr>
-                      <td class="">
+                      <td colspan="2">
                           <label>
                               <g:message code="name" default="Name" />
                               <span class="fieldRequired" title="Required">*</span>
@@ -24,7 +25,7 @@
                       </td>
                    </tr>
                    <tr>
-                      <td>
+                      <td colspan="2">
                           <g:textField class="${hasErrors(bean: instance, field: 'name', 'error')}" 
                                        id="name" name="name"
                                        value="${fieldValue(bean: instance, field: 'name')}" />
@@ -32,14 +33,14 @@
                   </tr>
                   
                   <tr>
-                      <td class="">
+                      <td colspan="2">
                           <label>
                               <g:message code="description" default="Description" />:
                           </label>
                       </td>
                   </tr>
                   <tr>
-                      <td>
+                      <td colspan="2">
                           <g:textArea class="${hasErrors(bean: instance, field: 'description', 'error')}"
                                       name="description" value="${fieldValue(bean: instance, field: 'description')}"/>
                       </td>
@@ -47,6 +48,9 @@
                   <tr>
                       <td>
                       <input class="button" type="submit" value="${message(code:'update.partner')}" />
+                      </td>
+                      <td>
+                      <input class="button" type="submit" value="${message(code:'cancel.update')}" />
                       </td>
                   </tr>
              </tbody>

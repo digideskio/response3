@@ -24,6 +24,6 @@ class Lock {
     String toString() {
         def g = new ValidationTagLib()
         return g.message(
-            code: "locked.by.info", args:[this.lockedby, this.dateCreated])
+            code: "locked.by.info", args:[this.lockedBy, this.dateCreated])
     }
 }
