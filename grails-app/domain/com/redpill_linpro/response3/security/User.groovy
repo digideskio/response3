@@ -6,7 +6,7 @@ class User {
 
 	String username
 	String password
-    String salt = Salt.getSalt()
+    String salt = Salt.INSTANCE.getSalt()
 	boolean enabled
 	boolean accountExpired
 	boolean accountLocked

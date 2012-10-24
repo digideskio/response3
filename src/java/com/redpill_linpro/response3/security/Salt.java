@@ -3,10 +3,11 @@ package com.redpill_linpro.response3.security;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-public class Salt {
+public enum Salt {
+    INSTANCE;
+    private final static SecureRandom RANDOM = new SecureRandom();
 
-    public static String getSalt() {
-        SecureRandom random = new SecureRandom();
-        return new BigInteger(130, random).toString(32);
+    public String getSalt() {
+        return new BigInteger(130, RANDOM).toString(32);
     }
 }
