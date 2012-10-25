@@ -10,8 +10,8 @@ class Customer {
     String description
     Date dateCreated
     Date lastUpdated
-    Lock lock
-    boolean deactivated = false
+    Lock lockdata
+    boolean enabled = true
     
     static hasMany = [
         projects:Project,
@@ -21,17 +21,17 @@ class Customer {
     
     static constraints = {
         partner(nullable:false)
-        lock(nullable:true)
+        lockdata(nullable:true)
         name(blank: false, nullable:false)
         description(nullable: true,size:0..4000)
         clients(nullable: true)
         contactPersons(nullable: true)
-        deactivated(validator: {
+        enabled(validator: {
                 val, obj ->
-                if(val){
+                if(val == false){
                     // Check Project
                     if(Project.executeQuery(
-                        "select 1 from Project p WHERE p.customer = :c AND p.deactivated is false",
+                        "select 1 from Project p WHERE p.customer = :c AND p.enabled is true",
                         [c:obj]
                     ).size() > 0){
                         return false;
@@ -56,6 +56,7 @@ class Customer {
         contactPersons index:'customer_contact_persons_idx'
         dateCreated index:'customer_date_created_idx'
         partner index:'customer_partner_idx'
+        enabled index:'customer_enabled_idx'
     }
     
     String toString() {

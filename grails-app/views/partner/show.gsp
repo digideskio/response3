@@ -47,6 +47,20 @@
                   </tr>
                   <tr>
                       <td>
+                          <label>
+                              <g:message code="enabled" default="Enabled" />:
+                          </label>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <g:checkBox class="${hasErrors(bean: instance, field: 'enabled', 'error')}"
+                                      disabled="disabled"
+                                      name="enabled" value="${fieldValue(bean: instance, field: 'enabled')}"/>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
                       <input class="button" type="submit" value="${message(code:'edit.partner')}" />
                       </td>
                   </tr>

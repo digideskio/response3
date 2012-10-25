@@ -11,7 +11,7 @@ class Project {
     
     Date dateCreated
     Date lastUpdated
-    boolean deactivated = false
+    boolean enabled = true
     
     static hasMany = [
         issues:Issue,
@@ -23,9 +23,9 @@ class Project {
     static constraints = {
         
         customer(nullable:false)
-        deactivated(validator: {
+        enabled(validator: {
                 val, obj ->
-                if(val){
+                if(val == false){
                     // Check Issue
                     if(Issue.executeQuery(
                         "select 1 from Issue i WHERE i.project = :p AND i.status.id NOT IN (0)",
@@ -57,7 +57,7 @@ class Project {
         issues index:'project_issues_idx'
         clients index:'project_clients_idx'
         customer index:'project_customer_idx'
-        deactivated index:'project_deactivated_idx'
+        enabled index:'project_enabled_idx'
         lastUpdated index:'project_last_opdated_idx'
 
         cache usage:'read-write'

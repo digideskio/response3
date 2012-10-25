@@ -49,13 +49,14 @@ class PartnerController {
     def edit(){
         log.debug params
         try{
-            def partner = lockService.lock(CN,Long.parseLong(params.id))
+            long partnerId = checkId(params.id)
+            def partner = lockService.lock(CN, partnerId)
             if(partner){
                 return [
                     instance:partner
                 ]
             } else {
-                throw new RuntimeException("Partnerservice returned null")
+                throw new RuntimeException("lockservice returned null")
             }
         } catch(RuntimeException e){
             log.error(e.getMessage())
@@ -67,19 +68,19 @@ class PartnerController {
     def cancel(){
         log.debug params
         try{
-            def partner = lockService.unlock(CN,Long.parseLong(params.id))
+            long partnerId = checkId(params.id)
+            def partner = lockService.unlock(CN,partnerId)
             if(partner){
                 flash.message = 
                     message(code:'unlocked.partner', args:[params.id])
                 redirect(action:'show', id:params.id)
             } else {
-                throw new RuntimeException("Partnerservice returned null")
+                throw new RuntimeException("lockservice returned null")
             }
         } catch(RuntimeException e){
             log.error(e.getMessage())
-            flash.errorMessage = message(
-                code:'could.not.unlock.partner', args:[params.id])
-            redirect(action:'show', id:params.id)
+            flash.errorMessage = message(code:'could.not.unlock.partner')
+            redirect(action:'list')
         }
     }
     
@@ -97,6 +98,11 @@ class PartnerController {
     
     def update(){
         log.debug params
+        if(params.partner == null){
+            flash.message = message(code:'no.partner.found')
+            redirect(action:'list')
+            return
+        }
         def partner = Partner.lock(params.partner.id)
         partner.properties = params
         partner.lock.delete()
@@ -111,4 +117,17 @@ class PartnerController {
     }
     
     def delete() {}
+    
+    private def checkId(id){
+        if(id instanceof String){
+            return Long.parseLong(id)
+        }
+        else{
+            try{
+                return Long.valueOf(id)
+            } catch (NumberFormatException e){
+                return null
+            }
+        }
+    }
 }

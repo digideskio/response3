@@ -197,6 +197,9 @@ div.notfound_footer{
 .r3form{
     width:560px;
 }
+.r3form h1{
+	background:#605860;
+}
 .r3form.show h1{
 	background:#605860 url(../images/icons/locked.png) no-repeat;
 	background-position:right center; 
@@ -225,6 +228,9 @@ div.notfound_footer{
     font-size: 0.975em;
     padding: 5px;
 }
+.r3form.show td input{
+    background-color: #ccc;
+}
 .r3form td input.error{
     background-color: #FFF3F3;
     border:#cc0000 1px solid;
@@ -238,6 +244,9 @@ div.notfound_footer{
     font-size: 0.975em;
     padding: 5px;
 }
+.r3form.show td textarea{
+    background-color: #ccc;
+}
 .r3form td textarea.error{
     background-color: #FFF3F3;
     border:#cc0000 1px solid;
@@ -248,10 +257,10 @@ div.notfound_footer{
     outline: none;
 }
 .r3form td input[readonly="readonly"]:focus{
-	background-color: #eee;
+	background-color: #ccc;
 }
 .r3form td textarea[readonly="readonly"]:focus{
-    background-color: #eee;
+    background-color: #ccc;
 }
 
 .r3form td textarea:focus{
@@ -277,6 +286,8 @@ div.notfound_footer{
     font-size:0.9em;
     padding:0 20px;
     transition:background 100ms ease-in;
+    background:#FF931F url(../images/icons/save.png) no-repeat;
+    background-position:90% center;
 }
 .r3form.show td input.button, .r3listing input.button{
 	background:#FF931F url(../images/icons/edit.png) no-repeat;
@@ -310,10 +321,9 @@ div.message {
 }
 div.errors {
     background: #fff3f3;
-    border-top: 1px solid #cc0000;
-    border-bottom: 1px solid #cc0000;
+    border: 1px solid #cc0000;
     color: #cc0000;
-    margin-top: 10px;
+    margin-bottom:20px;
     padding: 5px 20px 5px 20px;
     font-size: 0.7em;
 }

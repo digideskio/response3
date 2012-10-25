@@ -7,11 +7,11 @@ class Partner {
     
     String name
     String description
-    Lock lock
+    Lock lockdata
     
     Date dateCreated
     Date lastUpdated
-    boolean deactivated = false
+    boolean enabled = true
     
     static hasMany = [
         customers:Customer,
@@ -21,16 +21,17 @@ class Partner {
     
     static constraints = {
         customers(nullable:true)
-        lock(nullable:true)
+        lockdata(nullable:true)
         name(blank: false, nullable:false, unique:true,size:1..60)
         description(nullable: true,size:0..4000)
         clients(nullable: true)
         contactPersons(nullable: true)
-        deactivated(validator: {
+        enabled(validator: {
             val, obj ->
-            if(val){
+            if(val == false){
                 if(Customer.executeQuery(
-                    "select 1 from Customer c WHERE c.partner = :p AND c.deactivated is false",
+                    "select 1 from Customer c WHERE c.partner = :p AND "+
+                    "c.enabled is true",
                     [p:obj]
                 ).size() > 0){
                     return false;
@@ -44,7 +45,7 @@ class Partner {
         table 'partner'
         version false
         id generator: 'sequence', params: [sequence: 'partner_seq']
-        lock lazy: false
+        lockdata lazy: false
         //Indexes
         id index:'partner_id_idx'
         name index:'partner_name_idx'
