@@ -115,22 +115,20 @@ class PartnerControllerTests {
         assert response.redirectedUrl == '/partner/list'
     }
     void testInvalidUpdate(){
-        params.partner = [:]
-        params.partner.id = 10
+        params.id = 10
         controller.update()
         assert flash.errorMessage != null
         assert response.redirectedUrl == "/partner/list"
     }
     void testUpdate(){
-        params.partner = [:]
-        params.partner.id = 1
+        params.id = 1
         params.description = "truls"
         
         controller.update()
         
-        assert response.redirectedUrl == "/partner/show/$params.partner.id"
+        assert response.redirectedUrl == "/partner/show/$params.id"
         assert flash.message != null
-        def partner = Partner.get(params.partner.id)
+        def partner = Partner.get(params.id)
         assert partner.description == "truls"
     }
 }

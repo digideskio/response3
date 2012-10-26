@@ -98,13 +98,13 @@ class PartnerController {
     
     def update(){
         log.debug params
-        if(params.partner == null){
+        if(params.id == null){
             flash.message = message(code:'no.partner.found')
             redirect(action:'list')
             return
         }
         try{
-            def partner = lockService.update(CN, params.partner.id, params)
+            def partner = lockService.update(CN, params.id, params)
             if(partner){
                 flash.message = message(
                     code:'partner.updated',args:[partner.name])

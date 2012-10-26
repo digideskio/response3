@@ -12,7 +12,7 @@
         <g:render template="header"/>
         <div class="r3widget r3form edit">
           <g:form name="partnerform" action="update">
-            <input type="hidden" name="partner.id" value="${fieldValue(bean: instance, field: 'id')}" />
+            <input type="hidden" name="id" value="${fieldValue(bean: instance, field: 'id')}" />
             <h1><g:message code="edit.partner" /></h1>
             <table>
               <tbody>
