@@ -62,7 +62,7 @@ class PartnerController {
             log.error(e.getMessage())
             flash.errorMessage = message(
                 code:'could.not.lock.partner', args:[params.id])
-            redirect(action:'show', id:params.id)
+            redirect(action:'list')
         }
     }
     def cancel(){
@@ -103,16 +103,22 @@ class PartnerController {
             redirect(action:'list')
             return
         }
-        def partner = Partner.lock(params.partner.id)
-        partner.properties = params
-        partner.lock.delete()
-        partner.lock = null
-        if(partner.validate() && partner.save(flush:true)){
-            flash.message = message(code:'partner.updated',args:[partner.name])
-            redirect (action:'show', id:partner.id)
-        }
-        else{
-            render(view: "edit", model: [instance: partner])
+        try{
+            def partner = lockService.update(CN, params.partner.id, params)
+            if(partner){
+                flash.message = message(
+                    code:'partner.updated',args:[partner.name])
+                redirect (action:'show', id:partner.id)
+            }
+            else{
+                throw new RuntimeException(
+                    "lockservice for update returned null")
+            }
+        } catch(RuntimeException e){
+            log.error(e.getMessage())
+            flash.errorMessage = message(
+                code:'could.not.lock.partner', args:[params.id])
+            redirect(action:'list')
         }
     }
     

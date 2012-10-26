@@ -65,4 +65,30 @@ class LockService {
             throw new RuntimeException(msg)
         }
     }
+    
+    def update(String className, long id, Map params){
+        def currentUser = userService.getCurrentUser()
+        def domainClass = grailsApplication.getClassForName(className)
+        def instance = domainClass.lock(id)
+        if(instance.hasProperty('lock') && 
+            (instance.lock.lockedBy == currentUser || 
+             currentUser.isAdmin())){
+            instance.properties = params
+            instance.lock.delete()
+            instance.lock = null
+            if(instance.validate() && instance.save()){
+                return instance
+            }
+            else{
+                String msg = "Couldn't update $className id:$instance.id"
+                log.error(msg)
+                throw new RuntimeException(msg)
+            }
+        }
+        else{
+            String msg = "No lock found"
+            log.error(msg)
+            throw new RuntimeException(msg)
+        }
+    }
 }

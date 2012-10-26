@@ -17,6 +17,12 @@ class PartnerControllerTests {
         },
         unlock:{ String cname, long id ->
             return Partner.get(id)
+        },
+        update:{ String cname, long id, Map params ->
+            def p = Partner.get(id)
+            p.properties = params
+            p.save()
+            return p
         }
     ]
     
@@ -52,7 +58,7 @@ class PartnerControllerTests {
         params.id = 10
         controller.edit()
         
-        assert response.redirectedUrl == "/partner/show/$params.id"
+        assert response.redirectedUrl == "/partner/list"
         assert flash.errorMessage != null
     }
     void testValidEdit() {
@@ -102,5 +108,29 @@ class PartnerControllerTests {
         assert controller.checkId(1) == 1L
         assert controller.checkId(1L) == 1L
         assert controller.checkId(null) == null
+    }
+    void testEmptyUpdate(){
+        controller.update()
+        assert flash.message != null
+        assert response.redirectedUrl == '/partner/list'
+    }
+    void testInvalidUpdate(){
+        params.partner = [:]
+        params.partner.id = 10
+        controller.update()
+        assert flash.errorMessage != null
+        assert response.redirectedUrl == "/partner/list"
+    }
+    void testUpdate(){
+        params.partner = [:]
+        params.partner.id = 1
+        params.description = "truls"
+        
+        controller.update()
+        
+        assert response.redirectedUrl == "/partner/show/$params.partner.id"
+        assert flash.message != null
+        def partner = Partner.get(params.partner.id)
+        assert partner.description == "truls"
     }
 }
