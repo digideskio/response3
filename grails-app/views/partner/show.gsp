@@ -10,9 +10,12 @@
             </div>
         </g:hasErrors>
         <g:render template="header"/>
-        <div class="r3widget r3form show">
+        <div class="r3widget r3form show ${instance.lockdata == null ? 'unlocked':'locked'}">
           <g:form name="partnerform" action="edit" id="${instance.id}">
             <h1><g:message code="show.partner" /></h1>
+            <g:if test="${instance.lockdata != null}">
+                <h2><g:message code="locked.by" />:${instance.lockdata.lockedBy.username}</h2>
+            </g:if>
             <table>
               <tbody>
                   <tr>

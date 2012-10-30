@@ -19,7 +19,8 @@ class RoleService {
         }
         def consultantRole = Role.findByAuthority('ROLE_CONSULTANT')
         if(!consultantRole){
-            consultantRole = new Role(authority: 'ROLE_CONSULTANT').save(flush: true)
+            consultantRole = new Role(
+                authority: 'ROLE_CONSULTANT').save(flush: true)
         }
         def partnerRole = Role.findByAuthority('ROLE_PARTNER')
         if(!partnerRole){
@@ -27,7 +28,8 @@ class RoleService {
         }
         def customerRole = Role.findByAuthority('ROLE_CUSTOMER')
         if(!customerRole){
-            customerRole = new Role(authority: 'ROLE_CUSTOMER').save(flush: true)
+            customerRole = new Role(
+                authority: 'ROLE_CUSTOMER').save(flush: true)
         }
     }
 }

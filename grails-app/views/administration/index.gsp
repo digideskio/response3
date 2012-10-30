@@ -7,5 +7,6 @@
         <g:render template="partner"/>
         <g:render template="customer"/>
         <g:render template="project"/>
+        <g:render template="user"/>
     </body>
 </html>

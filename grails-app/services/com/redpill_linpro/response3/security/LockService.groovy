@@ -2,12 +2,14 @@ package com.redpill_linpro.response3.security
 
 class LockService {
     
+    static transactional = true
+    
     def grailsApplication
     def userService
-
-    static transactional = true
+    
     def lock(String className, long id) {
         def currentUser = userService.getCurrentUser()
+        log.debug("Currentuser: $currentUser")
         if(!currentUser){
             String msg = "Couldn't find current user"
             log.error(msg)
@@ -15,11 +17,11 @@ class LockService {
         }
         def domainClass = grailsApplication.getClassForName(className)
         def instance = domainClass.lock(id)
-        if(instance.hasProperty('lock') && instance.lock == null){
+        if(instance.hasProperty('lockdata') && instance.lockdata == null){
             def lock = new Lock(lockedBy:currentUser)
             lock.save()
-            instance.lock = lock 
-            if(instance.validate() && instance.save()){
+            instance.lockdata = lock 
+            if(instance.validate() && instance.save(flush:true)){
                 return instance
             }
             else{
@@ -29,12 +31,12 @@ class LockService {
             }
         }
         else{
-            if(instance.lock.lockedBy == currentUser || 
+            if(instance.lockdata.lockedBy == currentUser || 
                 currentUser.isAdmin()){
                 return instance
             }
             else{
-                String msg = instance.lock.toString()
+                String msg = instance.lockdata.toString()
                 log.error(msg)
                 throw new RuntimeException(msg)
             }
@@ -43,14 +45,15 @@ class LockService {
     
     def unlock(String className, long id){
         def currentUser = userService.getCurrentUser()
+        log.debug("Currentuser: $currentUser")
         def domainClass = grailsApplication.getClassForName(className)
         def instance = domainClass.lock(id)
-        if(instance.hasProperty('lock') && 
-            (instance.lock.lockedBy == currentUser || 
+        if(instance.hasProperty('lockdata') && 
+            (instance.lockdata.lockedBy == currentUser || 
              currentUser.isAdmin())){
-            instance.lock.delete()
-            instance.lock = null
-            if(instance.validate() && instance.save()){
+            instance.lockdata.delete()
+            instance.lockdata = null
+            if(instance.validate() && instance.save(flush:true)){
                 return instance
             }
             else{
@@ -66,17 +69,18 @@ class LockService {
         }
     }
     
-    def update(String className, long id, Map params){
+    def update(String className, Map params){
         def currentUser = userService.getCurrentUser()
+        log.debug("Currentuser: $currentUser")
         def domainClass = grailsApplication.getClassForName(className)
-        def instance = domainClass.lock(id)
-        if(instance.hasProperty('lock') && 
-            (instance.lock.lockedBy == currentUser || 
+        def instance = domainClass.lock(params.id)
+        if(instance.hasProperty('lockdata') && 
+            (instance.lockdata.lockedBy == currentUser || 
              currentUser.isAdmin())){
             instance.properties = params
-            instance.lock.delete()
-            instance.lock = null
-            if(instance.validate() && instance.save()){
+            instance.lockdata.delete()
+            instance.lockdata = null
+            if(instance.validate() && instance.save(flush:true)){
                 return instance
             }
             else{

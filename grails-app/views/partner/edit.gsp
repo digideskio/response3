@@ -10,10 +10,13 @@
             </div>
         </g:hasErrors>
         <g:render template="header"/>
-        <div class="r3widget r3form edit">
-          <g:form name="partnerform" action="update">
+        <div class="r3widget r3form edit ${instance.lockdata == null ? 'unlocked':'locked'}">
+          <g:form name="partnerform" controller="partner">
             <input type="hidden" name="id" value="${fieldValue(bean: instance, field: 'id')}" />
             <h1><g:message code="edit.partner" /></h1>
+            <g:if test="${instance.lockdata != null}">
+                <h2><g:message code="locked.by" />:${instance.lockdata.lockedBy.username}</h2>
+            </g:if>
             <table>
               <tbody>
                   <tr>
@@ -47,10 +50,10 @@
                   </tr>
                   <tr>
                       <td>
-                      <input class="button" type="submit" value="${message(code:'update.partner')}" />
+                        <g:actionSubmit class="button" value="${message(code:'update.partner')}" action="update"/>
                       </td>
                       <td>
-                      <input class="button" type="submit" value="${message(code:'cancel.update')}" />
+                        <g:actionSubmit class="button" value="${message(code:'cancel.update')}" action="cancel"/>
                       </td>
                   </tr>
              </tbody>

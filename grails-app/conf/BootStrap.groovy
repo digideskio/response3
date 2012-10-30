@@ -4,8 +4,9 @@ class BootStrap {
 
     def grailsApplication
     
+    def adminUserService
     def roleService
-    def AdminUserService
+    def initService
     
     def init = { servletContext ->
         roleService.init()
@@ -23,7 +24,7 @@ class BootStrap {
         
     }
     def developmentSetup(){
-        
+        initService.init()
     }
     def destroy = {
         

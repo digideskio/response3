@@ -58,14 +58,11 @@ a{
 	float:right;
 }
 #header li{
-    display:inline;
-    border:1px #666 solid;
     margin-left:4px;
     float:left;
     line-height: 120px;
     text-align:center;
     transition:background 100ms ease-in;
-    box-shadow: 0 0 2px #fff;
 }
 #header li a{
 	height:60px;
@@ -94,7 +91,8 @@ a{
 #header li.search-icon:hover{
     background:#77A500 url(../images/icons/search.png) center 10px no-repeat;
     background-size:40px 40px;
-}#header li.administration-icon{
+}
+#header li.administration-icon{
     background:#854C8F url(../images/icons/administration.png) center 10px no-repeat;
     background-size:40px 40px;
 }
@@ -102,11 +100,11 @@ a{
     background:#82398F url(../images/icons/administration.png) center 10px no-repeat;
     background-size:40px 40px;
 }#header li.signoff-icon{
-    background:#c33 url(../images/icons/close.png) center 10px no-repeat;
+    background:#c33 url(../images/icons/signout.png) center 10px no-repeat;
     background-size:40px 40px;
 }
 #header li.signoff-icon:hover{
-    background:#CC1B1B url(../images/icons/close.png) center 10px no-repeat;
+    background:#CC1B1B url(../images/icons/signout.png) center 10px no-repeat;
     background-size:40px 40px;
 }
 .main{
@@ -183,6 +181,12 @@ span.purple{
 span.red{
     background:#C33 url(../images/icons/add.png) center no-repeat;
 }
+span.yellow{
+    background:#ECBA21 url(../images/icons/add.png) center no-repeat;
+}
+span.cyan{
+    background:#00A19D url(../images/icons/folder.png) center no-repeat;
+}
 div.notfound{
 	min-height:500px;
 	background:#fff url(../images/errors/rat.png) center no-repeat;
@@ -200,11 +204,11 @@ div.notfound_footer{
 .r3form h1{
 	background:#605860;
 }
-.r3form.show h1{
+.r3form.locked h1{
 	background:#605860 url(../images/icons/locked.png) no-repeat;
 	background-position:right center; 
 }
-.r3form.edit h1{
+.r3form.unlocked h1{
     background:#605860 url(../images/icons/unlocked.png) no-repeat;
     background-position:right center; 
 }
@@ -321,9 +325,10 @@ div.message {
 }
 div.errors {
     background: #fff3f3;
-    border: 1px solid #cc0000;
+    border-top: 1px solid #cc0000;
+    border-bottom: 1px solid #cc0000;
     color: #cc0000;
-    margin-bottom:20px;
+    margin-top:10px;
     padding: 5px 20px 5px 20px;
     font-size: 0.7em;
 }

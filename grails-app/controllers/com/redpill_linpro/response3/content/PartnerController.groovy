@@ -104,7 +104,7 @@ class PartnerController {
             return
         }
         try{
-            def partner = lockService.update(CN, params.id, params)
+            def partner = lockService.update(CN, params)
             if(partner){
                 flash.message = message(
                     code:'partner.updated',args:[partner.name])

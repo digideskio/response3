@@ -98,7 +98,7 @@ log4j = {
     debug  'grails.app',
            'org.hibernate.SQL'
            
-    trace 'org.hibernate.type'
+    //trace 'org.hibernate.type'
 }
 
 // Added by the Spring Security Core plugin:

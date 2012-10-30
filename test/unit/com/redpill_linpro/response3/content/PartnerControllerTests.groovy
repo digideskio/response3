@@ -5,7 +5,8 @@ import org.junit.*
 
 import com.redpill_linpro.response3.security.LockService
 /**
- * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
+ * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} 
+ * for usage instructions
  */
 @TestFor(PartnerController)
 @Mock([Partner])
@@ -18,8 +19,8 @@ class PartnerControllerTests {
         unlock:{ String cname, long id ->
             return Partner.get(id)
         },
-        update:{ String cname, long id, Map params ->
-            def p = Partner.get(id)
+        update:{ String cname, Map params ->
+            def p = Partner.get(params.id)
             p.properties = params
             p.save()
             return p
