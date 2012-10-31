@@ -71,7 +71,11 @@ class LockService {
     
     def update(String className, Map params){
         def currentUser = userService.getCurrentUser()
-        log.debug("Currentuser: $currentUser")
+        if(!(params instanceof Map) || params.id == null){
+            String msg = "Invalid params: $params.toString()"
+            log.error(msg)
+            throw new RuntimeException(msg)
+        }
         def domainClass = grailsApplication.getClassForName(className)
         def instance = domainClass.lock(params.id)
         if(instance.hasProperty('lockdata') && 
