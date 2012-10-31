@@ -29,4 +29,18 @@ class PartnerTests {
        partner = new Partner(name:"Oslo Stock Exchange") 
        assert partner.validate()
     }
+    
+    void testSpecialChars(){
+        def partner = new Partner(name:"Ålbærg Øl")
+        assert partner.validate()
+        assert partner.save()
+        
+        def partner2 = new Partner(name:"-ナルト-")
+        assert partner2.validate()
+        assert partner2.save()
+        
+        def partner3 = new Partner(name:"ناروتو")
+        assert partner3.validate()
+        assert partner3.save()
+    }
 }
