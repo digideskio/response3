@@ -124,6 +124,44 @@ class PartnerController {
     
     def delete() {}
     
+    def customers(){
+        def partner = Partner.read(params.id)
+        if(partner){
+            params.max = Math.min(
+            params.max ? params.int('max') : 10,
+                grailsApplication.config.response3.lists.max)
+            params.offset = params.offset ? params.int('offset') : 0
+            
+            String sql = """
+                SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
+                WHERE c.partner.id = :id
+                ORDER BY c.name asc
+            """.stripMargin()
+            def customers = Customer.executeQuery(
+                sql, 
+                [id:params.long('id')],
+                [max:params.max,offset:params.long('offset')]
+            )
+            def total = Customer.executeQuery(
+                "SELECT COUNT(c) FROM Customer c WHERE c.partner.id = :id",
+                [id:params.long('id')]
+            )[0]
+            return [
+                instance:partner,
+                instances:customers,
+                total:total
+            ]
+        }
+        else{
+            flash.message = message(code:'partner.not.found',args:[params.id])
+            redirect(action:'list')
+        }
+    }
+    
+    def users(){
+        
+    }
+    
     private def checkId(id){
         if(id instanceof String){
             return Long.parseLong(id)

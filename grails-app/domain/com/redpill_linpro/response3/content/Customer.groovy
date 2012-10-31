@@ -22,7 +22,7 @@ class Customer {
     static constraints = {
         partner(nullable:false)
         lockdata(nullable:true)
-        name(blank: false, nullable:false)
+        name(blank: false, nullable:false,unique:true)
         description(nullable: true,size:0..4000)
         clients(nullable: true)
         contactPersons(nullable: true)

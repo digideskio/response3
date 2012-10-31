@@ -111,7 +111,6 @@ a{
 	padding:20px;
 }
 .r3widget{
-	background:#fff;
 	width:300px;
 	margin-bottom:20px;
 }
@@ -124,9 +123,9 @@ a{
     font-size:0.9em;
     padding:0 10px;
 }
-div.r3widget div{
-	height:40px;
-	background:#605860;
+div.r3widget div:first-child{
+    height:40px;
+    background:#605860;
 }
 .r3widget h1{
 	letter-spacing:0.15em;
@@ -144,6 +143,16 @@ div.r3widget div{
 	list-style:none;
     border-bottom: 1px solid #D4D4D4;
 }
+.r3widget .cnavigation ul li{
+	background:#fff;
+    list-style:none;
+    border: none;
+}
+.r3widget .cnavigation ul li.selected{
+    list-style:none;
+    border: none;
+    background:#C7D4E7;
+}
 .r3widget ul li a{
 	padding: 8px 0px 8px 20px;
 	height:40px;
@@ -152,8 +161,11 @@ div.r3widget div{
 	font-size:0.85em;
 	font-weight: bold;
 	color:#333;
-	letter-spacing:0.1em;
+	letter-spacing:0.04em;
 	transition:background 100ms ease-in;
+}
+.r3widget .cnavigation ul li a{
+    border-bottom:0px;
 }
 .r3widget ul li a:hover{
     background:#FF931F;
@@ -176,6 +188,9 @@ span.darkgreen{
 span.blue{
     background:#3FA9F5 url(../images/icons/add.png) center no-repeat;
 }
+.cnavigation span.blue{
+    background:#3FA9F5 url(../images/icons/show.png) center no-repeat;
+}
 span.darkblue{
 	background:#3B659C url(../images/icons/folder.png) center no-repeat;
 }
@@ -187,6 +202,10 @@ span.red{
 }
 span.yellow{
     background:#ECBA21 url(../images/icons/add.png) center no-repeat;
+}
+.cnavigation span.yellow{
+    background:#ECBA21 url(../images/icons/account.png) center no-repeat;
+    background-size: 24px 24px;
 }
 span.cyan{
     background:#00A19D url(../images/icons/folder.png) center no-repeat;
@@ -202,7 +221,10 @@ div.notfound_footer{
 	height:50px;
 	background: linear-gradient(to bottom, #fff, #ddd);
 }
-.r3form{
+.r3form.show{
+    width:800px;
+}
+.r3form.edit{
     width:560px;
 }
 .r3form h1{
@@ -217,16 +239,18 @@ div.notfound_footer{
     color:#fff;
     font-size:0.6em;
 }
-.r3form.locked div{
+.r3form.locked div:first-child{
 	background:#605860 url(../images/icons/locked.png) no-repeat;
 	background-position:right center; 
 }
-.r3form.unlocked div{
+.r3form.unlocked div:first-child{
     background:#605860 url(../images/icons/unlocked.png) no-repeat;
     background-position:right center; 
 }
 .r3form table{
-    width:100%;
+    width:560px;
+    background:#fff;
+    float:left;
     border-collapse: collapse;
 }
 .r3form td{
@@ -327,6 +351,10 @@ div.notfound_footer{
     background:#DE7B10 url(../images/icons/save.png) no-repeat;
     background-position:90% center;
 }
+.r3form .cnavigation{
+	float:right;
+	width:240px;
+}
 div.message {
     background: #F3F8FC;
     border-top: 1px solid #006DBA;
@@ -361,6 +389,11 @@ div.errors li {
 .r3listing table{
 	width: 100%;
 	border-collapse: collapse;
+}
+.show .r3listing table{
+    width: 560px;
+    border-collapse: collapse;
+    float:left;
 }
 .r3listing table th{
 	background:#3B659C;
@@ -398,12 +431,17 @@ div.errors li {
 	background:#3B659C;
     padding:0px;
 }
+.show .r3listing table tr:last-child td{
+    color:#fff;
+    line-height:30px;
+    height:30px;
+    padding:0px 4px;
+}
 
 .r3listing table th a{
     color:#fff;
     font-size:0.9em;
     display:block;
-    width:100%;
     padding: 0px 4px;
 }
 .r3listing table tbody tr{
@@ -440,6 +478,9 @@ div.errors li {
 	background:#fff;
 	border-right: 1px solid #D4D4D4;
 	max-width:100%;
+}
+.hlayout ul li:last-child a{
+    border-right:none;
 }
 div.clear{
 	clear:both;

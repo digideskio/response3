@@ -1,7 +1,7 @@
 <div class="r3widget hlayout">
     <h1><g:message code="partner.administration"/></h1>
     <ul>
-    <g:if test="${params.action.toLowerCase() in ['edit','show']}">
+    <g:if test="${params.action.toLowerCase() in ['customers','users','show']}">
         <li><g:link controller="partner" action="list">
             <span class="darkblue box"></span>
             <g:message code="list.partners"/></g:link></li>

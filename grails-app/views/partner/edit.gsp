@@ -12,13 +12,13 @@
         <g:render template="header"/>
         <div class="r3widget r3form edit ${instance.lockdata == null ? 'unlocked':'locked'}">
           <g:form name="partnerform" controller="partner">
-            <input type="hidden" name="id" value="${fieldValue(bean: instance, field: 'id')}" />
             <div>
-                <h1><g:message code="edit.partner" /></h1>
+                <h1>${fieldValue(bean: instance, field: 'name')}</h1>
                 <g:if test="${instance.lockdata != null}">
                     <h2><g:message code="locked.by" />:${instance.lockdata.lockedBy.username}</h2>
                 </g:if>
             </div>
+            <input type="hidden" name="id" value="${fieldValue(bean: instance, field: 'id')}" />
             <table>
               <tbody>
                   <tr>
@@ -60,6 +60,7 @@
                   </tr>
              </tbody>
           </table>
+          <div class="clear"></div>
           </g:form>
         </div>
     </body>

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title><g:message code="response3"/> - <g:message code="show.partner" /> - ${fieldValue(bean: instance, field: 'name')}</title>
+        <title><g:message code="response3"/> - <g:message code="partner" /> - ${fieldValue(bean: instance, field: 'name')}</title>
         <meta name="layout" content="main" />
     </head>
     <body>
@@ -13,7 +13,7 @@
         <div class="r3widget r3form show ${instance.lockdata == null ? 'unlocked':'locked'}">
           <g:form name="partnerform" action="edit" id="${instance.id}">
             <div>
-	            <h1><g:message code="show.partner" /></h1>
+	            <h1>${fieldValue(bean: instance, field: 'name')}</h1>
 	            <g:if test="${instance.lockdata != null}">
 	                <h2><g:message code="locked.by" />:${instance.lockdata.lockedBy.username}</h2>
 	            </g:if>
@@ -71,6 +71,8 @@
                   </tr>
              </tbody>
           </table>
+          <g:render template="content_navigation"/>
+          <div class="clear"></div>
           </g:form>
         </div>
 

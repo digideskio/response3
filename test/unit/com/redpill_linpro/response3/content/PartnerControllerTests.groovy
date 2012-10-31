@@ -9,7 +9,7 @@ import com.redpill_linpro.response3.security.LockService
  * for usage instructions
  */
 @TestFor(PartnerController)
-@Mock([Partner])
+@Mock([Partner,Customer])
 class PartnerControllerTests {
     
     def lockService = [
@@ -29,8 +29,10 @@ class PartnerControllerTests {
     
     void setUp(){
         controller.lockService = lockService
-        new Partner(name:'Redpill').save(flush:true)
+        def rp = new Partner(name:'Redpill').save(flush:true)
         new Partner(name:'OSE').save(flush:true)
+        new Customer(partner:rp, name:'Telenor').save(flush:true)
+        new Customer(partner:rp, name:'Oslo Stock Exchange').save(flush:true)
     }
     void testList() {
         def model = controller.list()
@@ -131,5 +133,20 @@ class PartnerControllerTests {
         assert flash.message != null
         def partner = Partner.get(params.id)
         assert partner.description == "truls"
+    }
+    
+    void testInvalidCustomerList(){
+        params.id = 10
+        def model = controller.customers()
+        assert response.redirectedUrl == "/partner/list"
+        assert flash.error != null
+    }
+    
+    void testCustomerList(){
+        params.id = 1
+        def model = controller.customers()
+        assertNotNull model.instance
+        assertNotNull model.instance.customers
+        assert model.instance.customers == 2
     }
 }
