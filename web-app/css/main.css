@@ -124,6 +124,10 @@ a{
     font-size:0.9em;
     padding:0 10px;
 }
+div.r3widget div{
+	height:40px;
+	background:#605860;
+}
 .r3widget h1{
 	letter-spacing:0.15em;
 	height:40px;
@@ -202,13 +206,22 @@ div.notfound_footer{
     width:560px;
 }
 .r3form h1{
+	float:left;
 	background:#605860;
 }
-.r3form.locked h1{
+.r3form h2{
+	float:right;
+	padding-right:30px;
+	letter-spacing: 0.15em;
+    line-height: 40px;
+    color:#fff;
+    font-size:0.6em;
+}
+.r3form.locked div{
 	background:#605860 url(../images/icons/locked.png) no-repeat;
 	background-position:right center; 
 }
-.r3form.unlocked h1{
+.r3form.unlocked div{
     background:#605860 url(../images/icons/unlocked.png) no-repeat;
     background-position:right center; 
 }
