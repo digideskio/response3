@@ -19,11 +19,12 @@
 	            </g:if>
 	        </div>
             <div class="r3listing">
-	            <table>
+	            <table id="customers-table">
 	                <thead>
 	                <tr>
 	                    <r3:sortableColumn action="customers" 
-	                                      class="table_title" 
+	                                      class="table_title"
+	                                      colspan="2"
 	                                      property="name" 
 	                                      title="${message(code:'name',default:'Name')}" 
 	                                      params="${[id:params.id]}" />
@@ -32,12 +33,21 @@
 	                <tbody>
 	                <g:each in="${instances}" var="i" status="s">
 	                    <tr class="${(s % 2) == 0 ? 'even' : 'odd'}">
-	                    <td><g:link controller="customer" action="show" id="${i.id}">${i.name}</g:link></td>
+	                    <td colspan="2"><g:link controller="customer" action="show" id="${i.id}">${i.name}</g:link></td>
 	                    </tr>
 	                </g:each>
 	                <tr>
-	                    <td colspan="4">
-	                        <g:message code="total.number.of.customers" args="${[total]}"/>
+	                    <td>
+	                       <g:if test="${total > grailsApplication.config.response3.lists.length}">
+                               <input type="submit" class="button more" value="${message(code:'show.more')}" onclick=""/>
+                           </g:if>
+	                       <script type="text/javascript">
+	                       var listLength = ${grailsApplication.config.response3.lists.length};
+	                       var totalLength = ${total};
+	                       </script>
+	                    </td>
+	                    <td>
+	                       <g:message code="total.number.of.customers" args="${[grailsApplication.config.response3.lists.length,total]}"/>
 	                    </td>
 	                </tr>
 	                </tbody>

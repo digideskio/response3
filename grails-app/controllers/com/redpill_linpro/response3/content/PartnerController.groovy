@@ -1,5 +1,6 @@
 package com.redpill_linpro.response3.content
 
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['ROLE_ADMIN','ROLE_MANAGER'])
@@ -11,7 +12,8 @@ class PartnerController {
     def list(){
         log.debug params
         params.max = Math.min(
-            params.max ? params.int('max') : 10, 
+            params.max ? params.int('max') : 
+            grailsApplication.config.response3.lists.length, 
             grailsApplication.config.response3.lists.max)
         params.sort = params.sort?:"dateCreated"
         params.order = params.order?:"desc"
@@ -128,19 +130,24 @@ class PartnerController {
         def partner = Partner.read(params.id)
         if(partner){
             params.max = Math.min(
-            params.max ? params.int('max') : 10,
+            params.max ? params.int('max') : 
+                grailsApplication.config.response3.lists.length,
                 grailsApplication.config.response3.lists.max)
-            params.offset = params.offset ? params.int('offset') : 0
+            params.offset = params.offset ? params.long('offset') : 0
             
+            params.sort =
+                params.sort in ['id','name'] ? params.sort:'name'
+            params.order =
+                params.order in ['asc','desc'] ? params.order:'asc'
             String sql = """
                 SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
                 WHERE c.partner.id = :id
-                ORDER BY c.name asc
+                ORDER BY c.$params.sort $params.order
             """.stripMargin()
             def customers = Customer.executeQuery(
                 sql, 
                 [id:params.long('id')],
-                [max:params.max,offset:params.long('offset')]
+                [max:params.long('max'),offset:params.long('offset')]
             )
             def total = Customer.executeQuery(
                 "SELECT COUNT(c) FROM Customer c WHERE c.partner.id = :id",
@@ -156,6 +163,34 @@ class PartnerController {
             flash.message = message(code:'partner.not.found',args:[params.id])
             redirect(action:'list')
         }
+    }
+    
+    def moreCustomers(){
+        def data = []
+        def partner = Partner.read(params.id)
+        if(partner){
+            params.max = Math.min(
+            params.max ? params.int('max') :
+                grailsApplication.config.response3.lists.length,
+                grailsApplication.config.response3.lists.max)
+            params.offset = params.offset ? params.long('offset') : 0
+            
+            params.sort =
+                params.sort in ['id','name'] ? params.sort:'name'
+            params.order =
+                params.order in ['asc','desc'] ? params.order:'asc'
+            String sql = """
+                SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
+                WHERE c.partner.id = :id
+                ORDER BY c.$params.sort $params.order
+            """.stripMargin()
+            data = Customer.executeQuery(
+                sql,
+                [id:params.long('id')],
+                [max:params.long('max'),offset:params.long('offset')]
+            )
+        }
+        render data as JSON
     }
     
     def users(){

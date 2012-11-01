@@ -35,6 +35,7 @@
 		  <g:layoutBody/>
 		</div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<g:javascript library="application"/>
 		<r:layoutResources />
 	</body>

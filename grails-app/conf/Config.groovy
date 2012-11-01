@@ -123,4 +123,5 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 ]
 
 // response3 specific configuration
-response3.lists.max=40L
+response3.lists.max=100L
+response3.lists.length=40L

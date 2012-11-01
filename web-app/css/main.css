@@ -330,10 +330,18 @@ div.notfound_footer{
     background:#FF931F url(../images/icons/save.png) no-repeat;
     background-position:90% center;
 }
+.r3listing input.button.more{
+	margin:0px;
+}
 .r3form.show td input.button, .r3listing input.button{
 	background:#FF931F url(../images/icons/edit.png) no-repeat;
 	background-position:90% center;
 }
+.r3form.show td input.button.more, .r3listing input.button{
+    background:#FF931F url(../images/icons/folder.png) no-repeat;
+    background-position:90% center;
+}
+
 .r3form.edit td input.button, .r3listing input.button{
 	background:#FF931F url(../images/icons/save.png) no-repeat;
 	background-position:90% center;
@@ -342,6 +350,10 @@ div.notfound_footer{
 	margin-top:10px;
     margin-right: auto;
     margin-left: auto;
+}
+.r3form.show td input.button.more:hover, .r3listing input.button:hover{
+    background:#DE7B10 url(../images/icons/folder.png) no-repeat;
+    background-position:90% center;
 }
 .r3form.show td input.button:hover, .r3listing input.button:hover{
 	background:#DE7B10 url(../images/icons/edit.png) no-repeat;
@@ -416,6 +428,9 @@ div.errors li {
     border-right: 1px solid #D4D4D4;
     padding:4px;
 }
+.r3listing table tr:last-child td{
+    border:none;
+}
 .r3listing table td a{
 	display: block;
 	color:#222;
@@ -435,7 +450,6 @@ div.errors li {
     color:#fff;
     line-height:30px;
     height:30px;
-    padding:0px 4px;
 }
 
 .r3listing table th a{
