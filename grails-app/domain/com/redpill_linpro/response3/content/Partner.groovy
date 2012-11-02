@@ -5,6 +5,10 @@ import com.redpill_linpro.response3.security.Lock
 
 class Partner {
     
+    static searchable = {
+        only: ['name']
+    }
+    
     String name
     String description
     Lock lockdata

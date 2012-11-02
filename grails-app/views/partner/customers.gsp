@@ -25,6 +25,7 @@
                                  id="cfilter" name="cfilter"
                                  value="" />
                 </div>
+                <div class="clear"></div>
 	            <table id="customers-table">
 	                <thead>
 	                <tr>

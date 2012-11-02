@@ -13,9 +13,9 @@ class ContentService {
     
     def createPartners(){
         new Partner(name:'Redpill').save(flush:true)
+        new Partner(name:'Varnish').save(flush:true)
         new Partner(name:'Mulesoft').save(flush:true)
         new Partner(name:'Springsource').save(flush:true)
-        new Partner(name:'Varnish').save(flush:true)
         assert Partner.count() == 4
     }
     
@@ -28,8 +28,6 @@ class ContentService {
             'Agasti Holding',
             'Aker',
             'Aker BioMarine',
-            'Aker Seafoods',
-            'Aker Solutions',
             'Algeta',
             'American Shipping Company',
             'Apptix',
@@ -244,6 +242,12 @@ class ContentService {
         customers.each{
             new Customer(
                 partner:Partner.findByName('Redpill'),
+                name:it).save(flush:true)
+        }
+        customers = ['Aker Seafoods','Aker Solutions',]
+        customers.each{
+            new Customer(
+                partner:Partner.findByName('Varnish'),
                 name:it).save(flush:true)
         }
     }

@@ -193,6 +193,20 @@ class PartnerController {
         render data as JSON
     }
     
+    def filterCustomers(){
+        def data = [:]
+        if(params.query && params.long('id')){
+            def wildcardQuery = "*" + params.query + "*"
+            def searchOptions = [max:40]
+            Closure searchClosure = {
+                must(term('$/Customer/partner/id', params.long('id')))
+                must(queryString(wildcardQuery))
+            }
+            data = Customer.search(searchClosure, searchOptions)
+        }
+        render data.results as JSON
+    }
+    
     def users(){
         
     }

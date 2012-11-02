@@ -5,6 +5,11 @@ import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Lock
 
 class Customer {
+    
+    static searchable = {
+        only: ['name', 'partner']
+        partner component: true
+    }
     Partner partner
     String name
     String description

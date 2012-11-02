@@ -142,6 +142,7 @@ div.r3widget form>div:first-child{
     padding: 0;
 }
 .r3widget ul li{
+	background:#fff;
 	list-style:none;
     border-bottom: 1px solid #D4D4D4;
 }
@@ -224,10 +225,12 @@ div.notfound_footer{
 	background: linear-gradient(to bottom, #fff, #ddd);
 }
 .r3form.show{
-    width:800px;
+    min-width:800px;
+    min-width:100%;
 }
 .r3form.edit{
-    width:560px;
+    min-width:800px;
+    min-width:100%;
 }
 .r3form h1{
 	float:left;
@@ -254,7 +257,15 @@ div.filter{
 	width:100%;
 }
 div.filter h1{
+	float:left;
     background:#3B659C;
+}
+div.filter input{
+	font-size:0.8em;
+	padding:0px;
+	margin-top:8px;
+    float:left;
+    width:400px;
 }
 .r3form table{
     width:560px;
@@ -270,7 +281,7 @@ div.filter h1{
     letter-spacing:0.1em;
     width:560px;
 }
-.r3form td input{
+.r3form input{
     width:98%;
     background-color: #eee;
     border-radius: 5px;
@@ -374,7 +385,8 @@ div.filter h1{
 }
 .r3form .cnavigation{
 	float:right;
-	width:240px;
+	min-width:240px;
+	width:20%;
 }
 div.message {
     background: #F3F8FC;
@@ -404,15 +416,18 @@ div.errors li {
     padding-left: 30px;
 }
 .r3listing{
-    background:#fff;
-    min-width:600px;
+    background:#3B659C;
+    min-width:560x;
+    width:80%;
+    float:left;
 }
 .r3listing table{
 	width: 100%;
 	border-collapse: collapse;
 }
 .show .r3listing table{
-    width: 560px;
+	width:100%;
+    min-width: 560px;
     border-collapse: collapse;
     float:left;
 }
@@ -450,6 +465,9 @@ div.errors li {
 }
 .r3listing table tr.odd{
     background:#F3F4FC;
+}
+.r3listing table tr.even{
+    background:#fff;
 }
 .r3listing table tr:last-child td{
 	background:#3B659C;
