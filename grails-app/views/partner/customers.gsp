@@ -19,6 +19,12 @@
 	            </g:if>
 	        </div>
             <div class="r3listing">
+                <div class="filter">
+                    <h1><g:message code="filter" /></h1>
+                    <g:textField class="" 
+                                 id="cfilter" name="cfilter"
+                                 value="" />
+                </div>
 	            <table id="customers-table">
 	                <thead>
 	                <tr>
@@ -38,16 +44,44 @@
 	                </g:each>
 	                <tr>
 	                    <td>
-	                       <g:if test="${total > grailsApplication.config.response3.lists.length}">
-                               <input type="submit" class="button more" value="${message(code:'show.more')}" onclick=""/>
-                           </g:if>
 	                       <script type="text/javascript">
 	                       var listLength = ${grailsApplication.config.response3.lists.length};
-	                       var totalLength = ${total};
-	                       </script>
+                           var totalLength = ${total};
+                           var r3execute = function(ele){
+                               var map = response3.collections.Dictionary();
+                               map.set('url','${createLink(action:"moreCustomers")}');
+                               map.set('params',{id:${instance.id},offset:listLength});
+                               map.set('callback', function(response){
+                            	   var data = $.parseJSON(response.responseText);
+                            	   listLength += data.length;
+                            	   if(listLength == totalLength){
+                            		   response3.disable.button(ele);
+                               	   }
+                            	   $("#currentLength").html(listLength);
+                            	   var table=document.getElementById("customers-table");
+                            	   var href = "${createLink(controller:'customer', action:'show')}/";
+                            	   for(var i=0; i<data.length; i++){
+                            		   var atag = document.createElement('a');
+                                       atag.href= href+data[i].id;
+                                       atag.innerHTML= data[i].name;
+                            		   var row=table.insertRow(table.rows.length -1);
+                                       var cell1=row.insertCell(0);
+                                       cell1.colSpan=2;
+                                       cell1.appendChild(atag);
+                               	   }
+                            	   response3.table.updateRowColors(table);
+                               });
+                               response3.ajax(map);
+                               return false;
+                           }
+                           </script>
+	                       <g:if test="${total > grailsApplication.config.response3.lists.length}">
+                               <input type="submit" class="button more" value="${message(code:'show.more')}" onclick="r3execute(this);return false;"/>
+                           </g:if>
 	                    </td>
 	                    <td>
-	                       <g:message code="total.number.of.customers" args="${[grailsApplication.config.response3.lists.length,total]}"/>
+	                       <span id="currentLength">${grailsApplication.config.response3.lists.length}</span>
+	                       <span><g:message code="total.number.of.customers" args="${[total]}"/></span>
 	                    </td>
 	                </tr>
 	                </tbody>

@@ -7,8 +7,7 @@ if (typeof jQuery !== 'undefined') {
 		});
 	})(jQuery);
 }
-
-response3 = {};
+response3={};
 (function( collections, $, undefined ) {
 	collections.Dictionary = function Dictionary() {
 		var self = {};
@@ -43,12 +42,40 @@ response3 = {};
     };
 }(window.response3.collections = window.response3.collections || {}, jQuery));
 
-(function( ajax, $, undefined ) {
-	ajax.ShowMore = function(map){
+(function( response3, $, undefined ) {
+	response3.ajax = function(map){
 		if(map.constructor === response3.collections.Dictionary){
+			var url = map.get('url');
+			var params = map.get('params')
+			if(!url || !params){ return false;}
+			$.ajax({
+                type: map.get('method') || 'POST',
+                url:url,
+                data:params,
+                async: map.get('sync') || false,
+                complete: map.get('callback') || function(){}
+            });
 		}
 	};
-}(window.response3.ajax = window.response3.ajax || {}, jQuery));
+}(window.response3 = window.response3 || {}, jQuery));
 
-var r3map = response3.collections.Dictionary();
-response3.ajax.ShowMore(r3map);
+(function( disable, $, undefined ) {
+	disable.button = function(ele){
+		ele.value = "";
+		ele.style.background = "#3B659C";
+		ele.onclick = function(){return false};
+		ele.style.cursor = "default";
+	};
+}(window.response3.disable = window.response3.disable || {}, jQuery));
+
+(function( table, $, undefined ) {
+	table.updateRowColors = function(ele){
+		for(var i=0; i<ele.rows.length; i++){
+		   if(i % 2 == 0){
+			   ele.rows[i].className="odd";
+		   } else {
+			   ele.rows[i].className="even";
+		   }
+		}
+	};
+}(window.response3.table = window.response3.table || {}, jQuery));

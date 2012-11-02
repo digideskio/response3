@@ -29,6 +29,8 @@ body {
 a{
 	text-decoration:none;
 }
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
 #header{
 	background:#333;
 	height:80px;
@@ -123,7 +125,7 @@ a{
     font-size:0.9em;
     padding:0 10px;
 }
-div.r3widget div:first-child{
+div.r3widget form>div:first-child{
     height:40px;
     background:#605860;
 }
@@ -239,13 +241,20 @@ div.notfound_footer{
     color:#fff;
     font-size:0.6em;
 }
-.r3form.locked div:first-child{
+.r3form.locked form>div:first-child{
 	background:#605860 url(../images/icons/locked.png) no-repeat;
 	background-position:right center; 
 }
-.r3form.unlocked div:first-child{
+.r3form.unlocked form>div:first-child{
     background:#605860 url(../images/icons/unlocked.png) no-repeat;
     background-position:right center; 
+}
+div.filter{
+	background:#3B659C;
+	width:100%;
+}
+div.filter h1{
+    background:#3B659C;
 }
 .r3form table{
     width:560px;
