@@ -11,7 +11,7 @@
         </g:hasErrors>
         <g:render template="header"/>
         <div class="r3widget r3form show ${instance.lockdata == null ? 'unlocked':'locked'}">
-          <g:form name="partnerform" action="edit" id="${instance.id}">
+          <form name="partnerform">
             <div>
 	            <h1>${fieldValue(bean: instance, field: 'name')}</h1>
 	            <g:if test="${instance.lockdata != null}">
@@ -23,7 +23,45 @@
                     <h1><g:message code="filter" /></h1>
                     <g:textField class="" 
                                  id="cfilter" name="cfilter"
-                                 value="" />
+                                 value="" onfocus="r3AddTimerFunction(this);" onsubmit="return false;"/>
+                    <script type="text/javascript">
+                    function r3AddTimerFunction(element){
+                        element.onfocus=null;
+                        var otbody = document.getElementById('customers-tbody');
+                        response3.table.data.lastListRow = otbody.rows[otbody.rows.length-1].cloneNode(true);
+                        response3.table.data.href = "${createLink(controller:'customer', action:'show')}/";
+	                    response3.timer.addTypingTimer(element, function(){
+	                    	var map = new response3.collections.Dictionary();
+		                    if(element.value === ""){
+		                    	map.set('url','${createLink(action:"moreCustomers")}');
+	                            map.set('params',{id:${instance.id}});
+                                map.set('callback', function(response){
+                                    var data = $.parseJSON(response.responseText);
+                                    var props = new response3.collections.Dictionary();
+                                    props.set('oldTBody',document.getElementById('customers-tbody'));
+                                    props.set('jsonData',data);
+                                    response3.table.buildSimpleTable(props);
+                                    response3.button.enable($('#button').get(0));
+                                    $("#currentLength").html(data.length);
+                                });
+		                    }
+		                    else{
+		                        map.set('url','${createLink(action:"filterCustomers")}');
+		                        map.set('params',{id:${instance.id},query:element.value});
+		                        map.set('callback', function(response){
+		                        	var data = $.parseJSON(response.responseText);
+		                        	var props = new response3.collections.Dictionary();
+		                        	props.set('oldTBody',document.getElementById('customers-tbody'));
+		                        	props.set('jsonData',data);
+		                        	response3.table.buildSimpleTable(props);
+		                            response3.button.disable($('#button').get(0));
+                                    $("#currentLength").html(data.length);
+		                        });
+		                    }
+		                    response3.ajax(map);
+	                    });
+                    }
+                    </script>
                 </div>
                 <div class="clear"></div>
 	            <table id="customers-table">
@@ -37,7 +75,7 @@
 	                                      params="${[id:params.id]}" />
 	                </tr>
 	                </thead>
-	                <tbody>
+	                <tbody id="customers-tbody">
 	                <g:each in="${instances}" var="i" status="s">
 	                    <tr class="${(s % 2) == 0 ? 'even' : 'odd'}">
 	                    <td colspan="2"><g:link controller="customer" action="show" id="${i.id}">${i.name}</g:link></td>
@@ -49,17 +87,17 @@
 	                       var listLength = ${grailsApplication.config.response3.lists.length};
                            var totalLength = ${total};
                            var r3execute = function(ele){
-                               var map = response3.collections.Dictionary();
+                               var map = new response3.collections.Dictionary();
                                map.set('url','${createLink(action:"moreCustomers")}');
                                map.set('params',{id:${instance.id},offset:listLength});
                                map.set('callback', function(response){
                             	   var data = $.parseJSON(response.responseText);
                             	   listLength += data.length;
                             	   if(listLength == totalLength){
-                            		   response3.disable.button(ele);
+                            		   response3.button.disable(ele);
                                	   }
                             	   $("#currentLength").html(listLength);
-                            	   var table=document.getElementById("customers-table");
+                            	   var table=document.getElementById("customers-tbody");
                             	   var href = "${createLink(controller:'customer', action:'show')}/";
                             	   for(var i=0; i<data.length; i++){
                             		   var atag = document.createElement('a');
@@ -77,11 +115,16 @@
                            }
                            </script>
 	                       <g:if test="${total > grailsApplication.config.response3.lists.length}">
-                               <input type="submit" class="button more" value="${message(code:'show.more')}" onclick="r3execute(this);return false;"/>
+                               <input type="submit" id="button" class="button more" value="${message(code:'show.more')}" onclick="r3execute(this);return false;"/>
                            </g:if>
 	                    </td>
 	                    <td>
-	                       <span id="currentLength">${grailsApplication.config.response3.lists.length}</span>
+	                       <g:if test="${total > grailsApplication.config.response3.lists.length}">
+	                           <span id="currentLength">${grailsApplication.config.response3.lists.length}</span>
+	                       </g:if>
+	                       <g:else>
+	                           <span id="currentLength">${total}</span>
+	                       </g:else>
 	                       <span><g:message code="total.number.of.customers" args="${[total]}"/></span>
 	                    </td>
 	                </tr>
@@ -90,7 +133,7 @@
 	        </div>
           <g:render template="content_navigation"/>
           <div class="clear"></div>
-          </g:form>
+          </form>
         </div>
 
     </body>

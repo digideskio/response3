@@ -5,7 +5,7 @@
     </head>
     <body>
         <g:render template="header"/>
-        <div class="r3listing">
+        <div class="fullwidth r3listing">
             <h1><g:message code="partner.list" /></h1>
             <table>
                 <thead>

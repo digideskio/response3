@@ -7,8 +7,12 @@ import com.redpill_linpro.response3.security.Lock
 class Customer {
     
     static searchable = {
-        only: ['name', 'partner']
+        only:['name']
+        exclude: [
+            'description', 'dateCreated','lastUpdated','enabled',
+            'lockdata']
         partner component: true
+        root:false
     }
     Partner partner
     String name

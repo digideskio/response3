@@ -196,15 +196,17 @@ class PartnerController {
     def filterCustomers(){
         def data = [:]
         if(params.query && params.long('id')){
-            def wildcardQuery = "*" + params.query + "*"
-            def searchOptions = [max:40]
+            def wildcardQuery = params.query + "*"
+            def searchOptions = [
+                max:grailsApplication.config.response3.lists.length]
             Closure searchClosure = {
                 must(term('$/Customer/partner/id', params.long('id')))
                 must(queryString(wildcardQuery))
             }
             data = Customer.search(searchClosure, searchOptions)
+            data = data.results.collect{it.properties['id','name']}
         }
-        render data.results as JSON
+        render data as JSON
     }
     
     def users(){
