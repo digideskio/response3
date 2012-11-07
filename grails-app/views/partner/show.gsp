@@ -66,6 +66,27 @@
                   </tr>
                   <tr>
                       <td>
+                          <label>
+                              <g:message code="contact.persons" default="Contact persons" />:
+                          </label>
+                      </td>
+                  </tr> 
+                  <tr>
+                      <td>
+                       <g:each var="cp" in="${instance.contactPersons}">
+                       <g:link controller="user"
+                                  action="show"
+                                  id="${cp.id}">
+                       <div class="personcell">
+				           <img alt="user" src="${createLinkTo(dir:'images/icons',file:'account.png')}" height="16" width="16">
+				            ${fieldValue(bean: cp, field: 'firstname')} ${fieldValue(bean: cp, field: 'lastname')}
+			           </div>
+			           </g:link>
+				       </g:each>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
                       <input class="button" type="submit" value="${message(code:'edit.partner')}" />
                       </td>
                   </tr>

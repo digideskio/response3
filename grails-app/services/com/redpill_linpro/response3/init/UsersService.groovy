@@ -7,7 +7,7 @@ class UsersService {
     def userService
 
     def init() {
-        def users = ['mrmanager','mrcustomer','mrconsultant']
+        def users = ['mrmanager','mrcustomer','mrconsultant','mrpartner']
         users.each{
             def user = User.findByUsername(it)
             if(!user){

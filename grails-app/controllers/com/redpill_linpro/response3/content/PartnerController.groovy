@@ -210,7 +210,45 @@ class PartnerController {
     }
     
     def users(){
-        
+        def partner = Partner.read(params.id)
+        if(partner){
+            params.max = Math.min(
+            params.max ? params.int('max') :
+                grailsApplication.config.response3.lists.length,
+                grailsApplication.config.response3.lists.max)
+            params.offset = params.offset ? params.long('offset') : 0
+            
+            params.sort =
+                params.sort in ['id','username'] ? params.sort:'username'
+            params.order =
+                params.order in ['asc','desc'] ? params.order:'asc'
+            String sql = """
+                SELECT NEW MAP(c.id as id, c.username as username) 
+                FROM Partner p JOIN p.clients c
+                WHERE p.id = :id
+                ORDER BY c.$params.sort $params.order
+            """.stripMargin()
+            def clients = Customer.executeQuery(
+                sql,
+                [id:params.long('id')],
+                [max:params.long('max'),offset:params.long('offset')]
+            )
+            def total = Customer.executeQuery("""
+                SELECT COUNT(c)FROM Partner p JOIN p.clients c
+                WHERE p.id = :id
+            """.stripMargin(),
+                [id:params.long('id')]
+            )[0]
+            return [
+                instance:partner,
+                instances:clients,
+                total:total
+            ]
+        }
+        else{
+            flash.message = message(code:'partner.not.found',args:[params.id])
+            redirect(action:'list')
+        }
     }
     
     private def checkId(id){

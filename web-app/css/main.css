@@ -1,4 +1,3 @@
-/* FONT STACK */
 body,
 input, select, textarea {
 	font-family: 'Source Sans Pro', sans-serif;
@@ -282,12 +281,16 @@ div.filter input{
     width:560px;
 }
 .r3form input{
-    width:98%;
+    width:100%;
+    box-sizing: border-box;
     background-color: #eee;
     border-radius: 5px;
     border: 1px solid #eee;
     font-size: 0.975em;
     padding: 5px;
+}
+.r3form input[type="checkbox"]{
+	width:auto;
 }
 .r3form.show td input{
     background-color: #ccc;
@@ -297,7 +300,8 @@ div.filter input{
     border:#cc0000 1px solid;
 }
 .r3form td textarea{
-    width:98%;
+	width:100%;
+    box-sizing: border-box;
     height:160px;
     background-color: #eee;
     border-radius: 5px;
@@ -385,7 +389,7 @@ div.filter input{
 }
 .r3form .cnavigation{
 	float:right;
-	min-width:240px;
+	min-width:200px;
 	width:20%;
 }
 div.message {
@@ -528,4 +532,25 @@ div.errors li {
 }
 div.clear{
 	clear:both;
+}
+.personcell {
+	border-radius:5px;
+    background: #CCC;
+    border: 1px solid #eee;
+    display: block;
+    font-size: 0.975em;
+    font-weight: bold;
+    height: 28px;
+    padding: 2px 5px;
+    min-width: 500px;
+    width:100%;
+    box-sizing: border-box;
+    color:#3B659C;
+}
+.personcell:hover{
+	background:#C7D4E7;
+}
+a .personcell img {
+    position: relative;
+    top: 2px;
 }

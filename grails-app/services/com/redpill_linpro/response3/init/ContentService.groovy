@@ -1,8 +1,12 @@
 package com.redpill_linpro.response3.init
 
 import com.redpill_linpro.response3.content.*
+import com.redpill_linpro.response3.security.User
+import com.redpill_linpro.response3.security.Role
 
 class ContentService {
+    
+    def userService
 
     def init() {
         createPartners()
@@ -17,6 +21,32 @@ class ContentService {
         new Partner(name:'Mulesoft').save(flush:true)
         new Partner(name:'Springsource').save(flush:true)
         assert Partner.count() == 4
+        createPartnerClients()
+        createPartnerContacts()
+    }
+    
+    def createPartnerClients(){
+        def user = new User(
+            username: 'redp', enabled: true, password: '1234567890',
+            firstname: 'red', lastname: 'pill',
+            email:'red@response3.org'
+        )
+        try{
+            userService.create(user, Role.findByAuthority("ROLE_PARTNER"))
+        } catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage())
+        }
+        def partner = Partner.findByName('Redpill')
+        partner.addToClients(User.findByUsername('mrpartner'));
+        partner.addToClients(user);
+        partner.validate()
+        partner.save(flush:true)
+    }
+    def createPartnerContacts(){
+        def partner = Partner.findByName('Redpill')
+        partner.addToContactPersons(User.findByUsername('mrpartner'));
+        partner.validate()
+        partner.save(flush:true)
     }
     
     def createCustomers(){
