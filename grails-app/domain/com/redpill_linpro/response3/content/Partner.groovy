@@ -7,6 +7,7 @@ class Partner {
     
     static searchable = {
         only: ['name']
+        clients component: true
     }
     
     String name

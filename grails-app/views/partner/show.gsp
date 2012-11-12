@@ -66,7 +66,7 @@
                   </tr>
                   <tr>
                       <td>
-                          <label>
+                          <label tooltip="test og masse meir tekst!!#">
                               <g:message code="contact.persons" default="Contact persons" />:
                           </label>
                       </td>

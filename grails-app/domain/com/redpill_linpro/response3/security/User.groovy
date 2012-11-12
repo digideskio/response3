@@ -1,6 +1,10 @@
 package com.redpill_linpro.response3.security
 
 class User {
+    
+    static searchable = {
+        only: ['id','name']
+    }
 
 	transient springSecurityService
 
@@ -12,6 +16,7 @@ class User {
 	boolean accountLocked = false
 	boolean passwordExpired = false
     
+    String name
     String firstname
     String lastname
     String telephone
@@ -19,6 +24,7 @@ class User {
 
 	static constraints = {
 		username blank: false, unique: true, size:3..32, matches:"^[a-zA-Z0-9]+"
+        name blank:true, nullable:true
         firstname blank:true, nullable:true
         lastname blank:true, nullable:true
 		password blank: false, size: 10..255
@@ -35,8 +41,7 @@ class User {
         version false
         
         id index:'person_id_idx'
-        firstname index:'person_firstname_idx'
-        lastname index:'person_lastname_idx'
+        name index:'person_name_idx'
         email index:'person_email_idx'
         enabled index:'person_enabled_idx'
 	}
@@ -47,17 +52,25 @@ class User {
 
 	def beforeInsert() {
 		encodePassword()
+        setFullName()
 	}
 
 	def beforeUpdate() {
 		if (isDirty('password')) {
 			encodePassword()
 		}
+        if (isDirty('firstname') || isDirty('lastname')) {
+            setFullName()
+        }
 	}
 
 	protected void encodePassword() {
 		password = springSecurityService.encodePassword(password, salt)
 	}
+    
+    private void setFullName(){
+        this.name = (this.firstname?:"") + " " + (this.lastname?:"") 
+    }
     
     public boolean isAdmin(){
         def roles = getAuthorities()

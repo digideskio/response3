@@ -3,11 +3,14 @@ package com.redpill_linpro.response3.content
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
+import com.redpill_linpro.response3.security.User
+
 @Secured(['ROLE_ADMIN','ROLE_MANAGER'])
 class PartnerController {
     private final String CN = "com.redpill_linpro.response3.content.Partner"
     
     def lockService
+    def searchableService
     
     def list(){
         log.debug params
@@ -212,27 +215,8 @@ class PartnerController {
     def users(){
         def partner = Partner.read(params.id)
         if(partner){
-            params.max = Math.min(
-            params.max ? params.int('max') :
-                grailsApplication.config.response3.lists.length,
-                grailsApplication.config.response3.lists.max)
-            params.offset = params.offset ? params.long('offset') : 0
-            
-            params.sort =
-                params.sort in ['id','username'] ? params.sort:'username'
-            params.order =
-                params.order in ['asc','desc'] ? params.order:'asc'
-            String sql = """
-                SELECT NEW MAP(c.id as id, c.username as username) 
-                FROM Partner p JOIN p.clients c
-                WHERE p.id = :id
-                ORDER BY c.$params.sort $params.order
-            """.stripMargin()
-            def clients = Customer.executeQuery(
-                sql,
-                [id:params.long('id')],
-                [max:params.long('max'),offset:params.long('offset')]
-            )
+            def clients = getClients(params)
+            log.debug clients
             def total = Customer.executeQuery("""
                 SELECT COUNT(c)FROM Partner p JOIN p.clients c
                 WHERE p.id = :id
@@ -249,6 +233,40 @@ class PartnerController {
             flash.message = message(code:'partner.not.found',args:[params.id])
             redirect(action:'list')
         }
+    }
+    
+    def filterUsers(){
+        def clients = getClients(params)
+        render clients as JSON
+    }
+    
+    private def getClients(Map params){
+        params.max = Math.min(
+            params.max ? params.int('max') :
+                grailsApplication.config.response3.lists.length,
+                grailsApplication.config.response3.lists.max)
+        params.offset = params.offset ? params.long('offset') : 0
+        params.sort =
+            params.sort in ['id','name'] ? params.sort:'name'
+        params.order =
+            params.order in ['asc','desc'] ? params.order:'asc'
+        Map sqlparams = [id:params.long('id')]
+        String filter = ""
+        if(params.query && params.query.size() > 0){
+            filter = "AND c.name LIKE :query"
+            sqlparams.query = "%"+params.query+"%"
+        }
+        String sql = """
+                SELECT NEW MAP(c.id as id, c.name as name) 
+                FROM Partner p JOIN p.clients c
+                WHERE p.id = :id
+                $filter
+                ORDER BY c.$params.sort $params.order
+            """.stripMargin()
+        return Customer.executeQuery(
+            sql, sqlparams,
+            [max:params.long('max'),offset:params.long('offset')]
+        )
     }
     
     private def checkId(id){

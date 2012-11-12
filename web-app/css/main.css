@@ -28,6 +28,39 @@ body {
 a{
 	text-decoration:none;
 }
+[tooltip]{
+   position:relative;
+}
+[tooltip]:hover:after {
+	display: block;
+	content: attr(tooltip);
+	position: absolute;
+	top: -30px;
+	padding: 5px 8px;
+	background: #1a1a1a;
+	color: #fff;
+	z-index: 99;
+	font-size: 0.75em;
+	height: 18px;
+	line-height: 18px;
+	border-radius: 3px;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+
+[tooltip]:hover:before {
+	content: '';
+	display: block;
+	border: 5px solid #1a1a1a;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	border-left-color: transparent;
+	position: absolute;
+	top: -2px;
+	left: 10px;
+	z-index: 99;
+}
+
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
 #header{
