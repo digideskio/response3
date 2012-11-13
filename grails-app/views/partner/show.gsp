@@ -24,7 +24,6 @@
                       <td class="">
                           <label>
                               <g:message code="name" default="Name" />
-                              <span class="fieldRequired" title="Required">*</span>
                           </label>
                       </td>
                    </tr>
@@ -66,7 +65,7 @@
                   </tr>
                   <tr>
                       <td>
-                          <label tooltip="test og masse meir tekst!!#">
+                          <label>
                               <g:message code="contact.persons" default="Contact persons" />:
                           </label>
                       </td>

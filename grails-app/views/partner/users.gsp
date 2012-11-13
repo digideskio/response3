@@ -25,7 +25,8 @@
                        id="cfilter" name="r3filter" 
                        value="" onsubmit="return false;"/>
                     <script type="text/javascript">
-                    var v = '{"id":${instance.id}, "url":"${createLink(action:"filterClients")}", "link":"${createLink(controller:"user", action:"show")}", "tbody":"users-tbody"}';
+                    var v = '{"id":${instance.id}, "url":"${createLink(action:"filterClients")}", '+
+                            '"link":"${createLink(controller:"user", action:"show")}", "tbody":"users-tbody"}';
                     document.getElementById('cfilter').setAttribute('data-options',v);
                     </script>
                 </div>

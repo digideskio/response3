@@ -61,6 +61,25 @@ class Partner {
         cache usage:'read-write'
     }
     
+    List getSortedClients(String sort = 'name', String order = 'asc'){
+        String sql = """
+            SELECT c FROM Partner p JOIN p.clients c
+            WHERE p.id = :id ORDER BY c.$sort $order
+        """.stripMargin()
+        return Customer.executeQuery(
+            sql, [id:this.id]
+        )
+    }
+    List getSortedContactPersons(String sort = 'name', String order = 'asc'){
+        String sql = """
+            SELECT c FROM Partner p JOIN p.contactPersons c
+            WHERE p.id = :id ORDER BY c.$sort $order
+        """.stripMargin()
+        return Customer.executeQuery(
+            sql, [id:this.id]
+        )
+    }
+    
     String toString() {
         return this.name
     }

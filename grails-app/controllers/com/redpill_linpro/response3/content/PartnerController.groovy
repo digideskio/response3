@@ -58,7 +58,8 @@ class PartnerController {
             def partner = lockService.lock(CN, partnerId)
             if(partner){
                 return [
-                    instance:partner
+                    instance:partner,
+                    clients:partner.getSortedClients()
                 ]
             } else {
                 throw new RuntimeException("lockservice returned null")
@@ -120,6 +121,17 @@ class PartnerController {
                     "lockservice for update returned null")
             }
         } catch(RuntimeException e){
+            if(e.getMessage().equals("validator.invalid")){
+                flash.errorMessage = message(
+                    code:'cant.disable.partner', args:[params.name])
+                def newpartner = Partner.read(params.id)
+                newpartner.properties = params
+                render (view:'edit', model: [
+                    instance:newpartner,
+                    clients:newpartner.getSortedClients()
+                ])
+                return
+            }
             log.error(e.getMessage())
             flash.errorMessage = message(
                 code:'could.not.lock.partner', args:[params.id])
@@ -172,26 +184,7 @@ class PartnerController {
         def data = []
         def partner = Partner.read(params.id)
         if(partner){
-            params.max = Math.min(
-            params.max ? params.int('max') :
-                grailsApplication.config.response3.lists.length,
-                grailsApplication.config.response3.lists.max)
-            params.offset = params.offset ? params.long('offset') : 0
-            
-            params.sort =
-                params.sort in ['id','name'] ? params.sort:'name'
-            params.order =
-                params.order in ['asc','desc'] ? params.order:'asc'
-            String sql = """
-                SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
-                WHERE c.partner.id = :id
-                ORDER BY c.$params.sort $params.order
-            """.stripMargin()
-            data = Customer.executeQuery(
-                sql,
-                [id:params.long('id')],
-                [max:params.long('max'),offset:params.long('offset')]
-            )
+            data = getCustomers(params)
         }
         render data as JSON
     }
@@ -209,7 +202,33 @@ class PartnerController {
             data = Customer.search(searchClosure, searchOptions)
             data = data.results.collect{it.properties['id','name']}
         }
+        else{
+            data = getCustomers(params)
+        }
         render data as JSON
+    }
+    
+    private def getCustomers(Map params){
+        params.max = Math.min(
+        params.max ? params.int('max') :
+            grailsApplication.config.response3.lists.length,
+            grailsApplication.config.response3.lists.max)
+        params.offset = params.offset ? params.long('offset') : 0
+        
+        params.sort =
+            params.sort in ['id','name'] ? params.sort:'name'
+        params.order =
+            params.order in ['asc','desc'] ? params.order:'asc'
+        String sql = """
+            SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
+            WHERE c.partner.id = :id
+            ORDER BY c.$params.sort $params.order
+        """.stripMargin()
+        return Customer.executeQuery(
+            sql,
+            [id:params.long('id')],
+            [max:params.long('max'),offset:params.long('offset')]
+        )
     }
     
     def users(){
@@ -235,7 +254,7 @@ class PartnerController {
         }
     }
     
-    def filterUsers(){
+    def filterClients(){
         def clients = getClients(params)
         render clients as JSON
     }

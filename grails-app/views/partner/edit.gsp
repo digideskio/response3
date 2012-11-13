@@ -25,7 +25,7 @@
                       <td colspan="2">
                           <label>
                               <g:message code="name" default="Name" />
-                              <span class="fieldRequired" title="Required">*</span>
+                              <span class="fieldRequired" data-tooltip="${message(code:'required')}">*</span>
                           </label>
                       </td>
                    </tr>
@@ -52,6 +52,19 @@
                   </tr>
                   <tr>
                       <td>
+                          <label>
+                              <g:message code="enabled" default="Enabled" />:
+                          </label>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <g:checkBox class="${hasErrors(bean: instance, field: 'enabled', 'error')}"
+                                      name="enabled" checked="${instance.enabled}" value="${true}"/>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
                         <g:actionSubmit class="button" value="${message(code:'update.partner')}" action="update"/>
                       </td>
                       <td>
@@ -60,6 +73,28 @@
                   </tr>
              </tbody>
           </table>
+          <div class="edit_contact_persons">
+            <label>
+                <g:message code="contact.persons" default="Contact persons" />:
+            </label>
+            <table>
+              <tbody>
+                <g:each var="c" in="${clients}">
+                  <tr>
+                    <td><g:checkBox class="table_checkbox" name="contactPersons" checked="${instance.contactPersons.contains(c)}" value="${c.id}"/></td>
+                    <td>
+                      <g:link controller="user" action="show" id="${c.id}">
+                       <div>
+                           <img alt="user" src="${createLinkTo(dir:'images/icons',file:'account.png')}" height="16" width="16">
+                           ${fieldValue(bean: c, field: 'name')}
+                       </div>
+                       </g:link>
+                    </td>
+                  </tr>
+                </g:each>
+              </tbody>
+            </table>
+          </div>
           <div class="clear"></div>
           </g:form>
         </div>

@@ -22,45 +22,12 @@
                 <div class="filter">
                     <h1><g:message code="filter" /></h1>
                     <g:textField class="" 
-                                 id="cfilter" name="cfilter"
-                                 value="" onfocus="r3AddTimerFunction(this);" onsubmit="return false;"/>
+                                 id="cfilter" name="r3filter"
+                                 value="" onsubmit="return false;"/>
                     <script type="text/javascript">
-                    function r3AddTimerFunction(element){
-                        element.onfocus=null;
-                        var otbody = document.getElementById('customers-tbody');
-                        response3.table.data.lastListRow = otbody.rows[otbody.rows.length-1].cloneNode(true);
-                        response3.table.data.href = "${createLink(controller:'customer', action:'show')}/";
-	                    response3.timer.addTypingTimer(element, function(){
-	                    	var map = new response3.collections.Dictionary();
-		                    if(element.value === ""){
-		                    	map.set('url','${createLink(action:"moreCustomers")}');
-	                            map.set('params',{id:${instance.id}});
-                                map.set('callback', function(response){
-                                    var data = $.parseJSON(response.responseText);
-                                    var props = new response3.collections.Dictionary();
-                                    props.set('oldTBody',document.getElementById('customers-tbody'));
-                                    props.set('jsonData',data);
-                                    response3.table.buildSimpleTable(props);
-                                    response3.button.enable($('#button').get(0));
-                                    $("#currentLength").html(data.length);
-                                });
-		                    }
-		                    else{
-		                        map.set('url','${createLink(action:"filterCustomers")}');
-		                        map.set('params',{id:${instance.id},query:element.value});
-		                        map.set('callback', function(response){
-		                        	var data = $.parseJSON(response.responseText);
-		                        	var props = new response3.collections.Dictionary();
-		                        	props.set('oldTBody',document.getElementById('customers-tbody'));
-		                        	props.set('jsonData',data);
-		                        	response3.table.buildSimpleTable(props);
-		                            response3.button.disable($('#button').get(0));
-                                    $("#currentLength").html(data.length);
-		                        });
-		                    }
-		                    response3.ajax(map);
-	                    });
-                    }
+                    var v = '{"id":${instance.id}, "url":"${createLink(action:"filterCustomers")}", '+
+                            '"link":"${createLink(controller:"customer", action:"show")}", "tbody":"customers-tbody"}';
+                    document.getElementById('cfilter').setAttribute('data-options',v);
                     </script>
                 </div>
                 <div class="clear"></div>

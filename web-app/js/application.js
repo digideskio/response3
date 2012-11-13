@@ -50,15 +50,13 @@ response3={};
 	};
 	
 	response3.addFilterQuery = function(element, params){
-		var tablebody = $("#"+params.tbody).get();
-		console.log(tablebody);
-		console.log(tablebody.rows);
+		var tablebody = document.getElementById(params.tbody);
         response3.table.data.lastListRow = tablebody.rows[tablebody.rows.length-1].cloneNode(true);
         response3.table.data.href = params.link+"/";
         response3.timer.addTypingTimer(element, function(){
         	var map = new response3.collections.Dictionary();
         	map.set('url',params.url);
-            map.set('params',{id:params.id});
+            map.set('params',{id:params.id,query:element.value});
             map.set('callback', function(response){
                 var data = $.parseJSON(response.responseText);
                 var props = new response3.collections.Dictionary();
@@ -112,7 +110,7 @@ response3={};
 	 * oldTBody, jsonData
 	 */
 	table.buildSimpleTable = function(map){
-		var old_tbody = map.get('oldTBody');
+		var old_tbody = document.getElementById(map.get('oldTBody').id);
         var new_tbody = document.createElement('tbody');
         new_tbody.id = old_tbody.id;
         var data = map.get('jsonData');

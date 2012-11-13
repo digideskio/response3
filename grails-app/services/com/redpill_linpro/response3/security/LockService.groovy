@@ -81,13 +81,25 @@ class LockService {
         if(instance.hasProperty('lockdata') && 
             (instance.lockdata.lockedBy == currentUser || 
              currentUser.isAdmin())){
+            params.contactPersons = ['6','7']
             instance.properties = params
+            params.keySet().each{
+                if(params[it].class.isArray()){
+                    println it
+                    println params[it]
+                }
+            }
             instance.lockdata.delete()
             instance.lockdata = null
             if(instance.validate() && instance.save(flush:true)){
                 return instance
             }
             else{
+                if(instance.errors['enabled'] &&
+                    instance.errors['enabled'].code == "validator.invalid"){
+                    throw new RuntimeException(instance.errors['enabled'].code)
+                } 
+                instance.errors.allErrors.each{log.debug it}
                 String msg = "Couldn't update $className id:$instance.id"
                 log.error(msg)
                 throw new RuntimeException(msg)
