@@ -1,13 +1,21 @@
 package com.redpill_linpro.response3.content
 
+import java.util.Set;
+
+import com.redpill_linpro.response3.security.Role;
 import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Lock
 
 class Partner {
     
+    static transients = [
+        'getClients',
+        'getContactPersons',
+        'getCustomers'
+    ]
+    
     static searchable = {
         only: ['name']
-        clients component: true
     }
     
     String name
@@ -18,19 +26,10 @@ class Partner {
     Date lastUpdated
     boolean enabled = true
     
-    static hasMany = [
-        customers:Customer,
-        clients:User,
-        contactPersons:User
-    ]
-    
     static constraints = {
-        customers(nullable:true)
         lockdata(nullable:true)
         name(blank: false, nullable:false, unique:true,size:1..60)
         description(nullable: true,size:0..4000)
-        clients(nullable: true)
-        contactPersons(nullable: true)
         enabled(validator: {
             val, obj ->
             if(val == false){
@@ -54,26 +53,34 @@ class Partner {
         //Indexes
         id index:'partner_id_idx'
         name index:'partner_name_idx'
-        customers index:'partner_customers_idx'
-        clients index:'partner_clients_idx'
-        contactPersons index:'partner_contact_persons_idx'
         dateCreated index:'partner_date_created_idx'
         cache usage:'read-write'
     }
     
-    List getSortedClients(String sort = 'name', String order = 'asc'){
+    List getClients(String sort = 'name', String order = 'asc'){
         String sql = """
-            SELECT c FROM Partner p JOIN p.clients c
-            WHERE p.id = :id ORDER BY c.$sort $order
+            SELECT c FROM PartnerClients p JOIN p.client c
+            WHERE p.partner.id = :id ORDER BY c.$sort $order
         """.stripMargin()
-        return Customer.executeQuery(
+        return PartnerClients.executeQuery(
             sql, [id:this.id]
         )
     }
-    List getSortedContactPersons(String sort = 'name', String order = 'asc'){
+    
+    List getContactPersons(String sort = 'name', String order = 'asc'){
         String sql = """
-            SELECT c FROM Partner p JOIN p.contactPersons c
-            WHERE p.id = :id ORDER BY c.$sort $order
+            SELECT c FROM PartnerContactPersons p JOIN p.contactPerson c
+            WHERE p.partner.id = :id ORDER BY c.$sort $order
+        """.stripMargin()
+        return PartnerContactPersons.executeQuery(
+            sql, [id:this.id]
+        )
+    }
+    
+    List getCustomers(String sort = 'name', String order = 'asc'){
+        String sql = """
+            SELECT c FROM Customer c
+            WHERE c.partner.id = :id ORDER BY c.$sort $order
         """.stripMargin()
         return Customer.executeQuery(
             sql, [id:this.id]

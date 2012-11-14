@@ -37,16 +37,19 @@ class ContentService {
             throw new RuntimeException(e.getMessage())
         }
         def partner = Partner.findByName('Redpill')
-        partner.addToClients(User.findByUsername('mrpartner'));
-        partner.addToClients(user);
-        partner.validate()
-        partner.save(flush:true)
+        new PartnerClients(partner:partner, client:user).save(flush:true)
+        new PartnerClients(
+            partner:partner, 
+            client:User.findByUsername('mrpartner')
+        ).save(flush:true)
     }
     def createPartnerContacts(){
         def partner = Partner.findByName('Redpill')
-        partner.addToContactPersons(User.findByUsername('mrpartner'));
-        partner.validate()
-        partner.save(flush:true)
+        def user = User.findByUsername('mrpartner')
+        new PartnerContactPersons(
+            partner:partner, 
+            contactPerson:user
+        ).save(flush:true)
     }
     
     def createCustomers(){

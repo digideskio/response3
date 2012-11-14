@@ -80,15 +80,16 @@
             <table>
               <tbody>
                 <g:each var="c" in="${clients}">
+                  <g:set var="isContactPerson" value="${instance.contactPersons.contains(c)?'checked="checked"':''}" />
                   <tr>
-                    <td><g:checkBox class="table_checkbox" name="contactPersons" checked="${instance.contactPersons.contains(c)}" value="${c.id}"/></td>
+                    <td><input type="checkbox" class="table_checkbox" name="contactPersons" ${isContactPerson} value="${c.id}"/></td>
                     <td>
                       <g:link controller="user" action="show" id="${c.id}">
-                       <div>
-                           <img alt="user" src="${createLinkTo(dir:'images/icons',file:'account.png')}" height="16" width="16">
-                           ${fieldValue(bean: c, field: 'name')}
-                       </div>
-                       </g:link>
+                      <div>
+                          <img alt="user" src="${createLinkTo(dir:'images/icons',file:'account.png')}" height="16" width="16">
+                          ${fieldValue(bean: c, field: 'name')}
+                      </div>
+                      </g:link>
                     </td>
                   </tr>
                 </g:each>

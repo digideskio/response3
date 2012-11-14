@@ -121,7 +121,12 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
     '/login/**':     ['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/logout/**':    ['IS_AUTHENTICATED_ANONYMOUSLY']
 ]
-
+grails.gorm.default.mapping = {
+    // Prevent GORM to update all properties for each update
+    dynamicUpdate true 
+    // Use proper DB locking/ Hibernate pessimistic locking
+    version false
+}
 // response3 specific configuration
 response3.lists.max=100L
 response3.lists.length=40L

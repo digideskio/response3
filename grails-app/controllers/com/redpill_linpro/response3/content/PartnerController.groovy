@@ -134,7 +134,7 @@ class PartnerController {
             }
             log.error(e.getMessage())
             flash.errorMessage = message(
-                code:'could.not.lock.partner', args:[params.id])
+                code:'could.not.update.partner', args:[params.id])
             redirect(action:'list')
         }
     }

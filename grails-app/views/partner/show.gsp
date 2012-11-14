@@ -72,7 +72,7 @@
                   </tr> 
                   <tr>
                       <td>
-                       <g:each var="cp" in="${instance.contactPersons}">
+                       <g:each var="cp" in="${instance.getContactPersons()}">
                        <g:link controller="user"
                                   action="show"
                                   id="${cp.id}">
