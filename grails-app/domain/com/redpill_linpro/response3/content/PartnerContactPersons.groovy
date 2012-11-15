@@ -13,7 +13,7 @@ class PartnerContactPersons implements Serializable {
 
     static constraints = {
         partner (nullable: false)
-        contactPerson (nullable: false)
+        contactPerson (nullable: false, unique:true)
     }
     
     static mapping = {

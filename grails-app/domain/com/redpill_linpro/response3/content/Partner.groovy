@@ -57,7 +57,7 @@ class Partner {
         cache usage:'read-write'
     }
     
-    List getClients(String sort = 'name', String order = 'asc'){
+    Set<User> getClients(String sort = 'name', String order = 'asc'){
         String sql = """
             SELECT c FROM PartnerClients p JOIN p.client c
             WHERE p.partner.id = :id ORDER BY c.$sort $order
@@ -67,22 +67,12 @@ class Partner {
         )
     }
     
-    List getContactPersons(String sort = 'name', String order = 'asc'){
+    Set<User> getContactPersons(String sort = 'name', String order = 'asc'){
         String sql = """
             SELECT c FROM PartnerContactPersons p JOIN p.contactPerson c
             WHERE p.partner.id = :id ORDER BY c.$sort $order
         """.stripMargin()
         return PartnerContactPersons.executeQuery(
-            sql, [id:this.id]
-        )
-    }
-    
-    List getCustomers(String sort = 'name', String order = 'asc'){
-        String sql = """
-            SELECT c FROM Customer c
-            WHERE c.partner.id = :id ORDER BY c.$sort $order
-        """.stripMargin()
-        return Customer.executeQuery(
             sql, [id:this.id]
         )
     }

@@ -7,7 +7,9 @@ import com.redpill_linpro.response3.security.User
 
 @Secured(['ROLE_ADMIN','ROLE_MANAGER'])
 class PartnerController {
-    private final String CN = "com.redpill_linpro.response3.content.Partner"
+    
+    private final String PNAME = this.getClass().getPackage().getName();
+    private final String CN = PNAME + ".Partner"
     
     def lockService
     def searchableService
@@ -57,9 +59,10 @@ class PartnerController {
             long partnerId = checkId(params.id)
             def partner = lockService.lock(CN, partnerId)
             if(partner){
+                println partner.getClients()
                 return [
                     instance:partner,
-                    clients:partner.getSortedClients()
+                    clients:partner.getClients()
                 ]
             } else {
                 throw new RuntimeException("lockservice returned null")
@@ -110,6 +113,10 @@ class PartnerController {
             return
         }
         try{
+            String className = PNAME +".PartnerContactPersons"
+            params.collections = [
+                (className):User.getAll(params.list('contactPersons'))
+            ]
             def partner = lockService.update(CN, params)
             if(partner){
                 flash.message = message(
@@ -235,10 +242,9 @@ class PartnerController {
         def partner = Partner.read(params.id)
         if(partner){
             def clients = getClients(params)
-            log.debug clients
             def total = Customer.executeQuery("""
-                SELECT COUNT(c)FROM Partner p JOIN p.clients c
-                WHERE p.id = :id
+                SELECT COUNT(c) FROM PartnerClients p JOIN p.client c
+                WHERE p.partner.id = :id
             """.stripMargin(),
                 [id:params.long('id')]
             )[0]
@@ -277,12 +283,12 @@ class PartnerController {
         }
         String sql = """
                 SELECT NEW MAP(c.id as id, c.name as name) 
-                FROM Partner p JOIN p.clients c
-                WHERE p.id = :id
+                FROM PartnerClients p JOIN p.client c
+                WHERE p.partner.id = :id
                 $filter
                 ORDER BY c.$params.sort $params.order
             """.stripMargin()
-        return Customer.executeQuery(
+        return PartnerClients.executeQuery(
             sql, sqlparams,
             [max:params.long('max'),offset:params.long('offset')]
         )

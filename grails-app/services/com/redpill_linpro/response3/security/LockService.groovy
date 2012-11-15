@@ -80,22 +80,22 @@ class LockService {
             throw new RuntimeException(msg)
         }
         def domainClass = grailsApplication.getClassForName(className)
-        def criteria = domainClass.createCriteria()
-        def instance = criteria.get {
-            eq "id", params.long('id')
-            domainClass.hasMany.each{ k,v ->
-                fetchMode k, FetchMode.JOIN
-            }
-            // LockMode.PESSIMISTIC_WRITE doesn't work with PostgreSQL as
-            // Hibernate 4.1.0 *fixed*!! this by changing their tests by writing a
-            // hack that returns a LockMode.READ for PostgreSQL and IBM DB2
-            // https://hibernate.onjira.com/browse/HHH-6985
-            delegate.criteria.lockMode=LockMode.WRITE
-        }
+        def instance = domainClass.lock(params.id)
         if(instance.hasProperty('lockdata') && 
             (instance.lockdata.lockedBy == currentUser || 
              currentUser.isAdmin())){
             instance.properties = params
+            if(params.collections){
+                params.collections.each{ k,v ->
+                    log.debug(k)
+                    log.debug(v)
+                    def relClass = grailsApplication.getClassForName(k)
+                    relClass.removeAll(instance)
+                    v.each{ value ->
+                        relClass.create(value, instance)
+                    }
+                }
+            }
             if(instance.validate() && instance.save(flush:true)){
                 instance.lockdata.delete()
                 instance.lockdata = null

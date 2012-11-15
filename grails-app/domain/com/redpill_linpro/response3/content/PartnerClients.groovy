@@ -11,7 +11,7 @@ class PartnerClients implements Serializable{
 
     static constraints = {
         partner(nullable: false)
-        client(nullable: false)
+        client(nullable: false, unique:true)
     }
     
     static mapping = {
