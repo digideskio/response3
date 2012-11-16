@@ -1,6 +1,8 @@
 package com.redpill_linpro.response3.content
 
 import java.util.Set;
+import org.hibernate.collection.PersistentSet
+import org.codehaus.groovy.grails.web.binding.ListOrderedSet
 
 import com.redpill_linpro.response3.security.Role;
 import com.redpill_linpro.response3.security.User
@@ -8,10 +10,9 @@ import com.redpill_linpro.response3.security.Lock
 
 class Partner {
     
-    static transients = [
-        'getClients',
-        'getContactPersons',
-        'getCustomers'
+    static hasMany = [
+        clients:User,
+        contactPersons:User,
     ]
     
     static searchable = {
@@ -43,6 +44,25 @@ class Partner {
                 return true
             }
         })
+        clients(nullable:true)
+        contactPersons(nullable:true,validator: { val, obj ->
+            log.debug(val.getClass().getName())
+            if (val == null){
+                return true
+            }
+            if (val instanceof PersistentSet || 
+                val instanceof ListOrderedSet){
+                val.each{
+                    if(!obj.clients.contains(it)){
+                        return false
+                    }
+                }
+            }
+            else if (!obj.clients.contains(val)){
+                return false;
+            }
+            return true
+        })
     }
     
     static mapping = {
@@ -57,22 +77,24 @@ class Partner {
         cache usage:'read-write'
     }
     
-    Set<User> getClients(String sort = 'name', String order = 'asc'){
+    Set getSortedClients(String sort = 'name', String order = 'asc'){
         String sql = """
-            SELECT c FROM PartnerClients p JOIN p.client c
-            WHERE p.partner.id = :id ORDER BY c.$sort $order
+            SELECT c FROM Partner p JOIN p.clients c
+            WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
-        return PartnerClients.executeQuery(
+        return Partner.executeQuery(
             sql, [id:this.id]
         )
     }
     
-    Set<User> getContactPersons(String sort = 'name', String order = 'asc'){
+    Set getSortedContactPersons(
+        String sort = 'name', String order = 'asc')
+    {
         String sql = """
-            SELECT c FROM PartnerContactPersons p JOIN p.contactPerson c
-            WHERE p.partner.id = :id ORDER BY c.$sort $order
+            SELECT c FROM Partner p JOIN p.contactPersons c
+            WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
-        return PartnerContactPersons.executeQuery(
+        return Partner.executeQuery(
             sql, [id:this.id]
         )
     }

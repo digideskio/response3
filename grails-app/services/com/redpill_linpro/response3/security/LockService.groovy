@@ -23,7 +23,7 @@ class LockService {
         if(instance.hasProperty('lockdata') && instance.lockdata == null){
             def lock = new Lock(lockedBy:currentUser)
             lock.save()
-            instance.lockdata = lock 
+            instance.lockdata = lock
             if(instance.validate() && instance.save(flush:true)){
                 return instance
             }
@@ -85,17 +85,6 @@ class LockService {
             (instance.lockdata.lockedBy == currentUser || 
              currentUser.isAdmin())){
             instance.properties = params
-            if(params.collections){
-                params.collections.each{ k,v ->
-                    log.debug(k)
-                    log.debug(v)
-                    def relClass = grailsApplication.getClassForName(k)
-                    relClass.removeAll(instance)
-                    v.each{ value ->
-                        relClass.create(value, instance)
-                    }
-                }
-            }
             if(instance.validate() && instance.save(flush:true)){
                 instance.lockdata.delete()
                 instance.lockdata = null
