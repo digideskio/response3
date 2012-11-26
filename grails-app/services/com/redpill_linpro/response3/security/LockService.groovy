@@ -2,6 +2,7 @@ package com.redpill_linpro.response3.security
 
 import org.hibernate.FetchMode
 import org.hibernate.LockMode
+import com.redpill_linpro.response3.content.*
 
 class LockService {
     

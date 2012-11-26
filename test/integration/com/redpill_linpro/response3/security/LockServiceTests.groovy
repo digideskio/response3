@@ -18,12 +18,47 @@ class LockServiceTests {
     final String PROJECTCN = "com.redpill_linpro.response3.content.Project"
     
     def lockService
+    def userService
     
     def mockedUserService = [
         currentUser: User.get(1),
         getCurrentUser:{ -> return mockedUserService.currentUser },
         setCurrentUser:{ User user-> mockedUserService.currentUser = user}
     ]
+    
+    private Partner getNewPartner(){
+        // Create new Partner object
+        def partner = new Partner(name:"HibernateLockTest")
+        def user = new User(
+            username: 'hibernatelocktest', enabled: true,
+            password: '1234567890',
+            firstname: 'hibernate', lastname: 'locktest',
+            email:'hibernate@response3.org'
+        )
+        try{
+            userService.create(user, Role.findByAuthority("ROLE_PARTNER"))
+        } catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage())
+        }
+        partner.addToClients(user)
+        partner.addToContactPersons(user)
+        def user2 = new User(
+            username: 'hibernatelocktest2', enabled: true,
+            password: '1234567890',
+            firstname: 'hibernate2', lastname: 'locktest',
+            email:'hibernate2@response3.org'
+        )
+        try{
+            userService.create(user2, Role.findByAuthority("ROLE_PARTNER"))
+        } catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage())
+        }
+        partner.addToClients(user2)
+        partner.validate()
+        partner.errors.allErrors.each{println it}
+        partner.save(flush:true)
+        return partner
+    }
 
     @Test
     void testPartnerLocking() {
@@ -33,9 +68,10 @@ class LockServiceTests {
         def consultant = User.findByUsername('mrconsultant')
         lockService.userService.setCurrentUser(admin)
         
-        def partner = Partner.findByName('Redpill')
-        assertNotNull partner
+        def partner = getNewPartner()
+
         partner = lockService.lock(PARTNERCN,partner.id)
+        assertNotNull partner
         assertNotNull partner.lockdata
         
         // Try to lock partner as consultant
@@ -121,5 +157,32 @@ class LockServiceTests {
         assertNull rtException
         assertNull partner.lockdata
         assertEquals partner.description, description
+    }
+    
+    def testPartnerLockContactPerson(){
+        println Partner.list().name
+        println Partner.list().id
+        def partner = getNewPartner()
+        def consultant = User.findByUsername('mrconsultant')
+        lockService.userService = mockedUserService
+        // Try to lock partner as consultant
+        lockService.userService.setCurrentUser(consultant)
+        RuntimeException rtException = null
+        println partner.id
+        try{
+            lockService.lock(PARTNERCN,partner.id)
+        } catch(RuntimeException e){
+            rtException = e
+            println rtException.getMessage()
+        }
+        assertNull rtException
+        def contactPersons = [] as Set
+        for(user in partner.clients){
+            contactPersons.add(user)
+        }
+        def parameters = [id:partner.id,contactPersons:contactPersons] 
+        def instance = lockService.update(PARTNERCN,parameters)
+        assert instance.contactPersons.size() == 2
+        assertNull instance.lockdata
     }
 }

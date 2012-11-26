@@ -59,10 +59,9 @@ class PartnerController {
             long partnerId = checkId(params.id)
             def partner = lockService.lock(CN, partnerId)
             if(partner){
-                println partner.getClients()
                 return [
                     instance:partner,
-                    clients:partner.getClients()
+                    clients:partner.getContactPersonsAsMap()
                 ]
             } else {
                 throw new RuntimeException("lockservice returned null")
@@ -242,9 +241,9 @@ class PartnerController {
         def partner = Partner.read(params.id)
         if(partner){
             def clients = getClients(params)
-            def total = Customer.executeQuery("""
-                SELECT COUNT(c) FROM PartnerClients p JOIN p.client c
-                WHERE p.partner.id = :id
+            def total = User.executeQuery("""
+                SELECT COUNT(c) FROM Partner p JOIN p.clients c
+                WHERE p.id = :id
             """.stripMargin(),
                 [id:params.long('id')]
             )[0]
@@ -283,12 +282,12 @@ class PartnerController {
         }
         String sql = """
                 SELECT NEW MAP(c.id as id, c.name as name) 
-                FROM PartnerClients p JOIN p.client c
-                WHERE p.partner.id = :id
+                FROM Partner p JOIN p.clients c
+                WHERE p.id = :id
                 $filter
                 ORDER BY c.$params.sort $params.order
             """.stripMargin()
-        return PartnerClients.executeQuery(
+        return Partner.executeQuery(
             sql, sqlparams,
             [max:params.long('max'),offset:params.long('offset')]
         )

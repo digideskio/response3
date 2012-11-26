@@ -1,6 +1,7 @@
 package com.redpill_linpro.response3.content
 
 import java.util.Set;
+import java.util.HashSet;
 import org.hibernate.collection.PersistentSet
 import org.codehaus.groovy.grails.web.binding.ListOrderedSet
 
@@ -51,7 +52,8 @@ class Partner {
                 return true
             }
             if (val instanceof PersistentSet || 
-                val instanceof ListOrderedSet){
+                val instanceof ListOrderedSet ||
+                val instanceof HashSet){
                 val.each{
                     if(!obj.clients.contains(it)){
                         return false
@@ -77,9 +79,10 @@ class Partner {
         cache usage:'read-write'
     }
     
-    Set getSortedClients(String sort = 'name', String order = 'asc'){
+    Set getClientsAsMap(String sort = 'name', String order = 'asc'){
         String sql = """
-            SELECT c FROM Partner p JOIN p.clients c
+            SELECT NEW MAP(c.id ,c.username, c.name) 
+            FROM Partner p JOIN p.clients c
             WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
         return Partner.executeQuery(
@@ -87,11 +90,12 @@ class Partner {
         )
     }
     
-    Set getSortedContactPersons(
+    Set getContactPersonsAsMap(
         String sort = 'name', String order = 'asc')
     {
         String sql = """
-            SELECT c FROM Partner p JOIN p.contactPersons c
+            SELECT NEW MAP(c.id ,c.username, c.name) 
+            FROM Partner p JOIN p.contactPersons c
             WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
         return Partner.executeQuery(
