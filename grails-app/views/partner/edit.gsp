@@ -80,7 +80,7 @@
             <table>
               <tbody>
                 <g:each var="c" in="${clients}">
-                  <g:set var="isContactPerson" value="${instance.contactPersons.contains(c)?'checked="checked"':''}" />
+                  <g:set var="isContactPerson" value="${instance.contactPersons.id.contains(c.id)?'checked="checked"':''}" />
                   <tr>
                     <td><input type="checkbox" class="table_checkbox" name="contactPersons" ${isContactPerson} value="${c.id}"/></td>
                     <td>

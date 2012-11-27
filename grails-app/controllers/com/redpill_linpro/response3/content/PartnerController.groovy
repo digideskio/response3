@@ -56,12 +56,11 @@ class PartnerController {
     def edit(){
         log.debug params
         try{
-            long partnerId = checkId(params.id)
-            def partner = lockService.lock(CN, partnerId)
+            def partner = lockService.lock(CN, params.long('id'))
             if(partner){
                 return [
                     instance:partner,
-                    clients:partner.getContactPersonsAsMap()
+                    clients: partner.getContactPersonsAsMap()
                 ]
             } else {
                 throw new RuntimeException("lockservice returned null")
@@ -112,10 +111,6 @@ class PartnerController {
             return
         }
         try{
-            String className = PNAME +".PartnerContactPersons"
-            params.collections = [
-                (className):User.getAll(params.list('contactPersons'))
-            ]
             def partner = lockService.update(CN, params)
             if(partner){
                 flash.message = message(
@@ -134,7 +129,7 @@ class PartnerController {
                 newpartner.properties = params
                 render (view:'edit', model: [
                     instance:newpartner,
-                    clients:newpartner.getSortedClients()
+                    clients:newpartner.getClientsAsMap()
                 ])
                 return
             }
@@ -150,30 +145,8 @@ class PartnerController {
     def customers(){
         def partner = Partner.read(params.id)
         if(partner){
-            params.max = Math.min(
-            params.max ? params.int('max') : 
-                grailsApplication.config.response3.lists.length,
-                grailsApplication.config.response3.lists.max)
-            params.offset = params.offset ? params.long('offset') : 0
-            
-            params.sort =
-                params.sort in ['id','name'] ? params.sort:'name'
-            params.order =
-                params.order in ['asc','desc'] ? params.order:'asc'
-            String sql = """
-                SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
-                WHERE c.partner.id = :id
-                ORDER BY c.$params.sort $params.order
-            """.stripMargin()
-            def customers = Customer.executeQuery(
-                sql, 
-                [id:params.long('id')],
-                [max:params.long('max'),offset:params.long('offset')]
-            )
-            def total = Customer.executeQuery(
-                "SELECT COUNT(c) FROM Customer c WHERE c.partner.id = :id",
-                [id:params.long('id')]
-            )[0]
+            def customers = partner.getCustomersAsMap(params)
+            long total = partner.getCustomerCount()
             return [
                 instance:partner,
                 instances:customers,
@@ -190,7 +163,7 @@ class PartnerController {
         def data = []
         def partner = Partner.read(params.id)
         if(partner){
-            data = getCustomers(params)
+            data = partner.getCustomersAsMap(params)
         }
         render data as JSON
     }
@@ -209,32 +182,12 @@ class PartnerController {
             data = data.results.collect{it.properties['id','name']}
         }
         else{
-            data = getCustomers(params)
+            def partner = Partner.read(params.id)
+            if(partner){
+                data = partner.getCustomersAsMap(params)
+            }
         }
         render data as JSON
-    }
-    
-    private def getCustomers(Map params){
-        params.max = Math.min(
-        params.max ? params.int('max') :
-            grailsApplication.config.response3.lists.length,
-            grailsApplication.config.response3.lists.max)
-        params.offset = params.offset ? params.long('offset') : 0
-        
-        params.sort =
-            params.sort in ['id','name'] ? params.sort:'name'
-        params.order =
-            params.order in ['asc','desc'] ? params.order:'asc'
-        String sql = """
-            SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
-            WHERE c.partner.id = :id
-            ORDER BY c.$params.sort $params.order
-        """.stripMargin()
-        return Customer.executeQuery(
-            sql,
-            [id:params.long('id')],
-            [max:params.long('max'),offset:params.long('offset')]
-        )
     }
     
     def users(){

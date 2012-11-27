@@ -2,6 +2,7 @@ package com.redpill_linpro.response3.content
 
 import grails.test.mixin.*
 import org.junit.*
+import grails.converters.JSON
 
 import com.redpill_linpro.response3.security.LockService
 /**
@@ -29,10 +30,20 @@ class PartnerControllerTests {
     
     void setUp(){
         controller.lockService = lockService
+        Customer.metaClass.static.search = { a, b ->
+            return [results:Customer.list()]
+        }
         def rp = new Partner(name:'Redpill').save(flush:true)
+        rp.metaClass.getContactPersonsAsMap{ return [] }
+        rp.metaClass.getClientsAsMap{ return [] }
+        rp.metaClass.getCustomersAsMap{ Map a=[:] -> 
+            return Customer.list(a) as Set
+        }
+        rp.metaClass.getCustomerCount{ return Customer.count()}
         new Partner(name:'OSE').save(flush:true)
-        new Customer(partner:rp, name:'Telenor').save(flush:true)
-        new Customer(partner:rp, name:'Oslo Stock Exchange').save(flush:true)
+        def c1 = new Customer(partner:rp, name:'Telenor').save(flush:true)
+        def c2 = new Customer(partner:rp, name:'Oslo Stock Exchange')
+            .save(flush:true)
     }
     void testList() {
         def model = controller.list()
@@ -60,7 +71,6 @@ class PartnerControllerTests {
     void testInvalidEdit() {
         params.id = 10
         controller.edit()
-        
         assert response.redirectedUrl == "/partner/list"
         assert flash.errorMessage != null
     }
@@ -96,7 +106,7 @@ class PartnerControllerTests {
         assert view == '/partner/create'
      }
     
-    void testSaveValidBook() { 
+    void testSaveValidPartner() { 
         params.name = "Redpill-Linpro" 
         params.description = "500"
         
@@ -139,14 +149,32 @@ class PartnerControllerTests {
         params.id = 10
         def model = controller.customers()
         assert response.redirectedUrl == "/partner/list"
-        assert flash.error != null
+        println flash.message
+        assert flash.message == "partner.not.found"
     }
     
     void testCustomerList(){
         params.id = 1
         def model = controller.customers()
         assertNotNull model.instance
-        assertNotNull model.instance.customers
-        assert model.instance.customers == 2
+        assertNotNull model.instances
+        assert model.total == 2
+    }
+    
+    void testMoreCustomers(){
+        params.id = 1
+        controller.moreCustomers()
+        def json = JSON.parse(controller.response.contentAsString)
+        assertNotNull json
+        assert controller.response.status == 200
+    }
+    
+    void testFilterCustomers(){
+        params.id = 1
+        params.query = 'te'
+        controller.filterCustomers()
+        def json = JSON.parse(controller.response.contentAsString)
+        assertNotNull json
+        assert controller.response.status == 200
     }
 }

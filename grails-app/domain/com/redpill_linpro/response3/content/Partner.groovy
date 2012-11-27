@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.HashSet;
 import org.hibernate.collection.PersistentSet
 import org.codehaus.groovy.grails.web.binding.ListOrderedSet
+import grails.util.Holders
 
 import com.redpill_linpro.response3.security.Role;
 import com.redpill_linpro.response3.security.User
@@ -47,7 +48,6 @@ class Partner {
         })
         clients(nullable:true)
         contactPersons(nullable:true,validator: { val, obj ->
-            log.debug(val.getClass().getName())
             if (val == null){
                 return true
             }
@@ -101,6 +101,40 @@ class Partner {
         return Partner.executeQuery(
             sql, [id:this.id]
         )
+    }
+    
+    Set getCustomersAsMap(Map params=[:]){
+        println this.name
+        params.max = Math.min(
+        params.max ? params.int('max') :
+            Holders.getGrailsApplication().config.response3.lists.length,
+            Holders.getGrailsApplication().config.response3.lists.max)
+        params.offset = params.offset ? params.long('offset') : 0
+        params.sort =
+            params.sort in ['id','name'] ? params.sort:'name'
+        params.order =
+            params.order in ['asc','desc'] ? params.order:'asc'
+        String sql = """
+            SELECT NEW MAP(c.id as id, c.name as name) FROM Customer c
+            WHERE c.partner.id = :id
+            ORDER BY c.$params.sort $params.order
+        """.stripMargin()
+        def customers = Customer.executeQuery(
+            sql,
+            [id:this.id],
+            [max:params.long('max'),offset:params.long('offset')]
+        )
+        return customers as Set
+    }
+    
+    long getCustomerCount(){
+        if(this.id){
+            return (long)Customer.executeQuery(
+                """SELECT COUNT(c) FROM Customer c WHERE c.partner.id = :id""",
+                [id:this.id]
+            )[0]
+        }
+        return 0L
     }
     
     String toString() {
