@@ -518,10 +518,12 @@ div.errors li {
 	background:#3B659C;
     padding:0px;
 }
-.show .r3listing table tr:last-child td{
+.r3listing table tr:last-child td{
     color:#fff;
     line-height:30px;
     height:30px;
+    font-weight:bold;
+    letter-spacing: 0.1em;
 }
 
 .r3listing table th a{
@@ -535,6 +537,12 @@ div.errors li {
 }
 .r3listing table tbody tr:hover{
 	background:#C7D4E7;
+}
+.r3listing table tbody tr td:hover{
+    background:#96B7E8;
+}
+.r3listing table tbody tr:last-child td:hover{
+	background:#3B659C;
 }
 .table_checkbox{
 	padding: 4px 4px 0px 4px;
@@ -621,4 +629,37 @@ a .personcell img {
 .edit_contact_persons tr td:first-child{
     width: 12px;
     padding:4px;
+}
+.r3listing input.button.delete{
+    background:#FF931F url(../images/icons/close.png) no-repeat;
+    background-position:90% center;
+    background-size: 12%
+}
+.r3listing input.button.delete:hover{
+    background:#DE7B10 url(../images/icons/close.png) no-repeat;
+    background-position:91% center;
+    background-size: 14%
+}
+.r3listing input.button.next{
+	float:right;
+	background:#FF931F url(../images/icons/next.png) no-repeat;
+	background-position:90% center;
+	background-size: 12%
+}
+.r3listing input.button.next:hover{
+    background:#DE7B10 url(../images/icons/next.png) no-repeat;
+    background-position:91% center;
+    background-size: 14%
+}
+.r3listing input.button.previous{
+	float:right;
+	text-align:right;
+    background:#FF931F url(../images/icons/previous.png) no-repeat;
+    background-position:10% center;
+    background-size: 12%
+}
+.r3listing input.button.previous:hover{
+    background:#DE7B10 url(../images/icons/previous.png) no-repeat;
+    background-position:9% center;
+    background-size: 14%
 }

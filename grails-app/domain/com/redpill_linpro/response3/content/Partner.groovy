@@ -21,6 +21,11 @@ class Partner {
         only: ['name']
     }
     
+    static transients = [
+        'customerCount', 'contactPersonsAsMap',
+        'customersAsMap','clientsAsMap'
+    ]
+    
     String name
     String description
     Lock lockdata
@@ -79,9 +84,9 @@ class Partner {
         cache usage:'read-write'
     }
     
-    Set getClientsAsMap(String sort = 'name', String order = 'asc'){
+    def getClientsAsMap(String sort = 'name', String order = 'asc'){
         String sql = """
-            SELECT NEW MAP(c.id ,c.username, c.name) 
+            SELECT NEW MAP(c.id as id, c.username as username, c.name as name) 
             FROM Partner p JOIN p.clients c
             WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
@@ -90,11 +95,11 @@ class Partner {
         )
     }
     
-    Set getContactPersonsAsMap(
+    def getContactPersonsAsMap(
         String sort = 'name', String order = 'asc')
     {
         String sql = """
-            SELECT NEW MAP(c.id ,c.username, c.name) 
+            SELECT NEW MAP(c.id as id ,c.username as username, c.name as name)
             FROM Partner p JOIN p.contactPersons c
             WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
@@ -103,8 +108,7 @@ class Partner {
         )
     }
     
-    Set getCustomersAsMap(Map params=[:]){
-        println this.name
+    def getCustomersAsMap(Map params=[:]){
         params.max = Math.min(
         params.max ? params.int('max') :
             Holders.getGrailsApplication().config.response3.lists.length,
@@ -127,10 +131,10 @@ class Partner {
         return customers as Set
     }
     
-    long getCustomerCount(){
+    def getCustomerCount(){
         if(this.id){
             return (long)Customer.executeQuery(
-                """SELECT COUNT(c) FROM Customer c WHERE c.partner.id = :id""",
+                "SELECT COUNT(c.id) FROM Customer c WHERE c.partner.id = :id",
                 [id:this.id]
             )[0]
         }

@@ -71,5 +71,17 @@ class Customer {
     String toString() {
         return this.name
     }
+    
+    static def listAll(Map params=null){
+        if(!params){
+            return []
+        }
+        String sql = """
+            SELECT c FROM Customer c 
+            ORDER BY c.$params.sort $params.order
+        """.stripMargin()
+        return Customer.executeQuery(sql, 
+            [max:params.max,offset:params.offset])
+    }
 }
 

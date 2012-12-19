@@ -20,15 +20,14 @@ class PartnerController {
             params.max ? params.int('max') : 
             grailsApplication.config.response3.lists.length, 
             grailsApplication.config.response3.lists.max)
-        params.sort = params.sort?:"dateCreated"
-        params.order = params.order?:"desc"
+        params.sort = params.sort?:"name"
+        params.order = params.order?:"asc"
         def props = grailsApplication.getDomainClass(
             "com.redpill_linpro.response3.content.Partner"
         ).persistentProperties.collect{ it.name }
         def partners = Partner.list(params)
         return [
             instances: partners,
-            props: props,
             total: Partner.count()
         ]
     }
@@ -60,7 +59,7 @@ class PartnerController {
             if(partner){
                 return [
                     instance:partner,
-                    clients: partner.getContactPersonsAsMap()
+                    clients: partner.getClientsAsMap()
                 ]
             } else {
                 throw new RuntimeException("lockservice returned null")
@@ -160,6 +159,7 @@ class PartnerController {
     }
     
     def moreCustomers(){
+        log.debug params
         def data = []
         def partner = Partner.read(params.id)
         if(partner){
