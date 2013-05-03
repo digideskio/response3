@@ -47,7 +47,6 @@ grails.project.dependency.resolution = {
 
     plugins {
         runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.8.0"
         runtime ":resources:1.1.6"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
@@ -56,10 +55,9 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 
         build ":tomcat:$grailsVersion"
-
         runtime ":database-migration:1.1"
         runtime ":spring-security-core:1.2.7.3"
-
+        compile ":searchable:0.6.4"
         compile ':cache:1.0.0'
     }
 }
