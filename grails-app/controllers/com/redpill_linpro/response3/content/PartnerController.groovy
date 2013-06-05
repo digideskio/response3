@@ -4,6 +4,7 @@ import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 import com.redpill_linpro.response3.security.User
+import org.compass.core.CompassQuery
 
 @Secured(['ROLE_ADMIN','ROLE_MANAGER'])
 class PartnerController {
@@ -169,11 +170,13 @@ class PartnerController {
     }
     
     def filterCustomers(){
+        log.debug params
         def data = [:]
         if(params.query && params.long('id')){
             def wildcardQuery = params.query + "*"
             def searchOptions = [
-                max:grailsApplication.config.response3.lists.length]
+                    max:grailsApplication.config.response3.lists.length
+            ]
             Closure searchClosure = {
                 must(term('$/Customer/partner/id', params.long('id')))
                 must(queryString(wildcardQuery))
@@ -181,11 +184,14 @@ class PartnerController {
             data = Customer.search(searchClosure, searchOptions)
             data = data.results.collect{it.properties['id','name']}
         }
-        else{
+        else if(params.id){
             def partner = Partner.read(params.id)
             if(partner){
                 data = partner.getCustomersAsMap(params)
             }
+        }
+        else{
+            redirect(action:"list")
         }
         render data as JSON
     }

@@ -18,16 +18,16 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             url = "jdbc:postgresql://pg92:5432/response3"
-            username="response3"
-            password="response3"
+            username="response"
+            password="response"
         }
     }
     test {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             url = "jdbc:postgresql://pg92:5432/response3_test"
-            username="response3"
-            password="response3"
+            username="response"
+            password="response"
         }
     }
     production {

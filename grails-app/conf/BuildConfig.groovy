@@ -41,13 +41,15 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
         // runtime 'mysql:mysql-connector-java:5.1.20'
-        compile 'com.fasterxml.jackson.core:jackson-core:2.1.1'
-
+        runtime 'postgresql:postgresql:9.2-1002.jdbc4'
+        compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
+        compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
+        compile 'org.apache.commons:commons-math3:3.0'
+        build 'redis.clients:jedis:2.1.0'
     }
 
     plugins {
         runtime ":hibernate:$grailsVersion"
-        runtime ":resources:1.1.6"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
@@ -55,9 +57,11 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 
         build ":tomcat:$grailsVersion"
-        runtime ":database-migration:1.1"
-        runtime ":spring-security-core:1.2.7.3"
+        runtime ":database-migration:1.3.2"
+        compile ':spring-security-core:1.2.7.3'
+        compile ":mail:1.0.1"
+        compile ':cache:1.0.1'
+        compile ":cache-ehcache:1.0.0"
         compile ":searchable:0.6.4"
-        compile ':cache:1.0.0'
     }
 }

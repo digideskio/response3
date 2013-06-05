@@ -4,9 +4,12 @@
         <meta name="layout" content="main" />
     </head>
     <body>
-        <g:render template="partner"/>
-        <g:render template="customer"/>
-        <g:render template="project"/>
-        <g:render template="user"/>
+		<ul class="administration-list">
+			<li><g:render template="client"/></li>
+			<li><g:render template="partner"/></li>
+			<li><g:render template="customer"/></li>
+			<li><g:render template="project"/></li>
+			<li><g:render template="user"/></li>
+		</ul>
     </body>
 </html>

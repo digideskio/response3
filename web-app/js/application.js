@@ -63,7 +63,12 @@ response3={};
                 props.set('oldTBody',tablebody);
                 props.set('jsonData',data);
                 response3.table.buildSimpleTable(props);
-                response3.button.enable($('#button').get(0));
+				console.log(element.value);
+				if(element.value.length > 0){
+					response3.button.disable($('#button').get(0));
+				} else{
+					response3.button.enable($('#button').get(0));
+				}
                 $("#currentLength").html(data.length);
             });
             response3.ajax(map);

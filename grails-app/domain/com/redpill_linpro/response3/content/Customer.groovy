@@ -8,7 +8,7 @@ class Customer {
     
     static searchable = {
         only:['name']
-        exclude: [
+        except: [
             'description', 'dateCreated','lastUpdated','enabled',
             'lockdata']
         partner component: true
@@ -37,9 +37,9 @@ class Customer {
         contactPersons(nullable: true)
         enabled(validator: {
                 val, obj ->
-                if(val == false){
+                if(!val){
                     // Check Project
-                    if(Project.executeQuery(
+                    if(executeQuery(
                         "select 1 from Project p WHERE p.customer = :c AND p.enabled is true",
                         [c:obj]
                     ).size() > 0){
@@ -80,7 +80,7 @@ class Customer {
             SELECT c FROM Customer c 
             ORDER BY c.$params.sort $params.order
         """.stripMargin()
-        return Customer.executeQuery(sql, 
+        return executeQuery(sql,
             [max:params.max,offset:params.offset])
     }
 }

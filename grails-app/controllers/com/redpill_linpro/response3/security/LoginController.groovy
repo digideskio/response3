@@ -1,5 +1,6 @@
 package com.redpill_linpro.response3.security
 import grails.converters.JSON
+import grails.util.Environment
 
 import javax.servlet.http.HttpServletResponse
 
@@ -44,7 +45,7 @@ class LoginController {
 	def auth = {
         log.debug params
 		def config = SpringSecurityUtils.securityConfig
-        log.debug springSecurityService.isLoggedIn()
+        log.debug "Is logged in? " + springSecurityService.isLoggedIn()
 		if (springSecurityService.isLoggedIn()) {
 			redirect uri: config.successHandler.defaultTargetUrl
 			return
@@ -52,6 +53,9 @@ class LoginController {
 
 		String view = 'auth'
 		String postUrl = "${request.contextPath}${config.apf.filterProcessesUrl}"
+        if(Environment.isDevelopmentMode()){
+            flash.message = message(code:"default.username.and.password")
+        }
 		render view: view, model: [postUrl: postUrl,
 		                           rememberMeParameter: config.rememberMe.parameter]
 	}
@@ -68,6 +72,7 @@ class LoginController {
 	 * Show denied page.
 	 */
 	def denied = {
+        log.debug params
 		if (springSecurityService.isLoggedIn() &&
 				authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
 			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY

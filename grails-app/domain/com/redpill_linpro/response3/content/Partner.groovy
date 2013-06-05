@@ -1,12 +1,9 @@
 package com.redpill_linpro.response3.content
 
-import java.util.Set;
-import java.util.HashSet;
 import org.hibernate.collection.PersistentSet
 import org.codehaus.groovy.grails.web.binding.ListOrderedSet
 import grails.util.Holders
 
-import com.redpill_linpro.response3.security.Role;
 import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Lock
 
@@ -40,8 +37,8 @@ class Partner {
         description(nullable: true,size:0..4000)
         enabled(validator: {
             val, obj ->
-            if(val == false){
-                if(Customer.executeQuery(
+            if(!val){
+                if(executeQuery(
                     "select 1 from Customer c WHERE c.partner = :p AND "+
                     "c.enabled is true",
                     [p:obj]
@@ -90,7 +87,7 @@ class Partner {
             FROM Partner p JOIN p.clients c
             WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
-        return Partner.executeQuery(
+        return executeQuery(
             sql, [id:this.id]
         )
     }
@@ -103,7 +100,7 @@ class Partner {
             FROM Partner p JOIN p.contactPersons c
             WHERE p.id = :id ORDER BY c.$sort $order
         """.stripMargin()
-        return Partner.executeQuery(
+        return executeQuery(
             sql, [id:this.id]
         )
     }
@@ -123,7 +120,7 @@ class Partner {
             WHERE c.partner.id = :id
             ORDER BY c.$params.sort $params.order
         """.stripMargin()
-        def customers = Customer.executeQuery(
+        def customers = executeQuery(
             sql,
             [id:this.id],
             [max:params.long('max'),offset:params.long('offset')]
@@ -133,7 +130,7 @@ class Partner {
     
     def getCustomerCount(){
         if(this.id){
-            return (long)Customer.executeQuery(
+            return (long)executeQuery(
                 "SELECT COUNT(c.id) FROM Customer c WHERE c.partner.id = :id",
                 [id:this.id]
             )[0]

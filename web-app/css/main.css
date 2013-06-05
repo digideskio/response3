@@ -64,12 +64,13 @@ a{
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
 #header{
-	background:#333;
+	background:#328333;
 	height:80px;
-	padding:10px 20px;
+	padding:10px 0px;
 }
 #header h1{
 	display:inline;
+	font-size:1.9em;
 }
 #header h1 a{
 	font-size:1.5em;
@@ -78,10 +79,10 @@ a{
 	color:#fff;
 }
 #header h1 a:hover{
-	text-shadow: 0 0 0.03em #fff;
+	text-shadow: 0 0 0.01em #ddd;
 }
 #header h2{
-    font-size:0.7em;
+    font-size:0.9em;
     color:#ddd;
     font-weight: normal;
 }
@@ -92,7 +93,6 @@ a{
 	float:right;
 }
 #header li{
-    margin-left:4px;
     float:left;
     line-height: 120px;
     text-align:center;
@@ -119,11 +119,11 @@ a{
     background-size:40px 40px;
 }
 #header li.search-icon{
-    background:#789600 url(../images/icons/search.png) center 10px no-repeat;
+    background:#77A500 url(../images/icons/search.png) center 10px no-repeat;
     background-size:40px 40px;
 }
 #header li.search-icon:hover{
-    background:#77A500 url(../images/icons/search.png) center 10px no-repeat;
+    background:#789600 url(../images/icons/search.png) center 10px no-repeat;
     background-size:40px 40px;
 }
 #header li.administration-icon{
@@ -145,13 +145,10 @@ a{
 	padding:20px;
 }
 .r3widget{
-	float:left;
-	margin-right:20px;
 	width:300px;
-	margin-bottom:20px;
 }
-.r3widget:last-child{
-    margin-right:0px;
+.r3widget-create{
+	width:100%;
 }
 .r3listing h1{
     letter-spacing:0.15em;
@@ -181,7 +178,8 @@ div.r3widget form>div:first-child{
 .r3widget ul li{
 	background:#fff;
 	list-style:none;
-    border-bottom: 1px solid #D4D4D4;
+	border-bottom: 1px solid #D4D4D4;
+	width: 100%;
 }
 .r3widget .cnavigation ul li{
 	background:#fff;
@@ -205,11 +203,11 @@ div.r3widget form>div:first-child{
 	transition:background 100ms ease-in;
 }
 .r3widget .cnavigation ul li a{
-    border-bottom:0px;
+	border-bottom:0px;
 }
 .r3widget ul li a:hover{
-    background:#FF931F;
-    color:#fff;
+	background:#FF931F;
+	color:#fff;
 }
 span.box{
 	float:left;
@@ -305,10 +303,13 @@ div.filter input{
     width:400px;
 }
 .r3form>form>table{
-    width:75%;
+    width:70%;
     background:#fff;
     float:left;
     border-collapse: collapse;
+}
+.r3widget-create>form>table{
+	width:100%;
 }
 .r3form td{
     padding: 0 20px;
@@ -428,7 +429,7 @@ div.filter input{
 .r3form .cnavigation{
 	float:right;
 	min-width:200px;
-	width:25%;
+	width:30%;
 }
 div.message {
     background: #F3F8FC;
@@ -458,8 +459,8 @@ div.errors li {
     padding-left: 30px;
 }
 .r3listing{
-    width:75%;
-    min-width:560x;
+    width:70%;
+    min-width:560px;
     background:#3B659C;
     float:left;
 }
@@ -548,7 +549,7 @@ div.errors li {
 	padding: 4px 4px 0px 4px;
 }
 .table_title{
-    max-width: 390x;
+    max-width: 390px;
 }
 .table_date_created{
     max-width: 100px;
@@ -562,6 +563,7 @@ div.errors li {
 }
 .hlayout ul{
 	height: 56px;
+	margin-bottom: 20px;
 }
 .hlayout ul li{
 	border:none;
@@ -662,4 +664,19 @@ a .personcell img {
     background:#DE7B10 url(../images/icons/previous.png) no-repeat;
     background-position:9% center;
     background-size: 14%
+}
+ul.administration-list{
+	list-style: none;
+	padding: 0;
+	text-align: center;
+}
+ul.administration-list>li{
+	vertical-align: top;
+	padding:10px 20px;
+	display: inline-block;
+	text-align: left;
+}
+.main_logo{
+	float:left;
+	margin:10px;
 }

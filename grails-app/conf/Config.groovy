@@ -72,10 +72,23 @@ environments {
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        environments {
+            production {
+                rollingFile name: "response3Appender",
+                            maxFileSize: 1024*1024,
+                            file: "log/response3.log"
+            }
+            development{
+                console name:'stdout',
+                        layout:pattern(
+                                conversionPattern:
+                                        '%p %d{HH:mm:ss} %c{2} - %m%n'
+                        )
+            }
+        }
+    }
+
     info   'grails.app'
     
     warn   'grails.app'
@@ -95,8 +108,8 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
            
-    debug  'grails.app',
-           'org.hibernate.SQL'
+    debug  'grails.app'
+           //'org.hibernate.SQL'
            
     //trace 'org.hibernate.type'
 }
@@ -113,13 +126,14 @@ grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
 grails.plugins.springsecurity.securityConfigType = 'Annotation'
 grails.plugins.springsecurity.rejectIfNoRule = true
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
-    '/administration/**':    ['ROLE_ADMIN','ROLE_MANAGER'],
-    '/js/**':        ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/css/**':       ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/images/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/*':           ['IS_AUTHENTICATED_FULLY'],
-    '/login/**':     ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/logout/**':    ['IS_AUTHENTICATED_ANONYMOUSLY']
+    '/administration/**':   ['ROLE_ADMIN','ROLE_MANAGER'],
+    '/js/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/css/**':              ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/images/**':           ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/*':                   ['IS_AUTHENTICATED_FULLY'],
+    '/default/**':          ['IS_AUTHENTICATED_FULLY'],
+    '/login/**':            ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/logout/**':           ['IS_AUTHENTICATED_ANONYMOUSLY']
 ]
 grails.gorm.default.mapping = {
     // Prevent GORM to update all properties for each update

@@ -9,9 +9,11 @@
                 <g:renderErrors bean="${instance}" as="list" />
             </div>
         </g:hasErrors>
-        <div class="r3widget r3form">
+        <div class="r3widget-create r3form r3widget">
           <g:form name="partnerform" action="save">
-            <h1><g:message code="create.new.partner" /></h1>
+			<div>
+            	<h1><g:message code="create.new.partner" /></h1>
+			</div>
             <table>
               <tbody>
                   <tr>
@@ -24,12 +26,12 @@
                    </tr>
                    <tr>
                       <td>
-                          <g:textField class="${hasErrors(bean: instance, field: 'name', 'error')}" 
-                                       id="name" name="name" 
+                          <g:textField class="${hasErrors(bean: instance, field: 'name', 'error')}"
+                                       id="name" name="name"
                                        value="${fieldValue(bean: instance, field: 'name')}" />
                       </td>
                   </tr>
-                  
+
                   <tr>
                       <td class="">
                           <label>
@@ -46,7 +48,7 @@
                   <tr>
                       <td>
                       <input class="button" type="submit" value="${message(code:'create.partner')}" />
-                      
+
                       </td>
                   </tr>
              </tbody>
