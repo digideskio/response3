@@ -45,6 +45,7 @@ grails.project.dependency.resolution = {
         compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
         compile 'org.apache.commons:commons-math3:3.0'
+        compile 'org.elasticsearch:elasticsearch:+'
         build 'redis.clients:jedis:2.1.0'
     }
 
@@ -62,6 +63,6 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1"
         compile ':cache:1.0.1'
         compile ":cache-ehcache:1.0.0"
-        compile ":searchable:0.6.4"
+        compile ":grails-melody:1.44"
     }
 }

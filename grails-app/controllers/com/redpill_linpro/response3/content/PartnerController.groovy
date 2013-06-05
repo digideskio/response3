@@ -4,7 +4,6 @@ import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 import com.redpill_linpro.response3.security.User
-import org.compass.core.CompassQuery
 
 @Secured(['ROLE_ADMIN','ROLE_MANAGER'])
 class PartnerController {
@@ -13,7 +12,6 @@ class PartnerController {
     private final String CN = PNAME + ".Partner"
     
     def lockService
-    def searchableService
     
     def list(){
         log.debug params

@@ -126,14 +126,17 @@ grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
 grails.plugins.springsecurity.securityConfigType = 'Annotation'
 grails.plugins.springsecurity.rejectIfNoRule = true
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
-    '/administration/**':   ['ROLE_ADMIN','ROLE_MANAGER'],
-    '/js/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/css/**':              ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/images/**':           ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/*':                   ['IS_AUTHENTICATED_FULLY'],
-    '/default/**':          ['IS_AUTHENTICATED_FULLY'],
-    '/login/**':            ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/logout/**':           ['IS_AUTHENTICATED_ANONYMOUSLY']
+    '/administration/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
+    '/js/**':                   ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/css/**':                  ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/images/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/*':                       ['IS_AUTHENTICATED_FULLY'],
+    '/default/**':              ['IS_AUTHENTICATED_FULLY'],
+    '/login/**':                ['IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/logout/**':               ['IS_AUTHENTICATED_ANONYMOUSLY']
+]
+grails.plugins.springsecurity.ipRestrictions = [
+    '/monitoring/**':           '10.0.0.0/24',
 ]
 grails.gorm.default.mapping = {
     // Prevent GORM to update all properties for each update
