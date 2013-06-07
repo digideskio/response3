@@ -241,6 +241,9 @@ span.red{
 span.yellow{
     background:#ECBA21 url(../images/icons/add.png) center no-repeat;
 }
+span.yellow.edit{
+	background:#ECBA21 url(../images/icons/edit.png) center no-repeat;
+}
 .cnavigation span.yellow{
     background:#ECBA21 url(../images/icons/account.png) center no-repeat;
     background-size: 24px 24px;

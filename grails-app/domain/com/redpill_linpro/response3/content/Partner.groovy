@@ -14,9 +14,9 @@ class Partner {
         contactPersons:User,
     ]
     
-    static searchable = {
-        only: ['name']
-    }
+    static searchable = [
+        only: ['id','name']
+    ]
     
     static transients = [
         'customerCount', 'contactPersonsAsMap',

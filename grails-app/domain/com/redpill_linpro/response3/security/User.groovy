@@ -1,10 +1,10 @@
 package com.redpill_linpro.response3.security
 
 class User {
-    
-    static searchable = {
-        only: ['id','name']
-    }
+
+    static searchable = [
+        only: ['id','username', 'name', 'email']
+    ]
 
 	transient springSecurityService
 

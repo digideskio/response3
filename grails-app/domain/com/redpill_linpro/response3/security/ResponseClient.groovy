@@ -2,17 +2,19 @@ package com.redpill_linpro.response3.security
 
 class ResponseClient {
 
-    static searchable = {
+    static searchable = [
         only: ['id','displayName']
-    }
+    ]
 
     String name
     String displayName
     String description
     Boolean isEnabled
+    Date dateCreated
+    Date lastUpdated
 
     static constraints = {
-        name unique: true, size:2..32, matches:"^[a-z0-9]+"
+        name unique: true, size:2..32, matches:"^[a-z0-9\\-]+"
         displayName unique: true, size:2..64
         description blank:true, nullable:true
         isEnabled nullable:false

@@ -1,4 +1,4 @@
-package com.redpill_linpro.response3;
+package com.redpill_linpro.response3.search;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -7,11 +7,11 @@ import org.elasticsearch.node.NodeBuilder;
 
 
 /**
- * Created with IntelliJ IDEA.
+ *
  * User: olav
  * Date: 6/5/13
  * Time: 5:11 PM
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class EmbeddedElasticSearch {
 
@@ -32,7 +32,7 @@ public class EmbeddedElasticSearch {
         client = node.client();
     }
 
-    public Client getClient(){
+    public static Client getClient(){
         return client;
     }
 

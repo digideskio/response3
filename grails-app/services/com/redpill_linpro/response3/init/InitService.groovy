@@ -4,8 +4,10 @@ class InitService {
     
     def contentService
     def usersService
+    def responseClientService
     
     def init() {
+        responseClientService.init()
         usersService.init()
         contentService.init()
     }

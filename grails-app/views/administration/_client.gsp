@@ -11,7 +11,7 @@
 				<g:message code="list.clients"/></g:link></li>
 		</sec:ifAnyGranted>
 		<li><g:link controller="client" action="edit">
-			<span class="purple box"></span>
+			<span class="yellow box edit"></span>
 			<g:message code="edit.client"/></g:link></li>
 	</ul>
 </div>

@@ -1,4 +1,6 @@
-import com.redpill_linpro.response3.EmbeddedElasticSearch
+import com.redpill_linpro.response3.search.ElasticSearchIndex
+import com.redpill_linpro.response3.search.EmbeddedElasticSearch
+import com.redpill_linpro.response3.security.ResponseClient
 
 class BootStrap {
 
@@ -21,6 +23,7 @@ class BootStrap {
             development {
                 embeddedElasticSearch = new EmbeddedElasticSearch()
                 developmentSetup()
+                new ElasticSearchIndex().createIndexes(ResponseClient.list())
             }
         }
         Map filterMap = [

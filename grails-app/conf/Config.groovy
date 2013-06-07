@@ -108,7 +108,8 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
            
-    debug  'grails.app'
+    debug  'grails.app',
+           'com.redpill_linpro.response3'
            //'org.hibernate.SQL'
            
     //trace 'org.hibernate.type'
@@ -126,6 +127,7 @@ grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
 grails.plugins.springsecurity.securityConfigType = 'Annotation'
 grails.plugins.springsecurity.rejectIfNoRule = true
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
+    '/responseClient/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
     '/administration/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
     '/js/**':                   ['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/css/**':                  ['IS_AUTHENTICATED_ANONYMOUSLY'],
