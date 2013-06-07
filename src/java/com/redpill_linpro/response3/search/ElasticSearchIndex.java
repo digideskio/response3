@@ -92,16 +92,6 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
     public void createIndexes(List<ResponseClient> clients)
             throws IOException {
         for(ResponseClient client : clients){
-            /*IndexResponse response = esClient.prepareIndex("twitter", "tweet", "1")
-                    .setSource(jsonBuilder()
-                            .startObject()
-                            .field("user", "kimchy")
-                            .field("postDate", new Date())
-                            .field("message", "trying out Elastic Search")
-                            .endObject()
-                    )
-                    .execute()
-                    .actionGet();*/
             DeleteIndexResponse delete = esClient.admin().indices().delete(
                     new DeleteIndexRequest(client.getName())).actionGet();
             if (!delete.isAcknowledged()) {
@@ -147,7 +137,6 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                 .endObject()
             .endObject();
 
-
             esClient.admin().indices().prepareCreate(client.getName())
                     .setSettings(settings)
                     .addMapping("partner", mapping)
@@ -157,23 +146,6 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
             esClient.admin().indices().flush(
                     new FlushRequest(client.getName())
                             .refresh(true)).actionGet();
-            /*esClient.admin()
-                    .indices()
-                    .preparePutMapping("test")
-                    .setType("type1")
-                    .setSource(XContentFactory.jsonBuilder().startObject()
-                        .startObject("tweet")
-                            .startObject("properties")
-                                .startObject("message")
-                                    .field("type", "string")
-                                    .field("store", "yes")
-                                    .field("index", "analyzed")
-                                    .field("null_value", "na")
-                                .endObject()
-                            .endObject()
-                        .endObject()
-                    .endObject());
-            CreateIndexResponse response = cirb.execute().actionGet();*/
         }
     }
 
