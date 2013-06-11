@@ -1,6 +1,8 @@
 package com.redpill_linpro.response3.search;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import com.redpill_linpro.response3.security.ResponseClient;
@@ -9,19 +11,26 @@ import groovy.lang.GroovyObjectSupport;
 import org.apache.log4j.Logger;
 import org.codehaus.groovy.grails.commons.*;
 import grails.util.Holders;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
-import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
+
+import org.elasticsearch.action.admin.indices.settings.UpdateSettingsRequestBuilder;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.Client;
+
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-
-import static org.elasticsearch.common.xcontent.XContentFactory.*;
+import org.elasticsearch.indices.IndexMissingException;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 
 
 /**
@@ -38,15 +47,20 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
 
     private Logger log = Logger.getLogger(this.getClass());
     private static final String SEARCHABLE_PROPERTY_NAME = "searchable";
+    private static final String SEARCHABLE_MAPPING_NAME = "mapping";
 
     private Object only;
     private Client esClient;
+    private List<ResponseClient> clients;
+    private SessionFactory sessionFactory;
 
     // Find all domain classes, search for the searchable property
-    public ElasticSearchIndex(){
+    public ElasticSearchIndex(List<ResponseClient> clients){
         this.esClient = EmbeddedElasticSearch.getClient();
+        this.clients = clients;
     }
-    public void buildMapping(){
+    public void buildMapping() throws IOException,
+            IllegalAccessException, InvocationTargetException{
         List<GrailsDomainClass> superMappings = new ArrayList<>();
         GrailsApplication app = Holders.getGrailsApplication();
 
@@ -62,18 +76,23 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                     "Found domain class: " +
                             superDomainClass.getClazz().getCanonicalName());
         }
+        for(ResponseClient client : this.clients){
+            createIndex(client);
+        }
         for(GrailsDomainClass domainClass: superMappings){
             only = null;
             if (domainClass.hasProperty(SEARCHABLE_PROPERTY_NAME)){
+                XContentBuilder mapping = null;
                 Object searchable =
                         domainClass.getPropertyValue(
                                 SEARCHABLE_PROPERTY_NAME);
                 if (searchable instanceof Boolean) {
                     log.debug("Searchable is Boolean");
                     break;
-                } else if (searchable instanceof java.util.LinkedHashMap) {
+                } else if (searchable instanceof LinkedHashMap) {
                     log.debug("Searchable is LinkedHashMap");
                     buildHashMapMapping((LinkedHashMap)searchable);
+                    mapping = getHashMapMapping((LinkedHashMap)searchable);
                 } else if (searchable instanceof Closure) {
                     log.debug("Searchable is Closure");
                     buildClosureMapping((Closure)searchable);
@@ -85,19 +104,120 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                 }
                 Set<String> propsOnly = convertToSet(only);
                 log.debug(propsOnly);
-                createSchema(domainClass, propsOnly);
+                for(ResponseClient client : this.clients){
+                    String type = domainClass.getClazz().getSimpleName();
+                    if(mapping != null){
+                        createMapping(type, mapping, client.getName());
+                        fetchContent(domainClass, propsOnly, client.getName());
+                        enableRealTimeIndexing(client.getName());
+                        optimizeIndex(client.getName());
+                        flushIndex(client.getName());
+                    }
+                }
             }
         }
     }
-    public void createIndexes(List<ResponseClient> clients)
-            throws IOException {
-        for(ResponseClient client : clients){
-            DeleteIndexResponse delete = esClient.admin().indices().delete(
-                    new DeleteIndexRequest(client.getName())).actionGet();
-            if (!delete.isAcknowledged()) {
-                log.error("Index wasn't deleted");
-            }
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
+    private void fetchContent(
+            GrailsDomainClass domainClass, Set<String> props, String idxName)
+    throws IllegalAccessException, InvocationTargetException, IOException {
+        String propertyType = domainClass.getClazz()
+                .getSimpleName()
+                .toLowerCase();
+        this.sessionFactory = (SessionFactory) Holders.getApplicationContext()
+                .getBean("sessionFactory");
+        Session session = this.sessionFactory.getCurrentSession();
+        String sql = "SELECT t FROM "
+                + propertyType
+                +" as t";
+        ScrollableResults results = session.createQuery(sql)
+                .setReadOnly(true)
+                .setFetchSize(1000)
+                .setCacheable(false)
+                .scroll(ScrollMode.FORWARD_ONLY);
+        while(results.next()){
+            List<Map<String, Object>> items = new ArrayList<>();
+            for(Object obj : results.get()){
+                Map<String, Object> properties = new HashMap<>();
+                for(Method m : obj.getClass().getDeclaredMethods()){
+                    String methodName = m.getName();
+                    for(String p : props){
+                        char[] stringArray = p.toCharArray();
+                        stringArray[0] = Character.toUpperCase(stringArray[0]);
+                        String uppedP = new String(stringArray);
+                        Object value = null;
+                        if(methodName.equals("get"+uppedP)){
+                            Class<?> returnType = m.getReturnType();
+                            if(returnType.equals(Long.class)){
+                                value = m.invoke(obj);
+                            }
+                            else if(returnType.equals(String.class)){
+                                value = m.invoke(obj);
+                            }
+                            else if(returnType.equals(Date.class)){
+                                value = m.invoke(obj);
+                            }
+                            else if(returnType.equals(Integer.class)){
+                                //noinspection RedundantCast
+                                value = (Long)m.invoke(obj);
+                            }
+                            else if(returnType.equals(Boolean.class)){
+                                value = m.invoke(obj);
+                            }
+                        }
+                        if(value != null){
+                            properties.put(p, value);
+                        }
+                    }
+                }
+                items.add(properties);
+            }
+            indexContent(idxName, propertyType.toLowerCase(), items);
+        }
+    }
+
+    private void indexContent(String idxName, String propertyName,
+              List<Map<String, Object>> items) throws IOException{
+        BulkRequestBuilder bulkRequest = esClient.prepareBulk();
+        for(Map<String, Object> document : items){
+            XContentBuilder obj = XContentFactory.jsonBuilder();
+            XContentBuilder fields = obj.startObject();
+            String id = "";
+            Set<String> keys = document.keySet();
+            for(String key :keys){
+                if(key.equals("id")){
+                    id = String.valueOf(document.get(key));
+                }
+                fields.field(key, document.get(key));
+            }
+            obj.endObject();
+            bulkRequest.add(esClient.prepareIndex(idxName, propertyName, id)
+                    .setSource(obj)
+            );
+        }
+
+        log.debug("Bulk items: " + bulkRequest.numberOfActions());
+        BulkResponse bulkResponse = bulkRequest.execute().actionGet();
+        if (bulkResponse.hasFailures()) {
+            // process failures by iterating through each bulk response item
+            log.error("Bulk insert failed!");
+        }
+    }
+
+    public void createIndex(ResponseClient client){
+        try{
+            try{
+                DeleteIndexResponse delete = esClient.admin().indices().delete(
+                        new DeleteIndexRequest(client.getName())).actionGet();
+                if (!delete.isAcknowledged()) {
+                    log.error("Index wasn't deleted");
+                }
+            } catch (IndexMissingException e){
+                log.error(e.getMessage());
+            }
             XContentBuilder settings = XContentFactory.jsonBuilder()
             .startObject()
                 .startObject("index")
@@ -117,47 +237,60 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                 .endObject()
             .endObject();
 
-            XContentBuilder mapping = XContentFactory.jsonBuilder()
-            .startObject()
-                .startObject("partner")
-                    .startObject("_source")
-                        .field("compress", "true")
-                    .endObject()
-                    .startObject("_all")
-                        .field("enabled", "false")
-                    .endObject()
-                    .startObject("properties")
-                        .startObject("name")
-                            .field("type", "string")
-                            .field("store", "yes")
-                            .field("index", "analyzed")
-                            .field("null_value", "")
-                        .endObject()
-                    .endObject()
-                .endObject()
-            .endObject();
-
-            esClient.admin().indices().prepareCreate(client.getName())
+            CreateIndexResponse req =
+                esClient.admin().indices().prepareCreate(client.getName())
                     .setSettings(settings)
-                    .addMapping("partner", mapping)
                     .execute()
                     .actionGet();
-            // Flush Index
-            esClient.admin().indices().flush(
-                    new FlushRequest(client.getName())
-                            .refresh(true)).actionGet();
+            if(!req.isAcknowledged()){
+                log.error(client.getName() +" index not created!");
+            }
+            flushIndex(client.getName());
+        } catch (IOException e){
+            log.error(e.getMessage());
         }
     }
-
-    public void createIndex(ResponseClient client){
-
+    private void enableRealTimeIndexing(String idxName){
+        Map<String,String> settingsMap = new HashMap<>();
+        settingsMap.put("refresh_interval", "1s");
+        Settings settings = ImmutableSettings
+                .settingsBuilder()
+                .put(settingsMap)
+                .build();
+        UpdateSettingsRequestBuilder request = esClient.admin().indices()
+                .prepareUpdateSettings();
+        request.setIndices(idxName)
+                .setSettings(settings)
+                .execute()
+                .actionGet();
+    }
+    private void optimizeIndex(String idxName){
+        esClient.admin().indices().prepareOptimize(idxName)
+                .setFlush(true)
+                .setOnlyExpungeDeletes(true)
+                .setWaitForMerge(true)
+                .execute()
+                .actionGet();
     }
 
-    private void createSchema(
-            GrailsDomainClass domainClass, Set<String> propsOnly) {
-        //
-        log.debug(domainClass.getFullName());
-        //client.admin().indices().prepareCreate(indexName)
+    private void flushIndex(String idxName){
+        esClient.admin().indices().flush(
+                new FlushRequest(idxName)
+                        .refresh(true)).actionGet();
+    }
+
+    private void createMapping(
+            String type, XContentBuilder mapping, String idxName) {
+        log.debug("Type: "+ type);
+        PutMappingResponse req =
+                esClient.admin().indices().preparePutMapping(idxName)
+                .setType(type)
+                .setSource(mapping)
+                .execute()
+                .actionGet();
+        if(!req.isAcknowledged()){
+            log.error("Error with mapping for: " + type);
+        }
     }
 
     public void setOnly(Object only) {
@@ -192,6 +325,10 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
     }
     public void buildHashMapMapping(LinkedHashMap map) {
         only = map.containsKey("only") ? map.get("only") : null;
+    }
+    public XContentBuilder getHashMapMapping(LinkedHashMap map){
+        return map.containsKey(SEARCHABLE_MAPPING_NAME) ?
+                (XContentBuilder)map.get(SEARCHABLE_MAPPING_NAME) : null;
     }
 
     public void buildClosureMapping(Closure searchable) {

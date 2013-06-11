@@ -1,9 +1,59 @@
 package com.redpill_linpro.response3.security
 
+import org.elasticsearch.common.xcontent.XContentFactory
+
 class User {
 
     static searchable = [
-        only: ['id','username', 'name', 'email']
+        only: ['id','username', 'name', 'email'],
+        mapping: XContentFactory.jsonBuilder()
+        .startObject()
+            .startObject(this.class.simpleName.toLowerCase())
+                .startObject("_source")
+                    .field("compress", "true")
+                .endObject()
+                .startObject("_all")
+                    .field("enabled", "false")
+                .endObject()
+                .startObject("properties")
+                    .startObject("id")
+                        .field("type", "integer")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("username")
+                        .field("type", "string")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                    .startObject("email")
+                        .field("type", "string")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                    .startObject("name")
+                        .field("type", "string")
+                        .field("store", "yes")
+                        .field("index", "analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                    .startObject("dateCreated")
+                        .field("type", "date")
+                        .field("format", "yyyy-MM-dd HH:mm")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("lastUpdated")
+                        .field("type", "date")
+                        .field("format", "yyyy-MM-dd HH:mm")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                .endObject()
+            .endObject()
+        .endObject()
     ]
 
 	transient springSecurityService
@@ -21,6 +71,9 @@ class User {
     String lastname
     String telephone
     String email
+
+    Date dateCreated
+    Date lastUpdated
 
 	static constraints = {
 		username blank: false, unique: true, size:3..32, matches:"^[a-zA-Z0-9]+"
@@ -73,7 +126,7 @@ class User {
     }
     
     public boolean isAdmin(){
-        def roles = getAuthorities()
+        def roles = authorities
         for(role in roles){
             if(role.authority.equals("ROLE_ADMIN")){
                 return true

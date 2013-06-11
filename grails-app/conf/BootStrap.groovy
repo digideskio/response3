@@ -23,7 +23,9 @@ class BootStrap {
             development {
                 embeddedElasticSearch = new EmbeddedElasticSearch()
                 developmentSetup()
-                new ElasticSearchIndex().createIndexes(ResponseClient.list())
+                ElasticSearchIndex searchable =
+                    new ElasticSearchIndex(ResponseClient.list());
+                searchable.buildMapping()
             }
         }
         Map filterMap = [

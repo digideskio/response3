@@ -1,5 +1,7 @@
 package com.redpill_linpro.response3.content
 
+import org.elasticsearch.common.xcontent.XContentBuilder
+import org.elasticsearch.common.xcontent.XContentFactory
 import org.hibernate.collection.PersistentSet
 import org.codehaus.groovy.grails.web.binding.ListOrderedSet
 import grails.util.Holders
@@ -15,7 +17,48 @@ class Partner {
     ]
     
     static searchable = [
-        only: ['id','name']
+        only: ['id','name','dateCreated','lastUpdated','enabled'],
+        mapping: XContentFactory.jsonBuilder()
+        .startObject()
+            .startObject(this.class.simpleName.toLowerCase())
+                .startObject("_source")
+                    .field("compress", "true")
+                .endObject()
+                .startObject("_all")
+                    .field("enabled", "false")
+                .endObject()
+                .startObject("properties")
+                    .startObject("id")
+                        .field("type", "integer")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("name")
+                        .field("type", "string")
+                        .field("store", "yes")
+                        .field("index", "analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                    .startObject("dateCreated")
+                        .field("type", "date")
+                        .field("format", "yyyy-MM-dd HH:mm")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("lastUpdated")
+                        .field("type", "date")
+                        .field("format", "yyyy-MM-dd HH:mm")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("enabled")
+                        .field("type", "boolean")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                .endObject()
+            .endObject()
+        .endObject()
     ]
     
     static transients = [

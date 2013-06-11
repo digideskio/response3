@@ -1,9 +1,35 @@
 package com.redpill_linpro.response3.security
 
+import org.elasticsearch.common.xcontent.XContentFactory
+
 class ResponseClient {
 
     static searchable = [
-        only: ['id','displayName']
+        only: ['id','displayName'],
+        mapping: XContentFactory.jsonBuilder()
+        .startObject()
+            .startObject(this.class.simpleName.toLowerCase())
+                .startObject("_source")
+                    .field("compress", "true")
+                .endObject()
+                .startObject("_all")
+                    .field("enabled", "false")
+                .endObject()
+                .startObject("properties")
+                    .startObject("id")
+                        .field("type", "integer")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("displayName")
+                        .field("type", "string")
+                        .field("store", "yes")
+                        .field("index", "analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                .endObject()
+            .endObject()
+        .endObject()
     ]
 
     String name
