@@ -1,6 +1,7 @@
 package com.redpill_linpro.response3.init
 
 import com.redpill_linpro.response3.content.*
+import com.redpill_linpro.response3.security.ResponseClient
 import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Role
 
@@ -16,25 +17,37 @@ class ContentService {
     }
     
     def createPartners(){
-        new Partner(name:'Redpill').save(flush:true)
-        new Partner(name:'Varnish').save(flush:true)
-        new Partner(name:'Mulesoft').save(flush:true)
-        new Partner(name:'Springsource').save(flush:true)
-        assert Partner.count() == 4
+        new Partner(
+                responseClient: ResponseClient.get(3),
+                name:'Redpill').save(flush:true)
+        new Partner(
+                responseClient: ResponseClient.get(1),
+                name:'Varnish').save(flush:true)
+        new Partner(
+                responseClient: ResponseClient.get(1),
+                name:'Mulesoft').save(flush:true)
+        new Partner(
+                responseClient: ResponseClient.get(1),
+                name:'Springsource').save(flush:true)
+        new Partner(
+                responseClient: ResponseClient.get(2),
+                name:'Mpx').save(flush:true)
+        assert Partner.count() == 5
         createPartnerClients()
         createPartnerContacts()
     }
     
     def createPartnerClients(){
         def user = new User(
-            username: 'redp', enabled: true, password: '1234567890',
-            firstname: 'red', lastname: 'pill',
-            email:'red@response3.org'
+                responseClient: ResponseClient.get(1),
+                username: 'redp', enabled: true, password: '1234567890',
+                firstname: 'red', lastname: 'pill',
+                email:'red@response3.org'
         )
         try{
             userService.create(user, Role.findByAuthority("ROLE_PARTNER"))
         } catch (RuntimeException e){
-            throw new RuntimeException(e.getMessage())
+            throw new RuntimeException(e.message)
         }
         def partner = Partner.findByName('Redpill')
         partner.addToClients(user)
@@ -270,14 +283,24 @@ class ContentService {
         ]
         customers.each{
             new Customer(
-                partner:Partner.findByName('Redpill'),
-                name:it).save(flush:true)
+                    responseClient: ResponseClient.get(1),
+                    partner:Partner.findByName('Redpill'),
+                    name:it).save(flush:true)
         }
         customers = ['Aker Seafoods','Aker Solutions',]
         customers.each{
             new Customer(
-                partner:Partner.findByName('Varnish'),
-                name:it).save(flush:true)
+                    responseClient: ResponseClient.get(1),
+                    partner:Partner.findByName('Varnish'),
+                    name:it).save(flush:true)
+        }
+
+        customers = ['Exxon','Schlumberger','British Petroleum']
+        customers.each{
+            new Customer(
+                    responseClient: ResponseClient.get(3),
+                    partner:Partner.findByName('Redpill'),
+                    name:it).save(flush:true)
         }
     }
     def createProjects(){

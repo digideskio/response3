@@ -3,6 +3,7 @@ package com.redpill_linpro.response3.search;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.redpill_linpro.response3.security.ResponseClient;
@@ -27,10 +28,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.indices.IndexMissingException;
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
+import org.hibernate.*;
 
 
 /**
@@ -48,11 +46,17 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
     private Logger log = Logger.getLogger(this.getClass());
     private static final String SEARCHABLE_PROPERTY_NAME = "searchable";
     private static final String SEARCHABLE_MAPPING_NAME = "mapping";
+    private static final SimpleDateFormat DATE_FORMAT =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private Object only;
     private Client esClient;
     private List<ResponseClient> clients;
-    private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory =
+            (SessionFactory) Holders.getApplicationContext()
+                    .getBean("sessionFactory");
+
+    private List<GrailsDomainClass> superMappings = new ArrayList<>();
 
     // Find all domain classes, search for the searchable property
     public ElasticSearchIndex(List<ResponseClient> clients){
@@ -61,9 +65,8 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
     }
     public void buildMapping() throws IOException,
             IllegalAccessException, InvocationTargetException{
-        List<GrailsDomainClass> superMappings = new ArrayList<>();
-        GrailsApplication app = Holders.getGrailsApplication();
 
+        GrailsApplication app = Holders.getGrailsApplication();
         GrailsClass[] domains = app.getArtefacts("Domain");
         for(GrailsClass domain : domains){
             Class<?> currentClass = domain.getClazz();
@@ -71,7 +74,7 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                     app.getArtefact(
                             DomainClassArtefactHandler.TYPE,
                             currentClass.getName());
-            superMappings.add(superDomainClass);
+            this.superMappings.add(superDomainClass);
             log.debug(
                     "Found domain class: " +
                             superDomainClass.getClazz().getCanonicalName());
@@ -79,7 +82,7 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
         for(ResponseClient client : this.clients){
             createIndex(client);
         }
-        for(GrailsDomainClass domainClass: superMappings){
+        for(GrailsDomainClass domainClass: this.superMappings){
             only = null;
             if (domainClass.hasProperty(SEARCHABLE_PROPERTY_NAME)){
                 XContentBuilder mapping = null;
@@ -105,10 +108,12 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                 Set<String> propsOnly = convertToSet(only);
                 log.debug(propsOnly);
                 for(ResponseClient client : this.clients){
-                    String type = domainClass.getClazz().getSimpleName();
+                    String type = domainClass.getClazz()
+                            .getSimpleName()
+                            .toLowerCase();
                     if(mapping != null){
                         createMapping(type, mapping, client.getName());
-                        fetchContent(domainClass, propsOnly, client.getName());
+                        fetchContent(domainClass, propsOnly, client);
                         enableRealTimeIndexing(client.getName());
                         optimizeIndex(client.getName());
                         flushIndex(client.getName());
@@ -122,61 +127,101 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
     }
 
     private void fetchContent(
-            GrailsDomainClass domainClass, Set<String> props, String idxName)
+            GrailsDomainClass domainClass, Set<String> props,
+            ResponseClient client)
     throws IllegalAccessException, InvocationTargetException, IOException {
-        String propertyType = domainClass.getClazz()
-                .getSimpleName()
-                .toLowerCase();
-        this.sessionFactory = (SessionFactory) Holders.getApplicationContext()
-                .getBean("sessionFactory");
-        Session session = this.sessionFactory.getCurrentSession();
-        String sql = "SELECT t FROM "
+        String propertyType = domainClass.getClazz().getSimpleName();
+        String sql =
+                "SELECT t FROM "
                 + propertyType
-                +" as t";
-        ScrollableResults results = session.createQuery(sql)
+                +" as t"
+                +" WHERE t.responseClient.id = " + client.getId();
+        StatelessSession statelessSession =
+                this.sessionFactory.openStatelessSession();
+        ScrollableResults results = statelessSession.createQuery(sql)
                 .setReadOnly(true)
                 .setFetchSize(1000)
                 .setCacheable(false)
                 .scroll(ScrollMode.FORWARD_ONLY);
+        List<Object> objects = new ArrayList<>();
+        long count = 0;
         while(results.next()){
-            List<Map<String, Object>> items = new ArrayList<>();
-            for(Object obj : results.get()){
-                Map<String, Object> properties = new HashMap<>();
-                for(Method m : obj.getClass().getDeclaredMethods()){
-                    String methodName = m.getName();
-                    for(String p : props){
-                        char[] stringArray = p.toCharArray();
-                        stringArray[0] = Character.toUpperCase(stringArray[0]);
-                        String uppedP = new String(stringArray);
-                        Object value = null;
-                        if(methodName.equals("get"+uppedP)){
-                            Class<?> returnType = m.getReturnType();
-                            if(returnType.equals(Long.class)){
-                                value = m.invoke(obj);
-                            }
-                            else if(returnType.equals(String.class)){
-                                value = m.invoke(obj);
-                            }
-                            else if(returnType.equals(Date.class)){
-                                value = m.invoke(obj);
-                            }
-                            else if(returnType.equals(Integer.class)){
-                                //noinspection RedundantCast
-                                value = (Long)m.invoke(obj);
-                            }
-                            else if(returnType.equals(Boolean.class)){
-                                value = m.invoke(obj);
-                            }
+            objects.add(results.get(0));
+            if(++count > 0 && count % 1000 == 0){
+                indexFetchedObject(objects, props, client, propertyType);
+                objects.clear();
+            }
+        }
+        if(objects.size() > 0){
+            indexFetchedObject(objects, props, client, propertyType);
+        }
+        statelessSession.close();
+    }
+
+    private void indexFetchedObject(
+            List<Object> results, Set<String> props, ResponseClient client,
+            String propertyType)
+    throws IllegalAccessException, InvocationTargetException, IOException {
+        List<Map<String, Object>> items = new ArrayList<>();
+        for(Object obj : results){
+            Map<String, Object> properties = new HashMap<>();
+            for(Method m : obj.getClass().getDeclaredMethods()){
+                String methodName = m.getName();
+                for(String p : props){
+                    char[] stringArray = p.toCharArray();
+                    stringArray[0] = Character.toUpperCase(stringArray[0]);
+                    String uppedP = new String(stringArray);
+                    Object value = null;
+                    if(methodName.equals("get"+uppedP)){
+                        Class<?> returnType = m.getReturnType();
+                        if(returnType.equals(Long.class)){
+                            value = m.invoke(obj);
                         }
-                        if(value != null){
-                            properties.put(p, value);
+                        else if(returnType.equals(String.class)){
+                            value = m.invoke(obj);
+                        }
+                        else if(returnType.equals(Date.class)){
+                            value = DATE_FORMAT.format(
+                                    (Date) m.invoke(obj));
+                        }
+                        else if(returnType.equals(boolean.class)){
+                            value = m.invoke(obj);
+                        }
+                        else if(returnType.equals(Integer.class)){
+                            //noinspection RedundantCast
+                            value = (Long)m.invoke(obj);
+                        }
+                        else if(returnType.equals(Boolean.class)){
+                            value = m.invoke(obj);
+                        }
+                        else{
+                            value = findValueInSuperMappings(
+                                    m.invoke(obj), returnType);
                         }
                     }
+                    if(value != null){
+                        properties.put(p, value);
+                    }
                 }
-                items.add(properties);
             }
-            indexContent(idxName, propertyType.toLowerCase(), items);
+            items.add(properties);
         }
+        indexContent(client.getName(), propertyType.toLowerCase(), items);
+    }
+
+    private Object findValueInSuperMappings(Object obj, Class<?> returnType)
+            throws IllegalAccessException, InvocationTargetException {
+        for(GrailsDomainClass clazz : this.superMappings){
+            if(returnType.equals(clazz.getClazz())){
+                for(Method m : obj.getClass().getDeclaredMethods()){
+                    String methodName = m.getName();
+                    if(methodName.equals("getId")){
+                        return m.invoke(obj);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void indexContent(String idxName, String propertyName,
@@ -190,10 +235,12 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
             for(String key :keys){
                 if(key.equals("id")){
                     id = String.valueOf(document.get(key));
+                } else {
+                    fields.field(key, document.get(key));
                 }
-                fields.field(key, document.get(key));
             }
             obj.endObject();
+            //log.debug(obj.prettyPrint().string());
             bulkRequest.add(esClient.prepareIndex(idxName, propertyName, id)
                     .setSource(obj)
             );
@@ -281,7 +328,6 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
 
     private void createMapping(
             String type, XContentBuilder mapping, String idxName) {
-        log.debug("Type: "+ type);
         PutMappingResponse req =
                 esClient.admin().indices().preparePutMapping(idxName)
                 .setType(type)

@@ -6,14 +6,10 @@ class BootStrap {
 
     def grailsApplication
     def ipAddressFilter
-    def adminUserService
-    def roleService
     def initService
     EmbeddedElasticSearch embeddedElasticSearch;
     
     def init = { servletContext ->
-        roleService.init()
-        adminUserService.init()
         environments {
             production {
             }

@@ -1,11 +1,14 @@
 package com.redpill_linpro.response3.security
 
+import groovy.transform.CompileStatic
 import org.elasticsearch.common.xcontent.XContentFactory
 
+//noinspection GroovyUnusedDeclaration
+@SuppressWarnings("GroovyClassNamingConvention")
 class User {
 
     static searchable = [
-        only: ['id','username', 'name', 'email'],
+        only: ['id','username', 'name', 'email','enabled'],
         mapping: XContentFactory.jsonBuilder()
         .startObject()
             .startObject(this.class.simpleName.toLowerCase())
@@ -41,13 +44,18 @@ class User {
                     .endObject()
                     .startObject("dateCreated")
                         .field("type", "date")
-                        .field("format", "yyyy-MM-dd HH:mm")
+                        .field("format", "yyyy-MM-dd HH:mm:ss")
                         .field("store", "yes")
                         .field("index", "not_analyzed")
                     .endObject()
                     .startObject("lastUpdated")
                         .field("type", "date")
-                        .field("format", "yyyy-MM-dd HH:mm")
+                        .field("format", "yyyy-MM-dd HH:mm:ss")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("enabled")
+                        .field("type", "boolean")
                         .field("store", "yes")
                         .field("index", "not_analyzed")
                     .endObject()
@@ -58,9 +66,10 @@ class User {
 
 	transient springSecurityService
 
+    ResponseClient responseClient
 	String username
 	String password
-    String salt = Salt.getSalt()
+    String salt = Salt.salt
 	boolean enabled = true
 	boolean accountExpired = false
 	boolean accountLocked = false
@@ -76,6 +85,7 @@ class User {
     Date lastUpdated
 
 	static constraints = {
+        responseClient nullable: false
 		username blank: false, unique: true, size:3..32, matches:"^[a-zA-Z0-9]+"
         name blank:true, nullable:true
         firstname blank:true, nullable:true
@@ -94,6 +104,7 @@ class User {
         version false
         
         id index:'person_id_idx'
+        responseClient index: 'person_response_client_idx'
         name index:'person_name_idx'
         email index:'person_email_idx'
         enabled index:'person_enabled_idx'
@@ -117,21 +128,36 @@ class User {
         }
 	}
 
+    @CompileStatic
+    public String toString(){
+        String stringName;
+        if(this.name == null || this.name.equals("")){
+            stringName = this.username
+        } else {
+            stringName = this.name
+        }
+        return stringName;
+    }
+
 	protected void encodePassword() {
 		password = springSecurityService.encodePassword(password, salt)
 	}
-    
+
+    @CompileStatic
     private void setFullName(){
         this.name = (this.firstname?:"") + " " + (this.lastname?:"") 
     }
-    
+
+    @CompileStatic
     public boolean isAdmin(){
-        def roles = authorities
+        boolean isAdmin = false;
+        Set<Role> roles = authorities
         for(role in roles){
             if(role.authority.equals("ROLE_ADMIN")){
-                return true
+                isAdmin = true
+                break
             }
         }
-        return false
+        return isAdmin
     }
 }

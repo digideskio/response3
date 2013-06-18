@@ -1,14 +1,64 @@
 
 package com.redpill_linpro.response3.content
 
+import com.redpill_linpro.response3.security.ResponseClient
 import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Lock
+import org.elasticsearch.common.xcontent.XContentFactory
 
 class Customer {
 
     static searchable = [
-        only: ['id','name','partner']
+        only: ['id', 'partner', 'name','dateCreated','lastUpdated','enabled'],
+        mapping: XContentFactory.jsonBuilder()
+        .startObject()
+            .startObject(this.class.simpleName.toLowerCase())
+                .startObject("_source")
+                    .field("compress", "true")
+                .endObject()
+                .startObject("_all")
+                    .field("enabled", "false")
+                .endObject()
+                .startObject("properties")
+                    .startObject("id")
+                        .field("type", "integer")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("partner")
+                        .field("type", "integer")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("name")
+                        .field("type", "string")
+                        .field("store", "yes")
+                        .field("index", "analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                    .startObject("dateCreated")
+                        .field("type", "date")
+                        .field("format", "yyyy-MM-dd HH:mm:ss")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("lastUpdated")
+                        .field("type", "date")
+                        .field("format", "yyyy-MM-dd HH:mm:ss")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                    .startObject("enabled")
+                        .field("type", "boolean")
+                        .field("store", "yes")
+                        .field("index", "not_analyzed")
+                    .endObject()
+                .endObject()
+            .endObject()
+        .endObject()
     ]
+
+    ResponseClient responseClient
     Partner partner
     String name
     String description
@@ -24,6 +74,7 @@ class Customer {
     ]
     
     static constraints = {
+        responseClient nullable: false
         partner(nullable:false)
         lockdata(nullable:true)
         name(blank: false, nullable:false,unique:true)
