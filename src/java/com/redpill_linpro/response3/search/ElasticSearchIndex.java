@@ -131,11 +131,18 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
             ResponseClient client)
     throws IllegalAccessException, InvocationTargetException, IOException {
         String propertyType = domainClass.getClazz().getSimpleName();
+        long clientId = 0;
+        for(Method m : client.getClass().getDeclaredMethods()){
+            String methodName = m.getName();
+            if(methodName.equals("getId")){
+                clientId = (long)m.invoke(client);
+            }
+        }
         String sql =
                 "SELECT t FROM "
                 + propertyType
                 +" as t"
-                +" WHERE t.responseClient.id = " + client.getId();
+                +" WHERE t.responseClient.id = " + clientId;
         StatelessSession statelessSession =
                 this.sessionFactory.openStatelessSession();
         ScrollableResults results = statelessSession.createQuery(sql)
