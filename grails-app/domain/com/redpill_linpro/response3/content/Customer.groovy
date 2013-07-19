@@ -33,6 +33,12 @@ class Customer {
                     .startObject("name")
                         .field("type", "string")
                         .field("store", "yes")
+                        .field("index", "not_analyzed")
+                        .field("null_value", "")
+                    .endObject()
+                    .startObject("displayName")
+                        .field("type", "string")
+                        .field("store", "yes")
                         .field("index", "analyzed")
                         .field("null_value", "")
                     .endObject()
@@ -61,6 +67,7 @@ class Customer {
     ResponseClient responseClient
     Partner partner
     String name
+    String displayName
     String description
     Date dateCreated
     Date lastUpdated
@@ -77,7 +84,8 @@ class Customer {
         responseClient nullable: false
         partner(nullable:false)
         lockdata(nullable:true)
-        name(blank: false, nullable:false,unique:true)
+        name(unique:true)
+        displayName(blank: false, nullable:false,unique:true)
         description(nullable: true,size:0..4000)
         clients(nullable: true)
         contactPersons(nullable: true)
@@ -112,6 +120,16 @@ class Customer {
         dateCreated index:'customer_date_created_idx'
         partner index:'customer_partner_idx'
         enabled index:'customer_enabled_idx'
+    }
+
+    def beforeInsert(){
+        this.name = this.displayName.toLowerCase()
+    }
+
+    def beforeUpdate() {
+        if (isDirty('displayName')) {
+            this.name = this.displayName.toLowerCase()
+        }
     }
     
     String toString() {

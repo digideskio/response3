@@ -279,20 +279,23 @@ class ContentService {
             'XACT Norden 120',
             'XACT OBX',
             'XACT Oil Service',
-            'Yara International'
+            'Yara International',
+            'Æ vil ha dæ',
+            'Ølen Fiskelag',
+            'Åges Plateselskap AS'
         ]
         customers.each{
             new Customer(
                     responseClient: ResponseClient.get(1),
                     partner:Partner.findByName('Redpill'),
-                    name:it).save(flush:true)
+                    displayName: it, name:it).save(flush:true)
         }
-        customers = ['Aker Seafoods','Aker Solutions',]
+        customers = ['Aker Seafoods','Aker Solutions','Ølsøket dot no']
         customers.each{
             new Customer(
-                    responseClient: ResponseClient.get(1),
+                    responseClient: ResponseClient.get(2),
                     partner:Partner.findByName('Varnish'),
-                    name:it).save(flush:true)
+                    displayName:it, name:it).save(flush:true)
         }
 
         customers = ['Exxon','Schlumberger','British Petroleum']
@@ -300,7 +303,7 @@ class ContentService {
             new Customer(
                     responseClient: ResponseClient.get(3),
                     partner:Partner.findByName('Redpill'),
-                    name:it).save(flush:true)
+                    displayName:it, name:it).save(flush:true)
         }
     }
     def createProjects(){

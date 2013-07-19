@@ -127,7 +127,8 @@ grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
 grails.plugins.springsecurity.securityConfigType = 'Annotation'
 grails.plugins.springsecurity.rejectIfNoRule = true
 grails.plugins.springsecurity.controllerAnnotations.staticRules = [
-    '/responseClient/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
+    '/responseClient/**':       ['ROLE_ADMIN'],
+    '/responseClient/edit':     ['ROLE_ADMIN','ROLE_MANAGER'],
     '/administration/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
     '/js/**':                   ['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/css/**':                  ['IS_AUTHENTICATED_ANONYMOUSLY'],
@@ -147,6 +148,6 @@ grails.gorm.default.mapping = {
     version false
 }
 // response3 specific configuration
-response3.lists.max=100L
-response3.lists.length=40L
+response3.lists.max=100
+response3.lists.length=40
 response3.elasticsearch.date.format='yyyy-MM-dd HH:mm:ss'
