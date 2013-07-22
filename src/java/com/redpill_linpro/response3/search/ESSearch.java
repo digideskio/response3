@@ -50,7 +50,6 @@ public class ESSearch {
                 .addSort("name", SortOrder.DESC)
                 .execute()
                 .actionGet();
-        log.debug(response.getTookInMillis() + " ms");
         SearchHits hits = response.getHits();
         for(SearchHit hit : hits){
             log.debug(hit.getSource());
