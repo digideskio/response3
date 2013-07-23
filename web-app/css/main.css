@@ -681,5 +681,6 @@ ul.administration-list>li{
 }
 .main_logo{
 	float:left;
-	margin:10px;
+	height:80px;
+	width:300px;
 }

@@ -4,12 +4,16 @@ class ResponseLogo {
 
     String title
     String backgroundColor
-    String path
+    String logoImagePath
+    String logoImageWidth
+    String description
 
     static constraints = {
-        title unique: true, size:2..32, matches:"^[a-z0-9\\-]+"
+        title blank:true, size:1..32
+        description blank: true
         backgroundColor nullable:false, blank:false
-        path nullable:false, blank:false
+        logoImagePath nullable:false, blank:false
+        logoImageWidth nullable:false, blank:false
     }
 
     static mapping = {

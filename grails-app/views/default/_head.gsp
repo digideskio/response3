@@ -1,13 +1,12 @@
-<div id="header">
-	<div class="main_logo">
-		<g:img dir="images" file="redpill_logo.png" height="60"/>
+<div id="header" style="background:${request.currentClient.logo.backgroundColor}">
+	<g:link controller="default">
+	<div class="main_logo" style="
+		background:url('${request.currentClient.logo.logoImagePath}') no-repeat 20px center;
+		width:'${request.currentClient.logo.logoImageWidth}';">
 	</div>
+	</g:link>
 	<div>
-		<h1>
-			<g:link controller="default">
-				<g:message code="response3" default="Response3"/>
-			</g:link>
-		</h1>
+		<h1>${request.currentClient.logo.title}</h1>
 		<sec:ifLoggedIn>
 			<ul id="nav">
 				<li class="search-icon">
@@ -34,6 +33,6 @@
 				</li>
 			</ul>
 		</sec:ifLoggedIn>
-		<h2><g:message code="issue.tracker" default="Issue Tracker"/></h2>
+		<h2>${request.currentClient.logo.description}</h2>
 	</div>
 </div>

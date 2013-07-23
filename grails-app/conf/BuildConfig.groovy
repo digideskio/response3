@@ -47,6 +47,7 @@ grails.project.dependency.resolution = {
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
         compile 'org.apache.commons:commons-math3:3.0'
         compile 'org.elasticsearch:elasticsearch:+'
+        compile 'org.elasticsearch:elasticsearch-analysis-icu:+'
         build 'redis.clients:jedis:2.1.0'
     }
 
