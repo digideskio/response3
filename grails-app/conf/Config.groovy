@@ -149,5 +149,5 @@ grails.gorm.default.mapping = {
 }
 // response3 specific configuration
 response3.lists.max=100
-response3.lists.length=40
+response3.lists.length=20
 response3.elasticsearch.date.format='yyyy-MM-dd HH:mm:ss'

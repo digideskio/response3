@@ -120,7 +120,7 @@ class PartnerController {
                     "lockservice for update returned null")
             }
         } catch(RuntimeException e){
-            if(e.getMessage().equals("validator.invalid")){
+            if(e.message.equals("validator.invalid")){
                 flash.errorMessage = message(
                     code:'cant.disable.partner', args:[params.name])
                 def newpartner = Partner.read(params.id)
@@ -131,7 +131,7 @@ class PartnerController {
                 ])
                 return
             }
-            log.error(e.getMessage())
+            log.error(e.message())
             flash.errorMessage = message(
                 code:'could.not.update.partner', args:[params.id])
             redirect(action:'list')

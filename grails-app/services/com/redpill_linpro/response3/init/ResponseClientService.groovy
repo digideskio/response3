@@ -1,6 +1,6 @@
 package com.redpill_linpro.response3.init
 
-import com.redpill_linpro.response3.content.ResponseLogo
+import com.redpill_linpro.response3.content.ResponseHeader
 import com.redpill_linpro.response3.security.ResponseClient
 
 class ResponseClientService {
@@ -8,52 +8,61 @@ class ResponseClientService {
     static transactional = true
 
     def init() {
-        def responseLogo1 = new ResponseLogo(
+        def responseHeader1 = new ResponseHeader(
                 title:"Redpill-Linpro",
-                description: "Response3 Issue Tracker",
+                titleColor: "#000",
+                description: "Response Issue Tracker",
                 backgroundColor: "#fff",
-                logoImagePath: "images/redpill_logo.png",
-                logoImageWidth: "80px"
+                filename: "redpill_logo.png",
+                logoImageWidth: "100px",
+                titleLineHeight: "50px"
         )
-        responseLogo1.save(flush: true)
-        new ResponseClient(
+        responseHeader1.save(flush: true)
+        def client1 = new ResponseClient(
                 name: "redpill-linpro",
                 displayName: "Redpill Linpro",
                 description: "Nordic leader in open source software solutions",
                 isEnabled:true,
-                logo:responseLogo1
-        ).save(flush:true)
-
-        def responseLogo2 = new ResponseLogo(
-                title:"",
-                description: "Response3 Issue Tracker",
-                backgroundColor: "#fff",
-                logoImagePath: "images/clients/klogo.gif",
-                logoImageWidth: "280px"
+                header:responseHeader1
         )
-        responseLogo2.save(flush: true)
+        client1.validate()
+        client1.errors.allErrors.each {log.error it}
+        client1.save(flush:true)
+
+        def responseHeader2 = new ResponseHeader(
+                title:"Support Center",
+                titleColor: "#1F1949",
+                description: "",
+                backgroundColor: "#fff",
+                filename: "klogo.gif",
+                logoImageWidth: "280px",
+                titleLineHeight: "70px"
+        )
+        responseHeader2.save(flush: true)
         new ResponseClient(
                 name: "komplett-group",
                 displayName: "Komplett Group",
                 description: "Komplett Group is a leading player in e-commerce",
                 isEnabled:true,
-                logo: responseLogo2
+                header: responseHeader2
         ).save(flush:true)
 
-        def responseLogo3 = new ResponseLogo(
-                title:"",
+        def responseHeader3 = new ResponseHeader(
+                title:"Support System",
+                titleColor: "#dadada",
                 description: "",
                 backgroundColor: "#333",
-                logoImagePath: "images/clients/statoillogo.jpg",
-                logoImageWidth: "120px"
+                filename: "statoillogo.jpg",
+                logoImageWidth: "180px",
+                titleLineHeight: "90px"
         )
-        responseLogo3.save(flush: true)
+        responseHeader3.save(flush: true)
         new ResponseClient(
                 name: "statoil",
                 displayName: "Statoil",
                 description: "Statoil is an international energy company",
                 isEnabled:true,
-                logo: responseLogo3
+                header: responseHeader3
         ).save(flush:true)
     }
 }

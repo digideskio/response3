@@ -1,12 +1,14 @@
-<div id="header" style="background:${request.currentClient.logo.backgroundColor}">
-	<g:link controller="default">
-	<div class="main_logo" style="
-		background:url('${request.currentClient.logo.logoImagePath}') no-repeat 20px center;
-		width:'${request.currentClient.logo.logoImageWidth}';">
-	</div>
-	</g:link>
+
+<div id="header" style="background:${request.currentClient.header.backgroundColor}">
+	<cache:block key="${request.currentClient.id}">
+		<g:link controller="default">
+			<header:logo/>
+		</g:link>
+	</cache:block>
 	<div>
-		<h1>${request.currentClient.logo.title}</h1>
+		<cache:block key="${request.currentClient.id}">
+			<header:h1/>
+		</cache:block>
 		<sec:ifLoggedIn>
 			<ul id="nav">
 				<li class="search-icon">
@@ -33,6 +35,8 @@
 				</li>
 			</ul>
 		</sec:ifLoggedIn>
-		<h2>${request.currentClient.logo.description}</h2>
+		<cache:block key="${request.currentClient.id}">
+			<header:h2/>
+		</cache:block>
 	</div>
 </div>

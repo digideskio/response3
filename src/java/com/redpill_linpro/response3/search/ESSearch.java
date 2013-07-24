@@ -23,12 +23,16 @@ import java.util.Map;
 public class ESSearch {
 
     private Logger log = Logger.getLogger(this.getClass());
-    private final Client esClient;
-    private final ResponseClient client;
+    protected final Client esClient;
+    protected final ResponseClient client;
+    protected final int size;
 
     public ESSearch(ResponseClient client){
         this.esClient = EmbeddedElasticSearch.getClient();
         this.client = client;
+        GrailsApplication app = Holders.getGrailsApplication();
+        Map<String, Object> config = app.getFlatConfig();
+        this.size = (int)config.get("response3.lists.length");
     }
 
     public void query(){

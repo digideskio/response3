@@ -1,13 +1,13 @@
 package com.redpill_linpro.response3.security
 
-import com.redpill_linpro.response3.content.ResponseLogo
+import com.redpill_linpro.response3.content.ResponseHeader
 
 class ResponseClient {
 
     String name
     String displayName
     String description
-    ResponseLogo logo
+    ResponseHeader header
     Boolean isEnabled
     Date dateCreated
     Date lastUpdated
@@ -17,7 +17,7 @@ class ResponseClient {
         displayName unique: true, size:2..64
         description blank:true, nullable:true
         isEnabled nullable:false
-        logo nullable:true
+        header nullable:true
     }
 
     static mapping = {

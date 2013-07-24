@@ -83,7 +83,6 @@ a{
 }
 #header h2{
     font-size:0.9em;
-    color:#ddd;
     font-weight: normal;
 }
 
@@ -682,5 +681,4 @@ ul.administration-list>li{
 .main_logo{
 	float:left;
 	height:80px;
-	width:300px;
 }

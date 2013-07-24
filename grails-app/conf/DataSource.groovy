@@ -1,7 +1,9 @@
+import org.hibernate.dialect.PostgreSQLDialect
+
 dataSource {
     pooled = true
     driverClassName = "org.postgresql.Driver"
-    dialect = org.hibernate.dialect.PostgreSQLDialect
+    dialect = PostgreSQLDialect
     /*properties {
         defaultTransactionIsolation = 
             java.sql.Connection.TRANSACTION_SERIALIZABLE

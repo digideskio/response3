@@ -245,9 +245,12 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                 } else {
                     fields.field(key, document.get(key));
                 }
+                if(key.equals("displayName")){
+                    log.debug(document.get(key));
+                }
             }
             obj.endObject();
-            //log.debug(obj.prettyPrint().string());
+            log.debug(obj.prettyPrint().string());
             bulkRequest.add(esClient.prepareIndex(idxName, propertyName, id)
                     .setSource(obj)
             );
@@ -290,15 +293,16 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
                     .endObject()
                     .startObject("analysis")
                         .startObject("analyzer")
-                            .startObject("collation")
+                            .startObject("norwegianAnalyzer")
+                                .field("type", "custom")
                                 .field("tokenizer", "keyword")
-                                .field("filter", "norwegianCollator")
+                                .field("filter", "norwegian")
                             .endObject()
                         .endObject()
                         .startObject("filter")
-                            .startObject("norwegianCollator")
+                            .startObject("norwegian")
                                 .field("type", "icu_collation")
-                                .field("language", "norwegian")
+                                .field("language", "nb")
                             .endObject()
                         .endObject()
                     .endObject()

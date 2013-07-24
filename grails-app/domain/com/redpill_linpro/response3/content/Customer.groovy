@@ -9,7 +9,9 @@ import org.elasticsearch.common.xcontent.XContentFactory
 class Customer {
 
     static searchable = [
-        only: ['id', 'partner', 'name','dateCreated','lastUpdated','enabled'],
+        only: [
+                'id', 'partner', 'name','dateCreated','lastUpdated',
+                'displayName'],
         mapping: XContentFactory.jsonBuilder()
         .startObject()
             .startObject(this.class.simpleName.toLowerCase())
@@ -33,8 +35,8 @@ class Customer {
                     .startObject("name")
                         .field("type", "string")
                         .field("store", "yes")
-                        .field("index", "not_analyzed")
                         .field("null_value", "")
+                        .field("analyzer", "norwegianAnalyzer")
                     .endObject()
                     .startObject("displayName")
                         .field("type", "string")
@@ -51,11 +53,6 @@ class Customer {
                     .startObject("lastUpdated")
                         .field("type", "date")
                         .field("format", "yyyy-MM-dd HH:mm:ss")
-                        .field("store", "yes")
-                        .field("index", "not_analyzed")
-                    .endObject()
-                    .startObject("enabled")
-                        .field("type", "boolean")
                         .field("store", "yes")
                         .field("index", "not_analyzed")
                     .endObject()
