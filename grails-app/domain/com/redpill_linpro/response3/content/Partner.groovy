@@ -176,18 +176,20 @@ class Partner {
         return customers as Set
     }
 
-    @CompileStatic
     def getCustomerCount(){
         long count = 0L;
         if(this.id){
-            count = (long)executeQuery(
-                "SELECT COUNT(c.id) FROM Customer c WHERE c.partner.id = :id",
-                [id:this.id]
-            )[0]
+            count = (long)Customer.countByPartner(this)
         }
         return count;
     }
-    
+
+    @CompileStatic
+    public long getDomainId(){
+        return (long)this.id
+    }
+
+    @CompileStatic
     String toString() {
         return this.name
     }

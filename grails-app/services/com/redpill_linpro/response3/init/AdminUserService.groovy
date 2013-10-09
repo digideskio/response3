@@ -3,10 +3,10 @@ package com.redpill_linpro.response3.init
 import com.redpill_linpro.response3.security.ResponseClient
 import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Role
+import grails.transaction.Transactional
 
+@Transactional
 class AdminUserService {
-    
-    static transactional = true
     
     def userService
 

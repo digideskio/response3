@@ -2,10 +2,10 @@ package com.redpill_linpro.response3.init
 
 import com.redpill_linpro.response3.content.ResponseHeader
 import com.redpill_linpro.response3.security.ResponseClient
+import grails.transaction.Transactional
 
+@Transactional
 class ResponseClientService {
-
-    static transactional = true
 
     def init() {
         def responseHeader1 = new ResponseHeader(
@@ -32,12 +32,14 @@ class ResponseClientService {
         def responseHeader2 = new ResponseHeader(
                 title:"Support Center",
                 titleColor: "#1F1949",
-                description: "",
+                description: "Komplett support",
                 backgroundColor: "#fff",
                 filename: "klogo.gif",
                 logoImageWidth: "280px",
                 titleLineHeight: "70px"
         )
+        log.debug(responseHeader2.validate())
+        responseHeader2.errors.allErrors.each {log.error it}
         responseHeader2.save(flush: true)
         new ResponseClient(
                 name: "komplett-group",
@@ -50,7 +52,7 @@ class ResponseClientService {
         def responseHeader3 = new ResponseHeader(
                 title:"Support System",
                 titleColor: "#dadada",
-                description: "",
+                description: "Statoil support",
                 backgroundColor: "#333",
                 filename: "statoillogo.jpg",
                 logoImageWidth: "180px",

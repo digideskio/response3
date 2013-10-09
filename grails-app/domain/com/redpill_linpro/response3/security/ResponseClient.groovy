@@ -15,7 +15,7 @@ class ResponseClient {
     static constraints = {
         name unique: true, size:2..32, matches:"^[a-z0-9\\-]+"
         displayName unique: true, size:2..64
-        description blank:true, nullable:true
+        description nullable:true, blank:true
         isEnabled nullable:false
         header nullable:true
     }

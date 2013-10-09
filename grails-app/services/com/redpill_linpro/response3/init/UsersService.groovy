@@ -1,7 +1,9 @@
 package com.redpill_linpro.response3.init
 
 import com.redpill_linpro.response3.security.*
+import grails.transaction.Transactional
 
+@Transactional
 class UsersService {
     
     def userService

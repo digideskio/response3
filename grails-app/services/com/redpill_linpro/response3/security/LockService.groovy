@@ -1,12 +1,12 @@
 package com.redpill_linpro.response3.security
 
+import grails.transaction.Transactional
 import org.hibernate.FetchMode
 import org.hibernate.LockMode
 import com.redpill_linpro.response3.content.*
 
+@Transactional
 class LockService {
-    
-    static transactional = true
     
     def grailsApplication
     def userService

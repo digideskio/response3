@@ -1,8 +1,9 @@
 package com.redpill_linpro.response3.security
 
-class UserService {
+import grails.transaction.Transactional
 
-    static transactional = true
+@Transactional
+class UserService {
     
     def springSecurityService
 

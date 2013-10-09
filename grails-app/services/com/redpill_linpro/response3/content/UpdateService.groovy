@@ -1,8 +1,9 @@
 package com.redpill_linpro.response3.content
 
+import grails.transaction.Transactional
+
+@Transactional
 class UpdateService {
-    
-    static transactional = true
 
     def save(String className, Map params) {
         

@@ -4,7 +4,9 @@ import com.redpill_linpro.response3.content.*
 import com.redpill_linpro.response3.security.ResponseClient
 import com.redpill_linpro.response3.security.User
 import com.redpill_linpro.response3.security.Role
+import grails.transaction.Transactional
 
+@Transactional
 class ContentService {
     
     def userService

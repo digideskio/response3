@@ -39,7 +39,7 @@ public class PartnerSearch extends ESSearch {
         List<String> list = new ArrayList<>();
         QueryBuilder qb = QueryBuilders.matchQuery(
                 "customer.partner",
-                partner.getId().toString()
+                String.valueOf(partner.getDomainId())
         );
         SearchResponse response =
                 this.esClient.prepareSearch(this.client.getName())

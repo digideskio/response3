@@ -347,8 +347,7 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
 
     private void flushIndex(String idxName){
         esClient.admin().indices().flush(
-                new FlushRequest(idxName)
-                        .refresh(true)).actionGet();
+                new FlushRequest(idxName)).actionGet();
     }
 
     private void createMapping(
