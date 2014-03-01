@@ -4,7 +4,7 @@ import com.redpill_linpro.response3.content.Partner
 import com.redpill_linpro.response3.search.ESSearch
 import com.redpill_linpro.response3.search.ElasticSearchIndex
 import com.redpill_linpro.response3.search.PartnerSearch
-import grails.plugins.springsecurity.Secured
+import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['ROLE_ADMIN'])
 class ResponseClientController {

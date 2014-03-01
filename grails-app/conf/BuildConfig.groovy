@@ -43,6 +43,8 @@ grails.project.dependency.resolution = {
         mavenLocal()
         mavenCentral()
 
+        mavenRepo 'http://repo.spring.io/milestone'
+
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
@@ -57,25 +59,25 @@ grails.project.dependency.resolution = {
         compile 'org.codehaus.jackson:jackson-core-asl:1.9.12'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
         compile 'org.apache.commons:commons-math3:3.0'
-        compile 'org.elasticsearch:elasticsearch:0.90.5'
-        compile 'org.elasticsearch:elasticsearch-analysis-icu:1.11.0'
-        build 'redis.clients:jedis:2.1.0'
+        compile 'org.elasticsearch:elasticsearch:1.0.0'
+        compile 'org.elasticsearch:elasticsearch-analysis-icu:2.0.0.RC1'
+        build 'redis.clients:jedis:2.4.0'
     }
 
     plugins {
-        compile ":hibernate:3.6.10.1"
+        compile ":hibernate:3.6.10.8"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 
-        build ":tomcat:7.0.42"
-        runtime ":database-migration:1.3.5"
-        compile ':spring-security-core:1.2.7.3'
+        build ":tomcat:7.0.50.1"
+        runtime ":database-migration:1.3.8"
+        compile ":spring-security-core:2.0-RC2"
         compile ":mail:1.0.1"
-        compile ':cache:1.0.1'
+        compile ':cache:1.1.1'
         compile ":cache-ehcache:1.0.0"
-        compile ":grails-melody:1.44"
+        compile ":grails-melody:1.49.1"
     }
 }

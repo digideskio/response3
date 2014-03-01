@@ -17,7 +17,7 @@ class Project {
         issues:Issue,
         contactPersons: User,
         projectManagers: User,
-        clients: User
+        //clients: User
     ]
 
     static constraints = {
@@ -25,10 +25,11 @@ class Project {
         customer(nullable:false)
         enabled(validator: {
                 val, obj ->
-                if(val == false){
+                if(!val){
                     // Check Issue
                     if(Issue.executeQuery(
-                        "select 1 from Issue i WHERE i.project = :p AND i.status.id NOT IN (0)",
+                        "select 1 from Issue i WHERE i.project = :p " +
+                        "AND i.status.id NOT IN (0)",
                         [p:obj]
                     ).size() > 0){
                         return false;
@@ -41,7 +42,7 @@ class Project {
         title(blank: false, nullable:false)
         projectManagers(nullable:true,blank: true)
         description(nullable:true,blank: true,size:0..4000)
-        clients(nullable: true)
+        //clients(nullable: true)
     }
     
     static mapping ={

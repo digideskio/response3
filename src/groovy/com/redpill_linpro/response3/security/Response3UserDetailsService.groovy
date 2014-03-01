@@ -1,7 +1,7 @@
 package com.redpill_linpro.response3.security
 
-import org.codehaus.groovy.grails.plugins.springsecurity.GormUserDetailsService
-import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
+import grails.plugin.springsecurity.userdetails.GormUserDetailsService
+import grails.plugin.springsecurity.userdetails.GrailsUser
 import org.springframework.security.core.userdetails.UserDetails
 
 class Response3UserDetailsService extends GormUserDetailsService {

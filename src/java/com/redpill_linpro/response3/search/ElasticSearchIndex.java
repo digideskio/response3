@@ -18,7 +18,7 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 
-import org.elasticsearch.action.admin.indices.settings.UpdateSettingsRequestBuilder;
+import org.elasticsearch.action.admin.indices.settings.put.UpdateSettingsRequestBuilder;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.Client;
@@ -135,7 +135,7 @@ public class ElasticSearchIndex extends GroovyObjectSupport {
         for(Method m : client.getClass().getDeclaredMethods()){
             String methodName = m.getName();
             if(methodName.equals("getId")){
-                clientId = (long)m.invoke(client);
+                clientId = (Long)m.invoke(client);
             }
         }
         String sql =

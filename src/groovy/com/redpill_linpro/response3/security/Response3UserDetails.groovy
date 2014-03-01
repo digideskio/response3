@@ -1,6 +1,7 @@
 package com.redpill_linpro.response3.security
 
-import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
+import grails.plugin.springsecurity.userdetails.GrailsUser
+
 
 class Response3UserDetails extends GrailsUser {
     public final String salt

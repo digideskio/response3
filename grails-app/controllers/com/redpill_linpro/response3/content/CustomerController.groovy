@@ -1,7 +1,7 @@
 package com.redpill_linpro.response3.content
 
 import grails.converters.JSON
-import grails.plugins.springsecurity.Secured
+import grails.plugin.springsecurity.annotation.Secured
 
 import com.redpill_linpro.response3.security.User
 
