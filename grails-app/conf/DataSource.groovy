@@ -19,7 +19,7 @@ environments {
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-            url = "jdbc:postgresql://zpool:5432/response3"
+            url = "jdbc:postgresql://zpool:5432/responsebee"
             username="response"
             password="response"
         }

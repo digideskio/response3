@@ -74,7 +74,6 @@ grails.project.dependency.resolution = {
 
         build ":tomcat:7.0.50.1"
         runtime ":database-migration:1.3.8"
-        compile ":spring-security-core:2.0-RC2"
         compile ":mail:1.0.1"
         compile ':cache:1.1.1'
         compile ":cache-ehcache:1.0.0"

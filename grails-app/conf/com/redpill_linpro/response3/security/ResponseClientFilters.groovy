@@ -1,4 +1,4 @@
-package com.redpill_linpro.response3.security
+package com.responsebee.security
 
 class ResponseClientFilters {
 

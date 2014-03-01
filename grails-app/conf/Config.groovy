@@ -77,7 +77,7 @@ log4j = {
             production {
                 rollingFile name: "response3Appender",
                             maxFileSize: 1024*1024,
-                            file: "log/response3.log"
+                            file: "log/responsebee.log"
             }
             development{
                 console name:'stdout',
@@ -109,45 +109,19 @@ log4j = {
            'net.sf.ehcache.hibernate'
            
     debug  'grails.app',
-           'com.redpill_linpro.response3'
+           'com.redpill_linpro.responsebee'
            //'org.hibernate.SQL'
            
     //trace 'org.hibernate.type'
 }
 
-// Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.redpill_linpro.response3.security.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.redpill_linpro.response3.security.UserRole'
-grails.plugin.springsecurity.authority.className = 'com.redpill_linpro.response3.security.Role'
-
-// Additional password protection
-grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
-
-// Url protection
-grails.plugin.springsecurity.securityConfigType = 'Annotation'
-grails.plugin.springsecurity.rejectIfNoRule = true
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-    '/responseClient/**':       ['ROLE_ADMIN'],
-    '/responseClient/edit':     ['ROLE_ADMIN','ROLE_MANAGER'],
-    '/administration/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
-    '/js/**':                   ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/css/**':                  ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/images/**':               ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/*':                       ['IS_AUTHENTICATED_FULLY'],
-    '/default/**':              ['IS_AUTHENTICATED_FULLY'],
-    '/login/**':                ['IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/logout/**':               ['IS_AUTHENTICATED_ANONYMOUSLY']
-]
-grails.plugin.springsecurity.ipRestrictions = [
-    '/monitoring/**':           '10.0.0.0/24',
-]
 grails.gorm.default.mapping = {
     // Prevent GORM to update all properties for each update
     dynamicUpdate true 
     // Use proper DB locking/ Hibernate pessimistic locking
     version false
 }
-// response3 specific configuration
+// responsebee specific configuration
 response3.lists.max=100
 response3.lists.length=20
 response3.elasticsearch.date.format='yyyy-MM-dd HH:mm:ss'

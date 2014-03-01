@@ -1,6 +1,6 @@
-import com.redpill_linpro.response3.search.ElasticSearchIndex
-import com.redpill_linpro.response3.search.EmbeddedElasticSearch
-import com.redpill_linpro.response3.security.ResponseClient
+import com.responsebee.search.ElasticSearchIndex
+import com.responsebee.search.EmbeddedElasticSearch
+import com.responsebee.security.ResponseClient
 
 class BootStrap {
 
