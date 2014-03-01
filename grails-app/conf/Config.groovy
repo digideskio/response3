@@ -116,17 +116,17 @@ log4j = {
 }
 
 // Added by the Spring Security Core plugin:
-grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.redpill_linpro.response3.security.User'
-grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.redpill_linpro.response3.security.UserRole'
-grails.plugins.springsecurity.authority.className = 'com.redpill_linpro.response3.security.Role'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.redpill_linpro.response3.security.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.redpill_linpro.response3.security.UserRole'
+grails.plugin.springsecurity.authority.className = 'com.redpill_linpro.response3.security.Role'
 
 // Additional password protection
 grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'salt'
 
 // Url protection
-grails.plugins.springsecurity.securityConfigType = 'Annotation'
-grails.plugins.springsecurity.rejectIfNoRule = true
-grails.plugins.springsecurity.controllerAnnotations.staticRules = [
+grails.plugin.springsecurity.securityConfigType = 'Annotation'
+grails.plugin.springsecurity.rejectIfNoRule = true
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     '/responseClient/**':       ['ROLE_ADMIN'],
     '/responseClient/edit':     ['ROLE_ADMIN','ROLE_MANAGER'],
     '/administration/**':       ['ROLE_ADMIN','ROLE_MANAGER'],
@@ -138,7 +138,7 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
     '/login/**':                ['IS_AUTHENTICATED_ANONYMOUSLY'],
     '/logout/**':               ['IS_AUTHENTICATED_ANONYMOUSLY']
 ]
-grails.plugins.springsecurity.ipRestrictions = [
+grails.plugin.springsecurity.ipRestrictions = [
     '/monitoring/**':           '10.0.0.0/24',
 ]
 grails.gorm.default.mapping = {

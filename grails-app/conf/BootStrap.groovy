@@ -5,7 +5,6 @@ import com.redpill_linpro.response3.security.ResponseClient
 class BootStrap {
 
     def grailsApplication
-    def ipAddressFilter
     def initService
     EmbeddedElasticSearch embeddedElasticSearch;
     
@@ -24,11 +23,6 @@ class BootStrap {
                 searchable.buildMapping()
             }
         }
-        Map filterMap = [
-                '/monitoring/**':'192.168.0.1',
-                '/administration/**':'192.168.0.2'
-        ]
-        ipAddressFilter.setIpRestrictions(filterMap)
     }
     def developmentSetup(){
         initService.init()

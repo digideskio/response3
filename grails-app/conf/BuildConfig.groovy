@@ -78,6 +78,6 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1"
         compile ':cache:1.1.1'
         compile ":cache-ehcache:1.0.0"
-        compile ":grails-melody:1.49.1"
+        compile ":grails-melody:1.49.2"
     }
 }
