@@ -1,14 +1,11 @@
 package com.responsebee.content
-
+import com.responsebee.security.Lock
 import com.responsebee.security.ResponseClient
+import com.responsebee.security.User
+import grails.util.Holders
 import groovy.transform.CompileStatic
 import org.elasticsearch.common.xcontent.XContentFactory
 import org.hibernate.collection.PersistentSet
-import org.codehaus.groovy.grails.web.binding.ListOrderedSet
-import grails.util.Holders
-
-import com.responsebee.security.User
-import com.responsebee.security.Lock
 
 @SuppressWarnings("GroovyClassNamingConvention")
 class Partner {
@@ -101,8 +98,8 @@ class Partner {
             if (val == null){
                 return true
             }
+            log.debug val.class.name
             if (val instanceof PersistentSet || 
-                val instanceof ListOrderedSet ||
                 val instanceof HashSet){
                 val.each{
                     if(!obj.clients.contains(it)){

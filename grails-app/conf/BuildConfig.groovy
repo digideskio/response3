@@ -3,8 +3,8 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.work.dir = "target/work"
-grails.project.target.level = 1.7
-grails.project.source.level = 1.7
+grails.project.target.level = 1.8
+grails.project.source.level = 1.8
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 // uncomment (and adjust settings) to fork the JVM to isolate classpaths
@@ -65,18 +65,19 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile ":hibernate:3.6.10.8"
+        runtime ":hibernate:3.6.10.17"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 
-        build ":tomcat:7.0.50.1"
+        build ":tomcat8:8.0.5"
         runtime ":database-migration:1.3.8"
-        compile ":mail:1.0.1"
-        compile ':cache:1.1.1'
-        compile ":cache-ehcache:1.0.0"
-        compile ":grails-melody:1.49.2"
+        compile ":mail:1.0.6"
+        compile ':cache:1.1.7'
+        compile ":cache-ehcache:1.0.1"
+        compile ":grails-melody:1.52.0"
+        compile ":spring-security-core:2.0-RC4"
     }
 }

@@ -1,4 +1,3 @@
-package com.responsebee.security
 
 class ResponseClientFilters {
 
